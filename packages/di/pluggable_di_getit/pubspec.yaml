@@ -15,7 +15,10 @@ dependencies:
   get_it: ^8.0.3
 
   pluggable:
-    path: ../../core
+    git:
+      url: git@github.com:camrongiuliani/pluggable.git
+      path: packages/core
+      ref: develop
 
 dev_dependencies:
   flutter_test:

@@ -14,7 +14,10 @@ dependencies:
   use_case: ^1.1.6
 
   pluggable_di_getit:
-    path: ../di/pluggable_di_getit
+    git:
+      url: git@github.com:camrongiuliani/pluggable.git
+      path: packages/di/pluggable_di_getit
+      ref: develop
 
 dev_dependencies:
   flutter_test:
