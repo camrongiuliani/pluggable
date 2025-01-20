@@ -25,8 +25,8 @@ Future<void> runPluggableApp({
   );
 
   runApp(
-    AnimatedBuilder(
-      animation: Pluggable,
+    StreamBuilder(
+      stream: Pluggable.stream,
       builder: (_, __) {
         return MaterialApp.router(
           theme: theme,

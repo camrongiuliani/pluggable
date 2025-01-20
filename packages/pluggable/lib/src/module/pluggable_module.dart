@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:pluggable/pluggable.dart';
 import 'package:pluggable/src/di/pluggable_di.dart';
 import 'package:pluggable/src/plug.dart';
 import 'package:pluggable/src/pluggable/pluggable.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class PluggableModule extends Plug<PluggableModule> {
-  late final UniqueKey _key;
+  late final String _key;
   late final String _diKey;
   late final PluggableStorage? _storage;
   late final PluggableDI? _di;
@@ -25,7 +25,7 @@ abstract class PluggableModule extends Plug<PluggableModule> {
     PluggableLogger? loggerPlugin,
     PluggableMapper? mapperPlugin,
   }) {
-    _key = UniqueKey();
+    _key = Uuid().v4();
     _diKey = '${runtimeType}_$_key';
     _storage = storagePlugin;
     _di = diPlugin;

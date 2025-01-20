@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:event_bus/event_bus.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:pluggable/pluggable.dart';
 import 'package:pluggable_di_getit/pluggable_di_getit.dart';
 import 'package:cartographer_mapper_plug/cartographer_mapper_plug.dart';
@@ -44,7 +42,7 @@ Future<PluggableImpl> initPluggable({
   return pluggable;
 }
 
-class PluggableImpl extends ChangeNotifier {
+class PluggableImpl extends DartNotifier {
   static PluggableImpl? instance;
 
   PluggableImpl._()
@@ -164,4 +162,20 @@ class PluggableImpl extends ChangeNotifier {
 
   Stream<T> on<T>() => _bus.on<T>();
 
+}
+
+class DartNotifier {
+  final StreamController<void> _controller = StreamController<void>.broadcast();
+
+  Stream<void> get stream => _controller.stream;
+
+  void notifyListeners() {
+    if (!_controller.isClosed) {
+      _controller.add(null);
+    }
+  }
+
+  void dispose() {
+    _controller.close();
+  }
 }
