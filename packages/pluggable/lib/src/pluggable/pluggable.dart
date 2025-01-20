@@ -10,6 +10,7 @@ import 'package:pluggable/src/logger/pluggable_logger.dart';
 import 'package:pluggable/src/plug.dart';
 import 'package:pluggable/src/storage/pluggable_storage.dart';
 import 'package:pluggable_di_getit/pluggable_di_getit.dart';
+import 'package:in_memory_storage_plug/in_memory_storage_plug.dart';
 import 'package:use_case/use_case.dart';
 
 // ignore: non_constant_identifier_names
@@ -31,7 +32,7 @@ Future<PluggableImpl> initPluggable({
   final pluggable = PluggableImpl();
 
   if (!pluggable.initialized) {
-    await pluggable.plugin(storagePlugin ?? MemoryStoragePlug());
+    await pluggable.plugin(storagePlugin ?? InMemoryStoragePlug());
     await pluggable.plugin(analyticsPlugin ?? NoAnalyticsPlug());
     await pluggable.plugin(loggingPlugin ?? ConsoleLoggerPlug());
     await pluggable.plugin(diPlugin ?? PluggableGetIt());

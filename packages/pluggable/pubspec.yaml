@@ -1,10 +1,7 @@
-name: pluggable_flutter
-description: "A new Flutter project."
+name: pluggable
+description: "A new Flutter package project."
+version: 0.0.1
 resolution: workspace
-
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-version: 1.0.0+1
 
 environment:
   sdk: ^3.6.0
@@ -12,14 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.8
-
-  pluggable:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/pluggable
-      ref: develop
+  event_bus: ^2.0.1
+  use_case: ^1.1.6
+  synchronized: ^3.1.0+1
+  expire_cache: ^2.0.1
 
   pluggable_di_getit:
     git:
@@ -27,12 +20,16 @@ dependencies:
       path: packages/di/pluggable_di_getit
       ref: develop
 
+  in_memory_storage_plug:
+    git:
+      url: git@github.com:camrongiuliani/pluggable.git
+      path: packages/storage/in_memory_storage_plug
+      ref: develop
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^5.0.0
 
-flutter:
-  uses-material-design: true
 
+flutter:

@@ -1,7 +1,6 @@
 name: go_router_plug
 description: "A new Flutter package project."
 version: 0.0.1
-homepage: https://www.church.io
 resolution: workspace
 
 environment:
@@ -12,11 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   go_router: ^14.2.0
 
   pluggable_flutter:
-    path: ../../pluggable_flutter
+    git:
+      url: git@github.com:camrongiuliani/pluggable.git
+      path: packages/pluggable_flutter
+      ref: develop
 
 dev_dependencies:
   flutter_test:
