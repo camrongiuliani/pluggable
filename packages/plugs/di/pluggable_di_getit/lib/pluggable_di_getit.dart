@@ -1,7 +1,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pluggable/pluggable.dart';
 
@@ -91,7 +90,6 @@ class PluggableGetIt implements PluggableDI {
     return _instance.hasScope(name);
   }
 
-  @visibleForTesting
   @override
   void allowReassignment() {
     _instance.allowReassignment = true;
