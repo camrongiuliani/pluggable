@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:pluggable/src/plug.dart';
 
 abstract class PluggableAnalytics extends Plug<PluggableAnalytics> {

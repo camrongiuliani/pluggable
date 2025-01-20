@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:pluggable/pluggable.dart';
 import 'package:pluggable/src/di/pluggable_di.dart';
 import 'package:pluggable/src/plug.dart';
 import 'package:pluggable/src/pluggable/pluggable.dart';
@@ -7,21 +8,37 @@ import 'package:pluggable/src/pluggable/pluggable.dart';
 abstract class PluggableModule extends Plug<PluggableModule> {
   late final UniqueKey _key;
   late final String _diKey;
+  late final PluggableStorage? _storage;
+  late final PluggableDI? _di;
+  late final PluggableAnalytics? _analytics;
+  late final PluggableLogger? _logger;
+  late final PluggableMapper? _mapper;
 
   bool bound = false;
 
   StreamSubscription? ss;
 
-  PluggableModule() {
+  PluggableModule({
+    PluggableStorage? storagePlugin,
+    PluggableDI? diPlugin,
+    PluggableAnalytics? analyticsPlugin,
+    PluggableLogger? loggerPlugin,
+    PluggableMapper? mapperPlugin,
+  }) {
     _key = UniqueKey();
     _diKey = '${runtimeType}_$_key';
+    _storage = storagePlugin;
+    _di = diPlugin;
+    _analytics = analyticsPlugin;
+    _logger = loggerPlugin;
+    _mapper = mapperPlugin;
   }
 
-  @override
-  Future<Plug> init() async => this;
-
-  @override
-  Future<Plug> dispose() async => this;
+  PluggableStorage get storage => _storage ?? Pluggable.storage;
+  PluggableDI get di => _di ?? Pluggable.di;
+  PluggableAnalytics get analytics => _analytics ?? Pluggable.analytics;
+  PluggableLogger get logger => _logger ?? Pluggable.logger;
+  PluggableMapper get mapper => _mapper ?? Pluggable.mapper;
 
   void addDependencies(PluggableDI i) {}
 
@@ -31,7 +48,7 @@ abstract class PluggableModule extends Plug<PluggableModule> {
     }
 
     if (log) {
-      Pluggable.log('$runtimeType module bound', tag: '$runtimeType');
+      Pluggable.logger.v('$runtimeType module bound', tag: '$runtimeType');
       Pluggable.di.pushScope(_diKey);
     }
 
@@ -49,7 +66,7 @@ abstract class PluggableModule extends Plug<PluggableModule> {
 
     Future.sync(() async {
       await Future.delayed(const Duration(milliseconds: 500));
-      Pluggable.log('$runtimeType module unbound', tag: '$runtimeType');
+      Pluggable.logger.v('$runtimeType module unbound', tag: '$runtimeType');
       Pluggable.di.popScope(_diKey);
 
       bound = false;

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_plug/go_route_ext.dart';
 import 'package:pluggable_flutter/pluggable_flutter.dart';
-import 'package:collection/collection.dart';
 
 class GoRouterPlug extends PluggableNavigator {
   late final GoRouter _router;
@@ -38,7 +37,7 @@ class GoRouterPlug extends PluggableNavigator {
       initialLocation: initialRoute,
       routingConfig: _routeConfig,
       onException: (context, state, router) {
-        Pluggable.log('Exception: ${state.error}', tag: 'CORE');
+        Pluggable.logger.e('Exception: ${state.error}', tag: 'CORE');
 
         router.go('/error');
       },

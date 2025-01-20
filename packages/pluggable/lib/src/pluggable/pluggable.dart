@@ -4,14 +4,9 @@ import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluggable/pluggable.dart';
-import 'package:pluggable/src/analytics/pluggable_analytics.dart';
-import 'package:pluggable/src/di/pluggable_di.dart';
-import 'package:pluggable/src/logger/pluggable_logger.dart';
-import 'package:pluggable/src/plug.dart';
-import 'package:pluggable/src/storage/pluggable_storage.dart';
 import 'package:pluggable_di_getit/pluggable_di_getit.dart';
+import 'package:cartographer_mapper_plug/cartographer_mapper_plug.dart';
 import 'package:in_memory_storage_plug/in_memory_storage_plug.dart';
-import 'package:use_case/use_case.dart';
 
 // ignore: non_constant_identifier_names
 PluggableImpl get Pluggable {
@@ -28,14 +23,16 @@ Future<PluggableImpl> initPluggable({
   PluggableAnalytics? analyticsPlugin,
   PluggableLogger? loggingPlugin,
   PluggableDI? diPlugin,
+  PluggableMapper? mapperPlugin,
 }) async {
   final pluggable = PluggableImpl();
 
   if (!pluggable.initialized) {
+    await pluggable.plugin(mapperPlugin ?? CartographerMapperPlug());
+    await pluggable.plugin(diPlugin ?? PluggableGetIt());
     await pluggable.plugin(storagePlugin ?? InMemoryStoragePlug());
     await pluggable.plugin(analyticsPlugin ?? NoAnalyticsPlug());
     await pluggable.plugin(loggingPlugin ?? ConsoleLoggerPlug());
-    await pluggable.plugin(diPlugin ?? PluggableGetIt());
 
     await pluggable._init();
 
@@ -82,6 +79,8 @@ class PluggableImpl extends ChangeNotifier {
 
   PluggableAnalytics get analytics => get();
 
+  PluggableMapper get mapper => get();
+
   final UseCaseManager ucm;
 
   // final IdentityProvider idp;
@@ -92,12 +91,6 @@ class PluggableImpl extends ChangeNotifier {
     var type = T;
     var plugs = plugins.where((p) => p is T).toList();
     var contains = plugs.isNotEmpty;
-
-    if (contains) {
-      print('object');
-    } else {
-      print('object');
-    }
 
     return contains;
   }
@@ -149,7 +142,7 @@ class PluggableImpl extends ChangeNotifier {
 
   Future<PluggableImpl> _init() async {
     if (initialized) {
-      log(
+      logger.i(
         'WARNING: Pluggable already initialized.',
         tag: '$runtimeType',
       );
@@ -171,9 +164,4 @@ class PluggableImpl extends ChangeNotifier {
 
   Stream<T> on<T>() => _bus.on<T>();
 
-  // bool get analyticsEnabled => initialized && analytics.enabled;
-
-  void log(String message, {String? tag, Object? err, StackTrace? stackTrace}) {
-    logger.log(message, tag: tag, err: err, stackTrace: stackTrace);
-  }
 }

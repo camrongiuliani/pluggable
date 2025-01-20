@@ -63,7 +63,7 @@ class PluggableGetIt implements PluggableDI {
       scopeName: name,
     );
 
-    Pluggable.log('Pushed DI scope ($name)', tag: '$runtimeType');
+    Pluggable.logger.v('Pushed DI scope ($name)', tag: '$runtimeType');
   }
 
   @override
@@ -72,7 +72,7 @@ class PluggableGetIt implements PluggableDI {
       return;
     }
 
-    Pluggable.log('Popped DI scope ($name)', tag: '$runtimeType');
+    Pluggable.logger.v('Popped DI scope ($name)', tag: '$runtimeType');
 
     return _instance.dropScope(name);
   }

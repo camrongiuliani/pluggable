@@ -7,8 +7,6 @@ environment:
   sdk: ^3.6.0
 
 dependencies:
-  flutter:
-    sdk: flutter
   event_bus: ^2.0.1
   use_case: ^1.1.6
   synchronized: ^3.1.0+1
@@ -26,10 +24,11 @@ dependencies:
       path: packages/storage/in_memory_storage_plug
       ref: develop
 
+  cartographer_mapper_plug:
+    git:
+      url: git@github.com:camrongiuliani/pluggable.git
+      path: packages/mapper/cartographer_mapper_plug
+      ref: develop
+
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^5.0.0
-
-
-flutter:

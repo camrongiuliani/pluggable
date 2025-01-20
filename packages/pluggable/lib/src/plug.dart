@@ -1,7 +1,4 @@
-
-import 'package:flutter/cupertino.dart';
-
 abstract class Plug<T extends Plug<T>> {
-  Future<Plug> init();
-  Future<Plug> dispose();
+  Future<Plug> init() async => this;
+  Future<Plug> dispose() async => this;
 }
