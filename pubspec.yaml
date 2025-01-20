@@ -1,0 +1,15 @@
+name: _
+description: "A new Flutter package project."
+homepage: https://www.savanainc.com
+workspace:
+  - packages/pluggable
+  - packages/pluggable_flutter
+  - packages/plugs/di/pluggable_di_getit
+  - packages/plugs/navigator/go_router_plug
+  - packages/plugs/storage/pluggabe_storage_in_memory
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=3.27.2"
+
+flutter:
