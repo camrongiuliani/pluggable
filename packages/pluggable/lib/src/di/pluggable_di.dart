@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:pluggable/src/plug.dart';
 
 typedef DependencyDisposeFunc<T> = FutureOr Function(T param);
 typedef DependencyBuilder<T> = T Function();
 
 abstract class PluggableDI extends Plug<PluggableDI> {
-  @visibleForTesting
   void allowReassignment();
 
   T get<T extends Object>();
