@@ -2,7 +2,7 @@ name: secure_storage_plug
 description: "A new Flutter package project."
 version: 0.0.1-pre.1
 
-resolution: workspace
+#resolution: workspace
 
 environment:
   sdk: ^3.6.1

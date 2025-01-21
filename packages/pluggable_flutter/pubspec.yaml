@@ -1,6 +1,6 @@
 name: pluggable_flutter
 description: "A new Flutter project."
-resolution: workspace
+#resolution: workspace
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
