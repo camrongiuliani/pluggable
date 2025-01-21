@@ -1,5 +1,5 @@
 name: _
-description: "A new Flutter package project."
+description: "Pluggable - Plug-n-Play Architecture"
 workspace:
   - packages/pluggable
   - packages/pluggable_flutter
