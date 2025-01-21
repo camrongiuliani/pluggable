@@ -1,6 +1,6 @@
 name: pluggable
 description: "A new Flutter package project."
-version: 0.0.1
+version: 0.0.1-pre.1
 resolution: workspace
 
 environment:
@@ -11,25 +11,15 @@ dependencies:
   use_case: ^1.1.7
   synchronized: ^3.1.0+1
   expire_cache: ^2.0.1
-  http:
+  http: any
+  uuid: any
+  collection: any
 
-  pluggable_di_getit:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/di/pluggable_di_getit
-      ref: develop
+  pluggable_di_getit: 0.0.1-pre.1
 
-  in_memory_storage_plug:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/storage/in_memory_storage_plug
-      ref: develop
+  in_memory_storage_plug: 0.0.1-pre.1
 
-  cartographer_mapper_plug:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/mapper/cartographer_mapper_plug
-      ref: develop
+  cartographer_mapper_plug: 0.0.1-pre.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0

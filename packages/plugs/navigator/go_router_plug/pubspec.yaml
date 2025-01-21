@@ -1,6 +1,6 @@
 name: go_router_plug
 description: "A new Flutter package project."
-version: 0.0.1
+version: 0.0.1-pre.1
 resolution: workspace
 
 environment:
@@ -13,11 +13,7 @@ dependencies:
 
   go_router: ^14.2.0
 
-  pluggable_flutter:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/pluggable_flutter
-      ref: develop
+  pluggable_flutter: 0.0.1-pre.1
 
 dev_dependencies:
   flutter_test:

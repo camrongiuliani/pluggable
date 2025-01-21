@@ -16,10 +16,12 @@ class PRequestHandler {
   }) {
     Pluggable.logger.header(
       '$runtimeType created [${request.method.value}] for ${request.requestId}',
+      tag: '$runtimeType',
     );
     Pluggable.logger.v(
       'Query Parameters ${request.queryParameters}',
       showPrefix: true,
+      tag: '$runtimeType',
     );
 
     final data = switch (request) {
@@ -31,6 +33,7 @@ class PRequestHandler {
     Pluggable.logger.v(
       'Request Body: $data',
       showPrefix: true,
+      tag: '$runtimeType',
     );
   }
 

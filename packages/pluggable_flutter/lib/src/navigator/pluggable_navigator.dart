@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pluggable/pluggable.dart';
 import 'package:pluggable_flutter/pluggable_flutter.dart';
 
 abstract class PluggableNavigator implements Plug<PluggableNavigator> {

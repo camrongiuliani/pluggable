@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:pluggable/pluggable.dart';
 
 abstract class ServerEnv {
   static const String _kEnvUrlBase = 'P_ENV_URL_BASE';
@@ -19,8 +20,7 @@ abstract class ServerEnv {
   static const String _kEnvRedisPw = 'P_ENV_REDIS_PW';
   static const String _kEnvIdpHost = 'P_ENV_IDP_HOST';
   static const String _kEnvIsLocal = 'P_ENV_IS_LOCAL';
-  static const String _kEnvLoggingCredential =
-      'P_ENV_LOGGING_CREDENTIAL';
+  static const String _kEnvLoggingCredential = 'P_ENV_LOGGING_CREDENTIAL';
   static const String _kEnvLoggingUrl = 'P_ENV_LOGGING_URL';
   static const String _kRemoteLoggingEnabled = 'REMOTE_LOGGING_ENABLED';
   static const String _kLoggingLevel = 'LOGGING_LEVEL';
@@ -44,7 +44,7 @@ abstract class ServerEnv {
     final key2 = key;
 
     return (Platform.environment[key1] ?? Platform.environment[key2] ?? def)
-    as int;
+        as int;
   }
 
   String get name => _name;
@@ -84,8 +84,8 @@ abstract class ServerEnv {
   bool get isLocal => _getEnvStr(_kEnvIsLocal) == 'true';
 
   int get syncPort => int.parse(
-    _getEnvStr(_kEnvRedisPort, '6379'),
-  );
+        _getEnvStr(_kEnvRedisPort, '6379'),
+      );
 
   bool get remoteLoggingEnabled =>
       _getEnvStr(_kRemoteLoggingEnabled).toLowerCase() == 'true';
@@ -112,7 +112,12 @@ abstract class ServerEnv {
         return MapEntry<String, String>(key, value);
       });
     } catch (e) {
-      print(e);
+      Pluggable.logger.e(
+        e.toString(),
+        err: e,
+        stackTrace: StackTrace.current,
+        tag: '$runtimeType',
+      );
       return {};
     }
   }

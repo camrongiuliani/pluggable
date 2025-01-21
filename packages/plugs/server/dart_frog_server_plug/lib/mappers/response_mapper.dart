@@ -9,11 +9,11 @@ class FrogResponseMapper extends Mapper<PHttpResponse, Response> {
   @override
   Response map(PHttpResponse source) {
     return switch (source.data) {
-      Stream s =>
+      Stream<List<int>> s =>
           Response.stream(
             statusCode: source.statusCode,
             headers: source.headers,
-            body: source.data,
+            body: s,
           ),
       _ =>
           Response(

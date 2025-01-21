@@ -44,9 +44,9 @@ class _RedisAdapter<T extends Object> {
         lockIdentity = Uuid().v4();
 
   List<dynamic> get expirationParams => switch (expiresIn == null) {
-    true => [],
-    false => ['PX', expiresIn!.inMilliseconds],
-  };
+        true => [],
+        false => ['PX', expiresIn!.inMilliseconds],
+      };
 
   Future<void> close() async {
     if (!_open) {
@@ -98,15 +98,20 @@ class _RedisAdapter<T extends Object> {
           results[key] = switch (value) {
             String _ || int _ || bool _ || num _ || double _ => value,
             _ => () {
-              return (value as dynamic)?.toJson();
-            }(),
+                return (value as dynamic)?.toJson();
+              }(),
           };
         }
 
         return results;
       });
     } catch (e) {
-      print(e);
+      Pluggable.logger.e(
+        e.toString(),
+        err: e,
+        stackTrace: StackTrace.current,
+        tag: '$runtimeType',
+      );
     }
 
     return {};
@@ -124,7 +129,6 @@ class _RedisAdapter<T extends Object> {
           socket,
           context: SecurityContext(withTrustedRoots: false),
           onBadCertificate: (certificate) {
-            print('it a bad cert dude');
             return true;
           },
         );
@@ -135,7 +139,10 @@ class _RedisAdapter<T extends Object> {
 
         if (password != null) {
           await command.send_object(['AUTH', password]);
-          print("Successfully authenticated to Redis Cache");
+          Pluggable.logger.v(
+            "Successfully authenticated to Redis Cache",
+            tag: '$runtimeType',
+          );
         }
 
         await command.send_object(['SELECT', 0]);
@@ -147,8 +154,8 @@ class _RedisAdapter<T extends Object> {
 
         final allKeys = (await keys)
             .where((key) {
-          return !key.endsWith('_lock');
-        })
+              return !key.endsWith('_lock');
+            })
             .where((key) => key.startsWith('dart_'))
             .toList();
 
@@ -161,16 +168,19 @@ class _RedisAdapter<T extends Object> {
         dbIdx = switch (indexes.keys.contains('dart_$T')) {
           true => int.parse(indexes['dart_$T']!),
           false => switch (indexes.length) {
-            0 => 1,
-            1 => 2,
-            _ => 1 +
-                indexes.values.map((e) => int.parse(e)).reduce(
-                      (a, b) => max(a, b),
-                ),
-          },
+              0 => 1,
+              1 => 2,
+              _ => 1 +
+                  indexes.values.map((e) => int.parse(e)).reduce(
+                        (a, b) => max(a, b),
+                      ),
+            },
         };
 
-        print('DBX $dbIdx SET FOR $T');
+        Pluggable.logger.v(
+          'DBX $dbIdx SET FOR $T',
+          tag: '$runtimeType',
+        );
 
         await command.send_object(['SETNX', 'dart_$T', dbIdx]);
         await releaseLock('dart_$T', 'DB_OPEN_$lockIdentity');
@@ -203,17 +213,19 @@ class _RedisAdapter<T extends Object> {
   }
 
   Future<bool> acquireLock(
-      String key,
-      String trace, [
-        int attempts = 1,
-        int maxAttempts = 0,
-        int attemptDelay = 1000,
-      ]) async {
+    String key,
+    String trace, [
+    int attempts = 1,
+    int maxAttempts = 0,
+    int attemptDelay = 1000,
+  ]) async {
     if (!_open && !trace.contains('DB_OPEN')) return false;
 
     final lockKey = '${key}_lock';
-    print(
-        '${Isolate.current.debugName} - $trace trying to lock $lockKey for $lockReleaseTimeout');
+    Pluggable.logger.v(
+      '${Isolate.current.debugName} - $trace trying to lock $lockKey for $lockReleaseTimeout',
+      tag: '$runtimeType',
+    );
 
     final result = await Future.wait([
       command.send_object(
@@ -225,8 +237,10 @@ class _RedisAdapter<T extends Object> {
     bool hasLock = result.first == 'OK' || result[1] == trace;
 
     if (hasLock) {
-      print(
-          '${Isolate.current.debugName} - $trace locked $lockKey for $lockReleaseTimeout');
+      Pluggable.logger.v(
+        '${Isolate.current.debugName} - $trace locked $lockKey for $lockReleaseTimeout',
+        tag: '$runtimeType',
+      );
     }
 
     if (hasLock) {
@@ -256,7 +270,10 @@ class _RedisAdapter<T extends Object> {
     await ensureInitialized();
 
     final lockKey = '${key}_lock';
-    print('${Isolate.current.debugName} - $trace releasing $lockKey');
+    Pluggable.logger.v(
+      '${Isolate.current.debugName} - $trace releasing $lockKey',
+      tag: '$runtimeType',
+    );
 
     // Start transaction on key
     // await command.send_object(['WATCH', lockKey]);
@@ -271,16 +288,18 @@ class _RedisAdapter<T extends Object> {
     // Remove the lock if it matches
     if (keyId == trace) {
       return _transLock.synchronized(
-            () async {
+        () async {
           // await command.send_object(['MULTI']);
           await command.send_object(['DEL', lockKey]);
           // await command.send_object(['EXEC']);
-          print('${Isolate.current.debugName} - Released lock');
+          Pluggable.logger.v(
+            '${Isolate.current.debugName} - Released lock',
+            tag: '$runtimeType',
+          );
         },
         timeout: const Duration(milliseconds: 6000),
       );
     } else {
-      print('${Isolate.current.debugName} - UNWATCH 2');
       // Cancel transaction if it doesn't match
       // await command.send_object(['UNWATCH']);
     }
@@ -323,22 +342,22 @@ class _RedisAdapter<T extends Object> {
   }
 
   Future<void> put(
-      String key,
-      T? entry, [
-        String? trace,
-      ]) async {
+    String key,
+    T? entry, [
+    String? trace,
+  ]) async {
     await ensureInitialized();
 
     final value = switch (fromEncodable == null || entry == null) {
       true => entry,
       false => jsonEncode(
-        (entry as dynamic).toJson(),
-      ),
+          (entry as dynamic).toJson(),
+        ),
     };
 
     final String identity = trace ?? lockIdentity;
 
-    // print('${Isolate.current.debugName} - ID = $identity');
+    // Pluggable.logger.v('${Isolate.current.debugName} - ID = $identity');
 
     return acquireLock(key, identity).then((hasLock) {
       if (!hasLock) {
@@ -370,18 +389,21 @@ class _RedisAdapter<T extends Object> {
   }
 
   Future<bool> putIfAbsent(
-      String key,
-      T entry, [
-        String? trace,
-      ]) async {
-    print('PUTTING $key');
+    String key,
+    T entry, [
+    String? trace,
+  ]) async {
+    Pluggable.logger.v(
+      'PUTTING $key',
+      tag: '$runtimeType',
+    );
     await ensureInitialized();
 
     final value = switch (fromEncodable == null) {
       true => entry,
       false => jsonEncode(
-        (entry as dynamic).toJson(),
-      ),
+          (entry as dynamic).toJson(),
+        ),
     };
 
     final String identity = trace ?? lockIdentity;
@@ -411,18 +433,33 @@ class _RedisAdapter<T extends Object> {
         try {
           await close();
         } catch (e) {
-          print(e);
+          Pluggable.logger.e(
+            e.toString(),
+            err: e,
+            stackTrace: StackTrace.current,
+            tag: '$runtimeType',
+          );
         }
 
         await open();
       }
     } catch (e) {
-      print(e);
+      Pluggable.logger.e(
+        e.toString(),
+        err: e,
+        stackTrace: StackTrace.current,
+        tag: '$runtimeType',
+      );
 
       try {
         await close();
       } catch (e) {
-        print(e);
+        Pluggable.logger.e(
+          e.toString(),
+          err: e,
+          stackTrace: StackTrace.current,
+          tag: '$runtimeType',
+        );
       }
 
       _open = false;
@@ -447,10 +484,10 @@ class _RedisAdapter<T extends Object> {
   }
 
   Future<T?> getAndPut(
-      String key,
-      T value, [
-        String? trace,
-      ]) async {
+    String key,
+    T value, [
+    String? trace,
+  ]) async {
     await ensureInitialized();
 
     Map<String, dynamic> map = (value as dynamic).toJson();
@@ -505,9 +542,9 @@ class RedisStoragePlug extends PluggableStorage {
 
   @override
   Future<Map<String, dynamic>> getAllForType(
-      String type, [
-        String? key,
-      ]) async {
+    String type, [
+    String? key,
+  ]) async {
     return _openLock.synchronized(() async {
       final entry = _caches.entries.firstWhereOrNull((e) {
         return e.value.type.toString() == type;
@@ -537,7 +574,10 @@ class RedisStoragePlug extends PluggableStorage {
 
     initialized = true;
 
-    print('${Isolate.current.debugName} - Redis store initialized');
+    Pluggable.logger.v(
+      '${Isolate.current.debugName} - Redis store initialized',
+      tag: '$runtimeType',
+    );
 
     return this;
   }
@@ -571,10 +611,10 @@ class RedisStoragePlug extends PluggableStorage {
     DecodeFunc<T>? fromEncodable,
   }) async {
     return _openLock.synchronized(() async {
-      // print('${Isolate.current.debugName} - OPENING $T');
+      // Pluggable.logger.v('${Isolate.current.debugName} - OPENING $T');
 
       if (_caches.containsKey(T) && _caches[T]!._open) {
-        // print('Cannot reopen a cache without first closing it.');
+        // Pluggable.logger.v('Cannot reopen a cache without first closing it.');
         return;
       }
 
@@ -624,10 +664,10 @@ class RedisStoragePlug extends PluggableStorage {
 
   @override
   Future<void> put<T extends Object>(
-      String key,
-      T? value, [
-        String? trace,
-      ]) {
+    String key,
+    T? value, [
+    String? trace,
+  ]) {
     return _getCache<T>().put(key, value, trace).then((_) {
       resolveInFlightRequest<T>(key, value);
     });
@@ -635,19 +675,19 @@ class RedisStoragePlug extends PluggableStorage {
 
   @override
   Future<bool> putIfAbsent<T extends Object>(
-      String key,
-      T value, [
-        String? trace,
-      ]) {
+    String key,
+    T value, [
+    String? trace,
+  ]) {
     return _getCache<T>().putIfAbsent(key, value);
   }
 
   @override
   Future<T?> get<T extends Object>(
-      String key, [
-        Fetch<T>? fetch,
-        String? trace,
-      ]) async {
+    String key, [
+    Fetch<T>? fetch,
+    String? trace,
+  ]) async {
     final cache = _getCache<T>();
 
     await cache.open();
@@ -665,11 +705,11 @@ class RedisStoragePlug extends PluggableStorage {
     final String identity = trace ?? cache.lockIdentity;
 
     if (await cache.isExtLocked(key, identity)) {
-      // print('${Isolate.current.debugName} - EXT LOCKED');
+      // Pluggable.logger.v('${Isolate.current.debugName} - EXT LOCKED');
       await Future.delayed(const Duration(milliseconds: 200));
       return get<T>(key, fetch, trace);
     } else if (isKeyInFlight<T>(key)) {
-      // print('${Isolate.current.debugName} - IN FLIGHT');
+      // Pluggable.logger.v('${Isolate.current.debugName} - IN FLIGHT');
       return inFlightRequest<T>(key);
     }
 
@@ -678,11 +718,11 @@ class RedisStoragePlug extends PluggableStorage {
     value ??= await cache.get(key);
 
     if (value == null && fetch != null) {
-      // print('${Isolate.current.debugName} - FETCH ACQ LOCK');
+      // Pluggable.logger.v('${Isolate.current.debugName} - FETCH ACQ LOCK');
 
       bool hasLock = await cache.acquireLock(key, identity);
 
-      // print('${Isolate.current.debugName} - ACQUIRED IN GET');
+      // Pluggable.logger.v('${Isolate.current.debugName} - ACQUIRED IN GET');
 
       if (!hasLock) {
         throw Exception('Unable to achieve lock on key $key');
@@ -692,7 +732,7 @@ class RedisStoragePlug extends PluggableStorage {
 
       if (fetchedValue != null) {
         await put<T>(key, fetchedValue, trace);
-        // print('${Isolate.current.debugName} - SET $fetchedValue');
+        // Pluggable.logger.v('${Isolate.current.debugName} - SET $fetchedValue');
         return fetchedValue;
       }
     } else if (value != null) {
@@ -708,10 +748,10 @@ class RedisStoragePlug extends PluggableStorage {
 
   @override
   Future<T?> getAndPut<T extends Object>(
-      String key,
-      T value, [
-        String? trace,
-      ]) {
+    String key,
+    T value, [
+    String? trace,
+  ]) {
     return _getCache<T>().getAndPut(
       key,
       value,

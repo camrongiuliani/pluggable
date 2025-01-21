@@ -1,6 +1,6 @@
 name: pluggable_di_getit
 description: "A new Flutter package project."
-version: 0.0.1
+version: 0.0.1-pre.1
 resolution: workspace
 
 environment:
@@ -10,11 +10,7 @@ dependencies:
 
   get_it: ^8.0.3
 
-  pluggable:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/core
-      ref: develop
+  pluggable: 0.0.1-pre.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0

@@ -42,7 +42,7 @@ class DartFrogServerPlug extends DartServerPlug {
     }
 
     return serve(
-      router,
+      router.call,
       ip,
       port,
       shared: true,

@@ -14,7 +14,7 @@ Future<core.PluggableImpl> initPluggable({
 }) async {
 
   if (core.PluggableImpl.instance?.initialized ?? false) {
-    await core.PluggableImpl?.instance!.dispose();
+    await core.PluggableImpl.instance!.dispose();
   }
 
   final pluggable = await core.initPluggable(

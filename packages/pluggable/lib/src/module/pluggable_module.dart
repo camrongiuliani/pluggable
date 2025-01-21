@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'package:pluggable/pluggable.dart';
-import 'package:pluggable/src/di/pluggable_di.dart';
-import 'package:pluggable/src/plug.dart';
-import 'package:pluggable/src/pluggable/pluggable.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class PluggableModule extends Plug<PluggableModule> {

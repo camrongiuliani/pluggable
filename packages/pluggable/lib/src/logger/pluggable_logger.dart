@@ -84,6 +84,7 @@ class ConsoleLoggerPlug extends PluggableLogger {
       );
 
   /// Logs an information message.
+  @override
   void i(
     String message, {
     String? tag,

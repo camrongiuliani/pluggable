@@ -23,7 +23,10 @@ class SecureStoragePlug extends PluggableStorage {
     return await newHiveDefaultCacheStore().then((store) {
       _store = store;
       initialized = true;
-      print('Secure vault store initialized');
+      Pluggable.logger.v(
+        'Secure vault store initialized',
+        tag: '$runtimeType',
+      );
       return this;
     });
   }
@@ -50,13 +53,24 @@ class SecureStoragePlug extends PluggableStorage {
       expiryPolicy: TouchedExpiryPolicy(expiry),
     )
       ..on<CacheEntryCreatedEvent<T>>().listen((event) {
-        print(event.entry.expiryTime);
-        return print('Key "${event.entry.key}" added to the vault');
+        return Pluggable.logger.v(
+          'Key "${event.entry.key}" added to the vault',
+          tag: '$runtimeType',
+        );
       })
       ..on<CacheEntryUpdatedEvent<T>>().listen((event) {
-        print('Key "${event.newEntry.key}" updated in the vault');
-        print('Old Expiry: ${event.oldEntry.expiryTime}');
-        print('New Expiry: ${event.newEntry.expiryTime}');
+        Pluggable.logger.v(
+          'Key "${event.newEntry.key}" updated in the vault',
+          tag: '$runtimeType',
+        );
+        Pluggable.logger.v(
+          'Old Expiry: ${event.oldEntry.expiryTime}',
+          tag: '$runtimeType',
+        );
+        Pluggable.logger.v(
+          'New Expiry: ${event.newEntry.expiryTime}',
+          tag: '$runtimeType',
+        );
       });
   }
 
@@ -84,10 +98,10 @@ class SecureStoragePlug extends PluggableStorage {
 
   @override
   Future<void> put<T extends Object>(
-      String key,
-      T? value, [
-        String? trace,
-      ]) {
+    String key,
+    T? value, [
+    String? trace,
+  ]) {
     final cache = getCache<T>();
 
     if (value == null) {
@@ -103,19 +117,19 @@ class SecureStoragePlug extends PluggableStorage {
 
   @override
   Future<bool> putIfAbsent<T extends Object>(
-      String key,
-      T value, [
-        String? trace,
-      ]) {
+    String key,
+    T value, [
+    String? trace,
+  ]) {
     return getCache<T>().putIfAbsent(key, value);
   }
 
   @override
   Future<T?> get<T extends Object>(
-      String key, [
-        Fetch<T>? fetch,
-        String? trace,
-      ]) async {
+    String key, [
+    Fetch<T>? fetch,
+    String? trace,
+  ]) async {
     if (isKeyInFlight<T>(key)) {
       return inFlightRequest<T>(key);
     }
@@ -146,10 +160,10 @@ class SecureStoragePlug extends PluggableStorage {
 
   @override
   Future<T?> getAndPut<T extends Object>(
-      String key,
-      T value, [
-        String? trace,
-      ]) {
+    String key,
+    T value, [
+    String? trace,
+  ]) {
     return getCache<T>().getAndPut(key, value);
   }
 }

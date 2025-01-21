@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:pluggable/pluggable.dart';
 import 'package:pluggable_di_getit/pluggable_di_getit.dart';
@@ -26,11 +27,11 @@ Future<PluggableImpl> initPluggable({
   final pluggable = PluggableImpl();
 
   if (!pluggable.initialized) {
+    await pluggable.plugin(loggingPlugin ?? ConsoleLoggerPlug());
     await pluggable.plugin(mapperPlugin ?? CartographerMapperPlug());
     await pluggable.plugin(diPlugin ?? PluggableGetIt());
     await pluggable.plugin(storagePlugin ?? InMemoryStoragePlug());
     await pluggable.plugin(analyticsPlugin ?? NoAnalyticsPlug());
-    await pluggable.plugin(loggingPlugin ?? ConsoleLoggerPlug());
 
     await pluggable._init();
 
@@ -67,11 +68,20 @@ class PluggableImpl extends DartNotifier {
     return plugins.firstWhere((p) => p is T) as T;
   }
 
+  T? maybeGet<T extends Plug<T>>() {
+    return plugins.firstWhereOrNull((p) => p is T) as T?;
+  }
+
   bool debug = false;
 
   PluggableDI get di => get();
 
-  PluggableLogger get logger => get();
+  PluggableLogger get logger => switch (initialized) {
+    true => get(),
+    false => _initLogger,
+  };
+
+  PluggableLogger get _initLogger => maybeGet() ?? ConsoleLoggerPlug();
 
   PluggableStorage get storage => get();
 
@@ -81,13 +91,10 @@ class PluggableImpl extends DartNotifier {
 
   final UseCaseManager ucm;
 
-  // final IdentityProvider idp;
-
   bool initialized = false;
 
   bool containsPlugin<T extends Plug<T>>() {
-    var type = T;
-    var plugs = plugins.where((p) => p is T).toList();
+    var plugs = plugins.whereType<T>().toList();
     var contains = plugs.isNotEmpty;
 
     return contains;
@@ -98,7 +105,10 @@ class PluggableImpl extends DartNotifier {
     bool allowReassignment = false,
     bool notify = true,
   }) async {
-    print('Trying to plug in ${plug.runtimeType}');
+    logger.v(
+      'Trying to plug in ${plug.runtimeType}',
+      tag: '$runtimeType',
+    );
 
     if (containsPlugin<T>()) {
       if (allowReassignment) {
@@ -117,7 +127,10 @@ class PluggableImpl extends DartNotifier {
     );
 
     if (containsPlugin<T>()) {
-      print('Plugged in ${plug.runtimeType}');
+      logger.v(
+        'Plugged in ${plug.runtimeType}',
+        tag: '$runtimeType',
+      );
     } else {
       throw Exception('Failed to plug in ${plug.runtimeType}');
     }
@@ -155,6 +168,7 @@ class PluggableImpl extends DartNotifier {
     return this;
   }
 
+  @override
   Future<void> dispose() async {
     await Future.wait(
       plugins.map(
@@ -177,7 +191,6 @@ class PluggableImpl extends DartNotifier {
   }
 
   Stream<T> on<T>() => _bus.on<T>();
-
 }
 
 class DartNotifier {
