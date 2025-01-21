@@ -12,6 +12,11 @@ Future<core.PluggableImpl> initPluggable({
   PluggableLogger? loggingPlugin,
   PluggableDI? diPlugin,
 }) async {
+
+  if (core.PluggableImpl.instance?.initialized ?? false) {
+    await core.PluggableImpl?.instance!.dispose();
+  }
+
   final pluggable = await core.initPluggable(
     modules: modules,
     storagePlugin: storagePlugin,
@@ -31,4 +36,12 @@ extension PluggableDartServer on PluggableImpl {
 
 mixin PluggableServerMixin on PluggableModule {
   ServerEnv get env;
+  Future<void> seed();
+
+  @override
+  Future<PluggableModule> init() async {
+    bind();
+    await seed();
+    return this;
+  }
 }

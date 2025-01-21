@@ -144,7 +144,8 @@ class PluggableImpl extends DartNotifier {
         'WARNING: Pluggable already initialized.',
         tag: '$runtimeType',
       );
-      return this;
+
+      await dispose();
     }
 
     _subscribeEventBus();
@@ -152,6 +153,21 @@ class PluggableImpl extends DartNotifier {
     initialized = true;
 
     return this;
+  }
+
+  Future<void> dispose() async {
+    await Future.wait(
+      plugins.map(
+        (p) => p.dispose(),
+      ),
+    );
+
+    await triggerStreamSubscription?.cancel();
+    triggerStreamSubscription = null;
+
+    instance = null;
+
+    super.dispose();
   }
 
   Future<void> emit(event) async {

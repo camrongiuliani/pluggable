@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:dart_frog_server_plug/mappers/request_mapper.dart';
+import 'package:dart_frog_server_plug/mappers/response_mapper.dart';
 import 'package:pluggable_dart_server/pluggable_dart_server.dart';
 
 class DartFrogServerPlug extends DartServerPlug {
@@ -11,6 +13,12 @@ class DartFrogServerPlug extends DartServerPlug {
 
   @override
   Future<DartFrogServerPlug> init() async {
+
+    Pluggable.mapper.buildAtlas([
+      ...FrogRequestMapper.all(Pluggable.mapper),
+      FrogResponseMapper(Pluggable.mapper),
+    ]);
+
     return this;
   }
 
@@ -42,11 +50,18 @@ class DartFrogServerPlug extends DartServerPlug {
   }
 
   @override
-  Future<RESPONSE> handle<REQUEST, RESPONSE>({
+  Future<RES> handle<REQUEST, RES>({
     required REQUEST request,
     required RequestHandler handler,
-  }) {
-    // TODO: implement handle
-    throw UnimplementedError();
+  }) async {
+    final result = await handler(
+      await Pluggable.mapper.mapAsync<RequestContext, PHttpRequest>(
+        request as RequestContext,
+      ),
+    ).execute();
+
+    return Pluggable.mapper.map<PHttpResponse, Response>(
+      result,
+    ) as RES;
   }
 }

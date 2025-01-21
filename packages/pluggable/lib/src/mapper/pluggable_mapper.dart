@@ -31,6 +31,16 @@ abstract class PluggableMapper extends Plug<PluggableMapper> {
     FROM source, [
     String? named,
   ]);
+
+  Future<TO> mapAsync<FROM extends Object, TO extends Object>(
+    FROM source, [
+    String? named,
+  ]);
+
+  Future<TO?> maybeMapAsync<FROM extends Object, TO extends Object>(
+    FROM source, [
+    String? named,
+  ]);
 }
 
 abstract class Mapper<FROM extends Object, TO extends Object> {
@@ -52,4 +62,19 @@ abstract class Mapper<FROM extends Object, TO extends Object> {
   }
 
   TO map(FROM source);
+}
+
+abstract class AsyncMapper<FROM extends Object, TO extends Object>
+    extends Mapper<FROM, TO> {
+  const AsyncMapper(
+    super.mapper, [
+    super.name,
+  ]);
+
+  @override
+  TO map(FROM source) {
+    throw Exception('Called map() on an AsyncMapper');
+  }
+
+  Future<TO> mapAsync(FROM source);
 }

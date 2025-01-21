@@ -25,19 +25,23 @@ class CartographerMapperPlug extends PluggableMapper {
 
   Mapper? _maybeGetMapper<FROM extends Object, TO extends Object>([
     String? named,
+    bool async = false,
   ]) {
-    return _mappers.firstWhereOrNull((m) {
+    return _mappers.where((m) {
+      return (async && m is AsyncMapper) || (!async && m is! AsyncMapper);
+    }).firstWhereOrNull((m) {
       return m.isMapperFor<FROM, TO>(named);
     });
   }
 
   Mapper _getMapper<FROM extends Object, TO extends Object>([
     String? named,
+    bool async = false,
   ]) {
-    final mapper = _maybeGetMapper<FROM, TO>(named);
+    final mapper = _maybeGetMapper<FROM, TO>(named, async);
 
     if (mapper == null) {
-      throw MapperNotRegistered<FROM, TO>();
+      throw MapperNotRegistered<FROM, TO>(async);
     }
 
     return mapper;
@@ -57,5 +61,33 @@ class CartographerMapperPlug extends PluggableMapper {
     String? named,
   ]) {
     return _getMapper<FROM, TO>(named).map(source) as TO;
+  }
+
+  @override
+  Future<TO> mapAsync<FROM extends Object, TO extends Object>(
+    FROM source, [
+    String? named,
+  ]) {
+    final mapper = _getMapper<FROM, TO>(named, true);
+
+    if (mapper is! AsyncMapper) {
+      throw MapperNotRegistered<FROM, TO>(true);
+    }
+
+    return mapper.mapAsync(source) as Future<TO>;
+  }
+
+  @override
+  Future<TO?> maybeMapAsync<FROM extends Object, TO extends Object>(
+    FROM source, [
+    String? named,
+  ]) async {
+    final mapper = _getMapper<FROM, TO>(named, true);
+
+    if (mapper is! AsyncMapper) {
+      return null;
+    }
+
+    return mapper.mapAsync(source) as Future<TO>;
   }
 }

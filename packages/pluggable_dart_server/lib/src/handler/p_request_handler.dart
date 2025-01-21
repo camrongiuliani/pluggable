@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:pluggable_dart_server/pluggable_dart_server.dart';
-import 'package:pluggable_dart_server/src/handler/exceptions.dart';
+import 'dart:io';
 
 class PRequestHandler {
   final PHttpRequest request;
-  final List<ApiException> exceptions = [];
+  final List<PHttpException> exceptions = [];
   final QueryParamValidator? queryValidator;
   final HeaderValidation? headerValidator;
 
@@ -21,26 +21,100 @@ class PRequestHandler {
       'Query Parameters ${request.queryParameters}',
       showPrefix: true,
     );
+
+    final data = switch (request) {
+      PHttpFormDataRequest r => r.data,
+      PHttpJsonDataRequest r => r.data,
+      _ => null,
+    };
+
     Pluggable.logger.v(
-      'Request Body ${request.data}',
+      'Request Body: $data',
       showPrefix: true,
     );
   }
 
-  FutureOr<Object?> execute() async {
-    try {
-      return await _execute();
-    } catch (e) {
-      await error();
-      rethrow;
+  // Checks to see if the [data] is a primitive Dart type.
+  // Lists and maps are also primitive if they contain only primitive types.
+  bool isPrimitiveDartType(dynamic data) {
+    if (data is num || data is String || data is bool) {
+      return true;
+    } else if (data is List) {
+      return data.every((element) => isPrimitiveDartType(element));
+    } else if (data is Map) {
+      return data.values.every((element) => isPrimitiveDartType(element));
     }
+    return false;
   }
 
-  FutureOr<Object?> _execute() async {
-    if (request.data is Future) {
-      await request.data;
-    }
+  FutureOr<PHttpResponse> execute() async {
+    return _execute().then((response) {
+      final data = switch (isPrimitiveDartType(response.data)) {
+        true => response.data,
+        false => switch (response.data) {
+          Stream() => response.data,
+          _ => (response.data as Object?).serialized,
+        },
+      };
 
+      bool isJson = switch (data) {
+        Map<String, dynamic>() || List<Map<String, dynamic>>() => true,
+        _ => false,
+      };
+
+      return response.copyWith(
+        statusCode: 200,
+        data: switch (isPrimitiveDartType(data)) {
+          true => {
+              'requestId': request.requestId,
+              'data': data,
+          },
+          false => data,
+        },
+        headers: {
+          HttpHeaders.contentTypeHeader: switch (isJson) {
+            true => ContentType.json.mimeType,
+            _ => switch (data) {
+                Stream() => ContentType.binary.mimeType,
+                _ => ContentType.text.mimeType,
+              },
+          },
+        },
+      );
+    }).onError((error, stackTrace) {
+      final trace = stackTrace.toString().split('\n').where(
+        (e) {
+          return e != '<asynchronous suspension>';
+        },
+      ).toList();
+
+      return PHttpResponse(
+        statusCode: switch (error) {
+          PHttpException e => e.statusCode,
+          _ => 500,
+        },
+        headers: {
+          HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+        },
+        data: switch (error) {
+          PHttpException e => {
+              ...e.toJson(),
+              'stackTrace': trace,
+            },
+          _ => {
+              'error': error.toString(),
+              'stackTrace': trace,
+            },
+        },
+        message: switch (error) {
+          PHttpException e => e.message,
+          _ => 'Internal Server Error',
+        },
+      );
+    });
+  }
+
+  Future<PHttpResponse> _execute() async {
     queryValidator?.validate(
       httpMethod: request.method,
       parameters: request.queryParameters,
@@ -50,15 +124,20 @@ class PRequestHandler {
       request.headers,
     );
 
-    return switch (request.method) {
-      PHttpMethod.delete => delete(),
-      PHttpMethod.get => get(),
-      PHttpMethod.head => head(),
-      PHttpMethod.options => options(),
-      PHttpMethod.patch => patch(),
-      PHttpMethod.post => post(),
-      PHttpMethod.put => put(),
-    };
+    return PHttpResponse(
+      headers: {},
+      statusCode: 200,
+      data: await switch (request.method) {
+        PHttpMethod.delete => delete(),
+        PHttpMethod.get => get(),
+        PHttpMethod.head => head(),
+        PHttpMethod.options => options(),
+        PHttpMethod.patch => patch(),
+        PHttpMethod.post => post(),
+        PHttpMethod.put => put(),
+      },
+      message: 'message',
+    );
   }
 
   FutureOr<void> error() async {}
@@ -103,5 +182,20 @@ class PRequestHandler {
     throw UnimplementedError(
       '${request.path} does not implement PUT',
     );
+  }
+}
+
+extension on Object? {
+  dynamic get serialized {
+    dynamic obj = this;
+
+    try {
+      return switch (obj) {
+        List l => l.map((e) => (e as Object?).serialized).toList(),
+        _ => obj.toJson(),
+      };
+    } catch (_) {
+      return {};
+    }
   }
 }

@@ -11,6 +11,7 @@ dependencies:
   use_case: ^1.1.7
   synchronized: ^3.1.0+1
   expire_cache: ^2.0.1
+  http:
 
   pluggable_di_getit:
     git:

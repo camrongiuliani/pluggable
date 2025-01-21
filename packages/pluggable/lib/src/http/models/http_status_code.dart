@@ -144,6 +144,14 @@ class PHttpException implements Exception {
   String toString() {
     return 'PHttpException: $statusCode - $message';
   }
+
+  // toJson
+  Map<String, dynamic> toJson() {
+    return {
+      'statusCode': statusCode,
+      'message': message,
+    };
+  }
 }
 
 class BadRequestException extends PHttpException {
