@@ -8,6 +8,11 @@ typedef RequestHandler = PRequestHandler Function(
 );
 
 abstract class DartServerPlug extends Plug<DartServerPlug> {
+  final InternetAddress ip;
+  final int port;
+
+  DartServerPlug(this.ip, this.port);
+
   Future<HttpServer> run({
     // required PServerHandler handler,
     required InternetAddress ip,

@@ -2,7 +2,7 @@ name: pluggable_dart_server
 description: "A Pluggable Dart Server."
 resolution: workspace
 
-version: 0.0.1-pre.3
+version: 0.0.1-pre.4
 
 environment:
   sdk: ^3.6.0
