@@ -40,7 +40,7 @@ class PRequestHandler {
   // Checks to see if the [data] is a primitive Dart type.
   // Lists and maps are also primitive if they contain only primitive types.
   bool isPrimitiveDartType(dynamic data) {
-    if (data is num || data is String || data is bool) {
+    if (data is num || data is String || data is bool || data == null) {
       return true;
     } else if (data is List) {
       return data.every((element) => isPrimitiveDartType(element));
@@ -54,39 +54,43 @@ class PRequestHandler {
     return _execute().then((response) {
       final data = switch (isPrimitiveDartType(response.data)) {
         true => response.data,
-        false => switch (response.data) {
+        false =>
+        switch (response.data) {
           Stream() => response.data,
           _ => (response.data as Object?).serialized,
         },
       };
 
       bool isJson = switch (data) {
-        Map<String, dynamic>() || List<Map<String, dynamic>>() => true,
+        List l => l.every(isPrimitiveDartType),
+        Map m => m.values.every(isPrimitiveDartType),
         _ => false,
       };
 
       return response.copyWith(
         statusCode: 200,
         data: switch (isPrimitiveDartType(data)) {
-          true => {
-              'requestId': request.requestId,
-              'data': data,
+          true =>
+          {
+            'requestId': request.requestId,
+            'data': data,
           },
           false => data,
         },
         headers: {
           HttpHeaders.contentTypeHeader: switch (isJson) {
             true => ContentType.json.mimeType,
-            _ => switch (data) {
-                Stream() => ContentType.binary.mimeType,
-                _ => ContentType.text.mimeType,
-              },
+            _ =>
+            switch (data) {
+              Stream() => ContentType.binary.mimeType,
+              _ => ContentType.text.mimeType,
+            },
           },
         },
       );
     }).onError((error, stackTrace) {
       final trace = stackTrace.toString().split('\n').where(
-        (e) {
+            (e) {
           return e != '<asynchronous suspension>';
         },
       ).toList();
@@ -100,14 +104,16 @@ class PRequestHandler {
           HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
         },
         data: switch (error) {
-          PHttpException e => {
-              ...e.toJson(),
-              'stackTrace': trace,
-            },
-          _ => {
-              'error': error.toString(),
-              'stackTrace': trace,
-            },
+          PHttpException e =>
+          {
+            ...e.toJson(),
+            'stackTrace': trace,
+          },
+          _ =>
+          {
+            'error': error.toString(),
+            'stackTrace': trace,
+          },
         },
         message: switch (error) {
           PHttpException e => e.message,
@@ -195,6 +201,8 @@ extension on Object? {
     try {
       return switch (obj) {
         List l => l.map((e) => (e as Object?).serialized).toList(),
+        Map m => m.map((k, v) => MapEntry(k, (v as Object?).serialized)),
+        String() || num() || bool() || Stream() || null => obj,
         _ => obj.toJson(),
       };
     } catch (_) {
