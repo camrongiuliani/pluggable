@@ -9,11 +9,12 @@ class DartFrogServerPlug extends DartServerPlug {
 
   DartFrogServerPlug({
     required this.rootHandler,
-  });
+    required InternetAddress internetAddress,
+    required int port,
+  }) : super(internetAddress, port);
 
   @override
   Future<DartFrogServerPlug> init() async {
-
     Pluggable.mapper.buildAtlas([
       ...FrogRequestMapper.all(Pluggable.mapper),
       FrogResponseMapper(Pluggable.mapper),
@@ -46,6 +47,7 @@ class DartFrogServerPlug extends DartServerPlug {
       ip,
       port,
       shared: true,
+      poweredByHeader: poweredByHeader,
     );
   }
 
