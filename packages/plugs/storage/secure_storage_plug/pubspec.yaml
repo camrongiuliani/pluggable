@@ -1,8 +1,8 @@
 name: secure_storage_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.1
+version: 0.0.1-pre.2
 
-#resolution: workspace
+resolution: workspace
 
 environment:
   sdk: ^3.6.1
@@ -16,7 +16,7 @@ dependencies:
   uuid: any
   synchronized: ^3.1.0+1
 
-  pluggable: 0.0.1-pre.1
+  pluggable: 0.0.1-pre.2
 
 dev_dependencies:
   flutter_test:

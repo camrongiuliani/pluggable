@@ -1,13 +1,13 @@
 name: in_memory_storage_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.1
-#resolution: workspace
+version: 0.0.1-pre.2
+resolution: workspace
 
 environment:
   sdk: ^3.6.1
 
 dependencies:
-  pluggable: 0.0.1-pre.1
+  pluggable: 0.0.1-pre.2
 
 dev_dependencies:
   flutter_lints: ^5.0.0

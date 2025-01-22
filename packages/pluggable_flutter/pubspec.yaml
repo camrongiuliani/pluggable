@@ -1,10 +1,8 @@
 name: pluggable_flutter
-description: "A new Flutter project."
-#resolution: workspace
+description: "Pluggable"
+resolution: workspace
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-version: 1.0.0+1
+version: 0.0.1-pre.2
 
 environment:
   sdk: ^3.6.0
@@ -15,17 +13,9 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  pluggable:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/pluggable
-      ref: develop
-
-  pluggable_di_getit:
-    git:
-      url: git@github.com:camrongiuliani/pluggable.git
-      path: packages/di/pluggable_di_getit
-      ref: develop
+  pluggable: 0.0.1-pre.2
+#
+  pluggable_di_getit: ^0.0.1-pre.2
 
 dev_dependencies:
   flutter_test:
