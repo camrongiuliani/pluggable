@@ -1,5 +1,6 @@
 export 'src/pluggable/pluggable.dart';
 export 'src/plug.dart';
+export 'src/env/pluggable_env.dart';
 export 'src/di/pluggable_di.dart';
 export 'src/service/pluggable_service.dart';
 export 'src/module/pluggable_module.dart';

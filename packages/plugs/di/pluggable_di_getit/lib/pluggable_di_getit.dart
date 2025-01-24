@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:pluggable/pluggable.dart';
 
-class PluggableGetIt implements PluggableDI {
+class PluggableGetIt extends PluggableDI {
   PluggableGetIt() {
     _instance = GetIt.instance;
   }

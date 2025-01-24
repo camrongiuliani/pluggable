@@ -1,6 +1,6 @@
 name: pluggable
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.2
+version: 0.0.1-pre.4
 resolution: workspace
 
 environment:
@@ -15,11 +15,11 @@ dependencies:
   uuid: any
   collection: any
 
-  pluggable_di_getit: 0.0.1-pre.2
+  pluggable_di_getit: 0.0.1-pre.4
 
-  in_memory_storage_plug: 0.0.1-pre.2
+  in_memory_storage_plug: 0.0.1-pre.4
 
-  cartographer_mapper_plug: 0.0.1-pre.2
+  cartographer_mapper_plug: 0.0.1-pre.4
 
 dev_dependencies:
   flutter_lints: ^5.0.0

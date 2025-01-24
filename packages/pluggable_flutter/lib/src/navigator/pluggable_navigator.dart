@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pluggable_flutter/pluggable_flutter.dart';
 
-abstract class PluggableNavigator implements Plug<PluggableNavigator> {
+abstract class PluggableNavigator extends Plug<PluggableNavigator> {
   GlobalKey<NavigatorState> get key;
 
   RouterConfig<Object>? get config;

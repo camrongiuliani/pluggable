@@ -1,6 +1,6 @@
 name: object_box_storage_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.2
+version: 0.0.1-pre.4
 resolution: workspace
 
 environment:
@@ -16,7 +16,7 @@ dependencies:
   uuid: any
   synchronized: ^3.1.0+1
 
-  pluggable: 0.0.1-pre.2
+  pluggable: 0.0.1-pre.4
 
 dev_dependencies:
   flutter_test:

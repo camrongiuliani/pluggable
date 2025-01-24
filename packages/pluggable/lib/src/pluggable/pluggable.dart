@@ -94,10 +94,7 @@ class PluggableImpl extends DartNotifier {
   bool initialized = false;
 
   bool containsPlugin<T extends Plug<T>>() {
-    var plugs = plugins.whereType<T>().toList();
-    var contains = plugs.isNotEmpty;
-
-    return contains;
+    return plugins.any((p) => p.sameType<T>());
   }
 
   Future<void> plugin<T extends Plug<T>>(
