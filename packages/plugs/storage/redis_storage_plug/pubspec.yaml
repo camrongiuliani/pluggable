@@ -1,7 +1,7 @@
 name: redis_storage_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.4
-resolution: workspace
+version: 0.0.1-pre.5
+# pubspec_overrides.yaml
 
 environment:
   sdk: ^3.6.1
@@ -15,7 +15,7 @@ dependencies:
   uuid: any
   synchronized: ^3.1.0+1
 
-  pluggable: 0.0.1-pre.4
+  pluggable: 0.0.1-pre.5
 
 dev_dependencies:
   flutter_test:

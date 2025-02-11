@@ -1,8 +1,8 @@
 name: dart_frog_server_plug
 description: "Pluggable - Plug-n-Play Architecture"
-resolution: workspace
+# pubspec_overrides.yaml
 
-version: 0.0.1-pre.7
+version: 0.0.1-pre.8
 
 environment:
   sdk: ^3.6.0
@@ -12,7 +12,7 @@ dependencies:
   dart_frog: ^1.0.0
   dart_frog_gen: ^2.0.0
 
-  pluggable_dart_server: 0.0.1-pre.6
+  pluggable_dart_server: 0.0.1-pre.7
 
 dev_dependencies:
   flutter_lints: ^5.0.0

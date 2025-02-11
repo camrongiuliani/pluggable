@@ -1,8 +1,8 @@
 name: pluggable_flutter
 description: "Pluggable"
-resolution: workspace
+# pubspec_overrides.yaml
 
-version: 0.0.1-pre.4
+version: 0.0.1-pre.5
 
 environment:
   sdk: ^3.6.0
@@ -13,9 +13,9 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  pluggable: 0.0.1-pre.4
+  pluggable: 0.0.1-pre.5
 #
-  pluggable_di_getit: ^0.0.1-pre.4
+  pluggable_di_getit: ^0.0.1-pre.5
 
 dev_dependencies:
   flutter_test:

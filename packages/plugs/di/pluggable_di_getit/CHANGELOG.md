@@ -1,3 +1,8 @@
+## 0.0.1-pre.5
+
+ - **FIX**: remove more Flutter refs.
+ - **FEAT**: add dart server and some additional plugs.
+
 ## 0.0.1
 
 * TODO: Describe initial release.
