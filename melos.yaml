@@ -1,0 +1,8 @@
+name: Pluggable
+
+packages:
+  - packages/**
+
+scripts:
+  analyze:
+    exec: dart analyze .
