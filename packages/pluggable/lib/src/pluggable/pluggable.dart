@@ -36,7 +36,19 @@ Future<PluggableImpl> initPluggable({
     await pluggable._init();
 
     for (final module in modules) {
-      await pluggable.plugin(module);
+      pluggable.logger.v(
+        'Trying to plug in ${module.runtimeType}',
+        tag: 'PluggableInit',
+      );
+
+      pluggable.plugins.add(
+        await module.init(),
+      );
+
+      pluggable.logger.v(
+        'Plugged in ${module.runtimeType}',
+        tag: 'PluggableInit',
+      );
     }
   }
 

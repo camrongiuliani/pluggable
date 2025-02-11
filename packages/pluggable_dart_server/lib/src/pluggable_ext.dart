@@ -29,7 +29,7 @@ Future<HttpServer> runPluggableServer({
   return Pluggable.server.run(
     ip: server.ip,
     port: server.port,
-    mounts: mounts,
+    mounts: mounts.where((s) => s.isNotEmpty).toList(),
     poweredByHeader: poweredByHeader,
     securityContext: securityContext,
     shared: shared,

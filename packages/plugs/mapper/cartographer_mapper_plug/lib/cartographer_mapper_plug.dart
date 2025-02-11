@@ -13,7 +13,12 @@ class CartographerMapperPlug extends PluggableMapper {
   void buildAtlas<FROM extends Object, TO extends Object>(
     List<Mapper> creators,
   ) {
-    _mappers.addAll(creators);
+    _mappers.addAll(
+        creators.map((m) {
+          Pluggable.logger.i('Registered mapper of type ${m.from} to ${m.to}');
+          return m;
+        })
+    );
   }
 
   @override

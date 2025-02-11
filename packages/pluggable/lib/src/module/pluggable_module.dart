@@ -11,6 +11,10 @@ abstract class PluggableModule extends Plug<PluggableModule> {
   late final PluggableLogger? _logger;
   late final PluggableMapper? _mapper;
 
+  Future<void> plugin(PluggableImpl pluggable) async {
+    return pluggable.plugin(this);
+  }
+
   bool bound = false;
 
   StreamSubscription? ss;
@@ -32,12 +36,18 @@ abstract class PluggableModule extends Plug<PluggableModule> {
   }
 
   PluggableStorage get storage => _storage ?? Pluggable.storage;
+
   PluggableDI get di => _di ?? Pluggable.di;
+
   PluggableAnalytics get analytics => _analytics ?? Pluggable.analytics;
+
   PluggableLogger get logger => _logger ?? Pluggable.logger;
+
   PluggableMapper get mapper => _mapper ?? Pluggable.mapper;
 
   void addDependencies(PluggableDI i) {}
+
+  List<Mapper> registerMappers(PluggableMapper cartograph) => [];
 
   void bind([bool log = true]) {
     if (bound) {
@@ -53,7 +63,20 @@ abstract class PluggableModule extends Plug<PluggableModule> {
       Pluggable.di,
     );
 
+    _buildCartograph();
+
     bound = true;
+  }
+
+  void _buildCartograph() {
+    Pluggable.mapper.buildAtlas(
+      registerMappers(Pluggable.mapper),
+    );
+
+    logger.v(
+      'Mappers Registered: ${Pluggable.mapper.mappers.length}',
+      tag: '$runtimeType',
+    );
   }
 
   void unbind() {
