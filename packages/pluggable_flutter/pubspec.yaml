@@ -13,7 +13,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  pluggable: 0.0.1-pre.5
+  pluggable: ^0.0.1-pre.5
 #
   pluggable_di_getit: ^0.0.1-pre.5
 
