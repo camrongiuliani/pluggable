@@ -17,7 +17,7 @@ dependencies:
 #
   pluggable_di_getit: ^0.0.1-pre.5
 
-  collection: ^1.19.1
+  collection: ^1.19.0
 
 dev_dependencies:
   flutter_test:
