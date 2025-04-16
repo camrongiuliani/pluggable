@@ -30,7 +30,13 @@ Future<PluggableImpl> initPluggable({
     await pluggable.plugin(loggingPlugin ?? ConsoleLoggerPlug());
     await pluggable.plugin(mapperPlugin ?? CartographerMapperPlug());
     await pluggable.plugin(diPlugin ?? PluggableGetIt());
-    await pluggable.plugin(storagePlugin ?? InMemoryStoragePlug());
+    await pluggable.plugin(
+      storagePlugin ??
+          PluggableStorage(
+            local: InMemoryStoragePlug(),
+            remote: InMemoryStoragePlug(),
+          ),
+    );
     await pluggable.plugin(analyticsPlugin ?? NoAnalyticsPlug());
 
     await pluggable._init();
@@ -89,9 +95,9 @@ class PluggableImpl extends DartNotifier {
   PluggableDI get di => get();
 
   PluggableLogger get logger => switch (initialized) {
-    true => get(),
-    false => _initLogger,
-  };
+        true => get(),
+        false => _initLogger,
+      };
 
   PluggableLogger get _initLogger => maybeGet() ?? ConsoleLoggerPlug();
 

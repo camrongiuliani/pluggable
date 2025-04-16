@@ -1,7 +1,7 @@
 import 'package:expire_cache/expire_cache.dart';
 import 'package:pluggable/pluggable.dart';
 
-class ExpireCacheStoragePlug extends PluggableStorage {
+class ExpireCacheStoragePlug extends PluggableStorageProvider {
   final Map<Type, ExpireCache<String, Object?>> _cache = {};
 
   ExpireCache<String, T?> _getCache<T extends Object>() {
@@ -15,7 +15,7 @@ class ExpireCacheStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> close<T extends Object>() async {
+  Future<PluggableStorageProvider> close<T extends Object>() async {
     return this;
   }
 
@@ -25,7 +25,7 @@ class ExpireCacheStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> dump<T extends Object>() async {
+  Future<PluggableStorageProvider> dump<T extends Object>() async {
     _getCache<T>().clear();
     return super.dump();
   }

@@ -1,6 +1,6 @@
 import 'package:pluggable/pluggable.dart';
 
-class InMemoryStoragePlug extends PluggableStorage {
+class InMemoryStoragePlug extends PluggableStorageProvider {
   final Map<Type, Map<String, Object?>> _cache = {};
 
   Map<String, T?> _getCache<T extends Object>() {
@@ -13,7 +13,7 @@ class InMemoryStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> dump<T extends Object>() async {
+  Future<PluggableStorageProvider> dump<T extends Object>() async {
     _getCache<T>().clear();
     return super.dump();
   }

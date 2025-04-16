@@ -6,7 +6,7 @@ import 'package:stash_objectbox/stash_objectbox.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:pluggable/pluggable.dart';
 
-class ObjectBoxStoragePlug extends PluggableStorage {
+class ObjectBoxStoragePlug extends PluggableStorageProvider {
   late final ObjectboxCacheStore _store;
 
   bool initialized = false;
@@ -20,7 +20,7 @@ class ObjectBoxStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> init() async {
+  Future<PluggableStorageProvider> init() async {
     if (initialized) {
       return this;
     }
@@ -41,7 +41,7 @@ class ObjectBoxStoragePlug extends PluggableStorage {
     required Duration expiry,
     DecodeFunc<T>? fromEncodable,
   }) async {
-    fromEncodable ??= getDecoder<T>();
+    fromEncodable ??= Pluggable.storage.getDecoder<T>();
 
     if (!isPrimitiveType<T>() && fromEncodable == null) {
       throw Exception(
@@ -95,13 +95,13 @@ class ObjectBoxStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> close<T extends Object>() async {
+  Future<PluggableStorageProvider> close<T extends Object>() async {
     await lock.synchronized(() => _caches[T]?.close());
     return this;
   }
 
   @override
-  Future<PluggableStorage> dump<T extends Object>() async {
+  Future<PluggableStorageProvider> dump<T extends Object>() async {
     await lock.synchronized(() => getCache<T>().clear());
     return this;
   }

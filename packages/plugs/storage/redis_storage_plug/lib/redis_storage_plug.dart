@@ -517,7 +517,7 @@ class _RedisAdapter<T extends Object> {
   }
 }
 
-class RedisStoragePlug extends PluggableStorage {
+class RedisStoragePlug extends PluggableStorageProvider {
   bool initialized = false;
 
   final Map<Type, _RedisAdapter> _caches = {};
@@ -567,7 +567,7 @@ class RedisStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> init() async {
+  Future<PluggableStorageProvider> init() async {
     if (initialized) {
       return this;
     }
@@ -618,7 +618,7 @@ class RedisStoragePlug extends PluggableStorage {
         return;
       }
 
-      fromEncodable ??= getDecoder<T>();
+      fromEncodable ??= Pluggable.storage.getDecoder<T>();
 
       if (!isPrimitiveType<T>() && fromEncodable == null) {
         throw Exception(
@@ -651,13 +651,13 @@ class RedisStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> close<T extends Object>() async {
+  Future<PluggableStorageProvider> close<T extends Object>() async {
     await _caches[T]?.close();
     return this;
   }
 
   @override
-  Future<PluggableStorage> dump<T extends Object>() async {
+  Future<PluggableStorageProvider> dump<T extends Object>() async {
     await _getCache<T>().dump();
     return this;
   }

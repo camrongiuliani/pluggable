@@ -2,7 +2,7 @@ import 'package:pluggable/pluggable.dart';
 import 'package:stash/stash_api.dart';
 import 'package:stash_hive/stash_hive.dart';
 
-class SecureStoragePlug extends PluggableStorage {
+class SecureStoragePlug extends PluggableStorageProvider {
   late final HiveDefaultCacheStore _store;
   bool initialized = false;
 
@@ -14,7 +14,7 @@ class SecureStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> init() async {
+  Future<PluggableStorageProvider> init() async {
     if (initialized) {
       return this;
     }
@@ -36,7 +36,7 @@ class SecureStoragePlug extends PluggableStorage {
     required Duration expiry,
     DecodeFunc<T>? fromEncodable,
   }) async {
-    fromEncodable ??= getDecoder<T>();
+    fromEncodable ??= Pluggable.storage.getDecoder<T>();
 
     if (!isPrimitiveType<T>() && fromEncodable == null) {
       throw Exception(
@@ -85,13 +85,13 @@ class SecureStoragePlug extends PluggableStorage {
   }
 
   @override
-  Future<PluggableStorage> close<T extends Object>() async {
+  Future<PluggableStorageProvider> close<T extends Object>() async {
     await _caches[T]?.close();
     return this;
   }
 
   @override
-  Future<PluggableStorage> dump<T extends Object>() async {
+  Future<PluggableStorageProvider> dump<T extends Object>() async {
     await getCache<T>().clear();
     return this;
   }
