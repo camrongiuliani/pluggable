@@ -1,3 +1,7 @@
+## 0.0.1-pre.6
+
+ - **FEAT**: add remote storage option.
+
 ## 0.0.1-pre.5
 
  - **FIX**: remove more Flutter refs.

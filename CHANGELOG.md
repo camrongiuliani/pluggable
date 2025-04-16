@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-16
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`expire_cache_storage_plug` - `v0.0.1-pre.6`](#expire_cache_storage_plug---v001-pre6)
+ - [`go_router_plug` - `v0.0.1-pre.6`](#go_router_plug---v001-pre6)
+ - [`in_memory_storage_plug` - `v0.0.1-pre.6`](#in_memory_storage_plug---v001-pre6)
+ - [`object_box_storage_plug` - `v0.0.1-pre.6`](#object_box_storage_plug---v001-pre6)
+ - [`pluggable` - `v0.0.1-pre.6`](#pluggable---v001-pre6)
+ - [`pluggable_flutter` - `v0.0.1-pre.6`](#pluggable_flutter---v001-pre6)
+ - [`redis_storage_plug` - `v0.0.1-pre.6`](#redis_storage_plug---v001-pre6)
+ - [`secure_storage_plug` - `v0.0.1-pre.6`](#secure_storage_plug---v001-pre6)
+ - [`pluggable_di_getit` - `v0.0.1-pre.6`](#pluggable_di_getit---v001-pre6)
+ - [`cartographer_mapper_plug` - `v0.0.1-pre.6`](#cartographer_mapper_plug---v001-pre6)
+ - [`pluggable_dart_server` - `v0.0.1-pre.8`](#pluggable_dart_server---v001-pre8)
+ - [`dart_frog_server_plug` - `v0.0.1-pre.9`](#dart_frog_server_plug---v001-pre9)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `pluggable_di_getit` - `v0.0.1-pre.6`
+ - `cartographer_mapper_plug` - `v0.0.1-pre.6`
+ - `pluggable_dart_server` - `v0.0.1-pre.8`
+ - `dart_frog_server_plug` - `v0.0.1-pre.9`
+
+---
+
+#### `expire_cache_storage_plug` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+#### `go_router_plug` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+#### `in_memory_storage_plug` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+#### `object_box_storage_plug` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+#### `pluggable` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+#### `pluggable_flutter` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+#### `redis_storage_plug` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+#### `secure_storage_plug` - `v0.0.1-pre.6`
+
+ - **FEAT**: add remote storage option.
+
+
 ## 2025-02-11
 
 ### Changes

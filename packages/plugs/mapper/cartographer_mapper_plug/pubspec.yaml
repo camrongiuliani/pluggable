@@ -1,6 +1,6 @@
 name: cartographer_mapper_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.5
+version: 0.0.1-pre.6
 # pubspec_overrides.yaml
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   collection: any
 
-  pluggable: 0.0.1-pre.5
+  pluggable: 0.0.1-pre.6
 
 dev_dependencies:
   flutter_lints: ^5.0.0

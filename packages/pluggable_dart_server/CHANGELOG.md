@@ -1,3 +1,7 @@
+## 0.0.1-pre.8
+
+ - Update a dependency to the latest release.
+
 ## 0.0.1-pre.7
 
  - **FIX**: (pluggable_dart_server) inc build.
