@@ -1,3 +1,22 @@
+/// Form data model for the Pluggable system.
+/// 
+/// This class represents form data submitted in HTTP requests,
+/// including both text fields and file uploads.
+/// 
+/// Example usage:
+/// ```dart
+/// final formData = PFormData(
+///   fields: {'name': 'John', 'email': 'john@example.com'},
+///   files: {
+///     'avatar': PFormFile(
+///       name: 'avatar.jpg',
+///       contentType: 'image/jpeg',
+///       bytes: Uint8List.fromList([/* file bytes */]),
+///     ),
+///   },
+/// );
+/// ```
+
 import 'dart:collection';
 
 import 'package:pluggable/pluggable.dart';
@@ -13,8 +32,10 @@ class PFormData with MapMixin<String, String> {
   })  : _fields = fields,
         _files = files;
 
+  /// Internal storage for form fields
   final Map<String, String> _fields;
 
+  /// Internal storage for uploaded files
   final Map<String, PFormFile> _files;
 
   /// The fields that were submitted in the form.
@@ -53,7 +74,7 @@ class PFormData with MapMixin<String, String> {
   )
   String? remove(Object? key) => _fields.remove(key);
 
-  // fromJson
+  /// Creates a form data instance from JSON
   PFormData.fromJson(Map<String, dynamic> json)
       : _fields = Map<String, String>.from(json['fields']),
         _files = Map<String, PFormFile>.fromEntries(
@@ -65,7 +86,7 @@ class PFormData with MapMixin<String, String> {
           ),
         );
 
-  // toJson
+  /// Converts the form data to JSON
   Map<String, dynamic> toJson() {
     return {
       'fields': _fields,
@@ -76,7 +97,7 @@ class PFormData with MapMixin<String, String> {
     };
   }
 
-  // copyWith
+  /// Creates a copy of this form data with the specified fields replaced
   PFormData copyWith({
     Map<String, String>? fields,
     Map<String, PFormFile>? files,

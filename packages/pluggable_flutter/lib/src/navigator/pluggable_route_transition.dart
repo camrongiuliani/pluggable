@@ -1,6 +1,18 @@
 import 'package:flutter/widgets.dart';
 import 'package:pluggable_flutter/src/navigator/custom_transition_page.dart';
 
+/// A page that provides custom route transitions in the Pluggable framework.
+///
+/// This class extends [CustomTransitionPage] and provides various transition
+/// effects for route navigation.
+///
+/// Example usage:
+/// ```dart
+/// RouteTransitionPage.slideLeft(
+///   key: ValueKey('/home'),
+///   child: HomePage(),
+/// );
+/// ```
 class RouteTransitionPage extends CustomTransitionPage<void> {
   const RouteTransitionPage({
     required super.child,
@@ -9,6 +21,7 @@ class RouteTransitionPage extends CustomTransitionPage<void> {
     super.transitionDuration = const Duration(milliseconds: 250),
   });
 
+  /// Creates a page with no transition effect.
   factory RouteTransitionPage.none({
     LocalKey? key,
     required Widget child,
@@ -23,6 +36,7 @@ class RouteTransitionPage extends CustomTransitionPage<void> {
     );
   }
 
+  /// Creates a page with a fade transition effect.
   factory RouteTransitionPage.mobileSlideWebFade({
     LocalKey? key,
     required Widget child,
@@ -46,6 +60,7 @@ class RouteTransitionPage extends CustomTransitionPage<void> {
     );
   }
 
+  /// Creates a page with a slide left transition effect.
   factory RouteTransitionPage.slideLeft({
     LocalKey? key,
     required Widget child,
@@ -59,6 +74,7 @@ class RouteTransitionPage extends CustomTransitionPage<void> {
     );
   }
 
+  /// Creates a page with a slide up transition effect.
   factory RouteTransitionPage.slideUp({
     LocalKey? key,
     required Widget child,
@@ -72,6 +88,7 @@ class RouteTransitionPage extends CustomTransitionPage<void> {
     );
   }
 
+  /// Creates a page with a slide down transition effect.
   factory RouteTransitionPage.slideDown({
     LocalKey? key,
     required Widget child,
@@ -85,6 +102,7 @@ class RouteTransitionPage extends CustomTransitionPage<void> {
     );
   }
 
+  /// Creates a page with a fade transition effect.
   factory RouteTransitionPage.fade({
     LocalKey? key,
     required Widget child,

@@ -3,10 +3,31 @@ import 'package:go_router/go_router.dart';
 import 'package:go_router_plug/go_route_ext.dart';
 import 'package:pluggable_flutter/pluggable_flutter.dart';
 
+/// A navigation plugin that uses the GoRouter package for routing in Flutter applications.
+///
+/// This plugin provides a complete navigation solution using GoRouter, including:
+/// - Route management
+/// - Navigation methods (push, pop, etc.)
+/// - Query parameter handling
+/// - Route configuration
+///
+/// Example usage:
+/// ```dart
+/// final navigator = GoRouterPlug(
+///   initialRoute: '/home',
+/// );
+///
+/// await navigator.init();
+/// navigator.navigate('/profile', queryParams: {'id': '123'});
+/// ```
 class GoRouterPlug extends PluggableNavigator {
+  /// The underlying GoRouter instance.
   late final GoRouter _router;
+
+  /// The initial route to navigate to when the app starts.
   final String initialRoute;
 
+  /// Configuration for the router's routes.
   final _routeConfig = ValueNotifier<RoutingConfig>(RoutingConfig(
     routes: [
       GoRoute(
@@ -16,18 +37,31 @@ class GoRouterPlug extends PluggableNavigator {
     ],
   ));
 
+  /// The navigator key used for navigation.
   @override
   late final GlobalKey<NavigatorState> key;
 
+  /// Gets the router configuration.
   @override
   RouterConfig<Object> get config => _router;
 
+  /// Creates a new GoRouter plugin.
+  ///
+  /// [initialRoute]: The route to navigate to when the app starts.
   GoRouterPlug({
     required this.initialRoute,
   }) {
     key = GlobalKey<NavigatorState>();
   }
 
+  /// Initializes the router with the specified configuration.
+  ///
+  /// Sets up the router with:
+  /// - Navigation key
+  /// - Route observers
+  /// - Initial location
+  /// - Route configuration
+  /// - Error handling
   @override
   Future<Plug> init() async {
     _router = GoRouter.routingConfig(
@@ -40,17 +74,14 @@ class GoRouterPlug extends PluggableNavigator {
 
         router.go('/error');
       },
-      // redirect: (context, state) {
-      //   if (state.uri.path == '/error') {
-      //     return initialRoute;
-      //   }
-      //   return null;
-      // },
     );
 
     return this;
   }
 
+  /// Updates the available routes in the router.
+  ///
+  /// [routes]: The new set of routes to use.
   @override
   Future<void> updateRoutes(
     Iterable<PluggableRouteBase> routes,
@@ -64,39 +95,50 @@ class GoRouterPlug extends PluggableNavigator {
     );
   }
 
+  /// Gets the list of navigation observers.
   @override
   List<NavigatorObserver> get observers => [];
 
+  /// Gets the current build context.
   @override
   BuildContext get context => key.currentContext!;
 
+  /// Gets the router delegate.
   @override
   RouterDelegate get routerDelegate => _router.routerDelegate;
 
+  /// Gets the current route configuration.
   RouteMatchList get _currentConfiguration {
     return _router.routerDelegate.currentConfiguration;
   }
 
+  /// Gets the current query parameters.
   @override
   Map<String, String> get queryParams {
     return _currentConfiguration.uri.queryParameters;
   }
 
+  /// Gets the current route data.
   @override
   Object? get data {
     return _currentConfiguration.extra;
   }
 
+  /// Gets the current route path.
   @override
   String get currentRoute {
     return _currentConfiguration.fullPath;
   }
 
+  /// Checks if the current route can be popped.
   @override
   bool canPop() {
     return _router.canPop();
   }
 
+  /// Attempts to pop the current route.
+  ///
+  /// [result]: Optional result to return to the previous route.
   @override
   Future<bool> maybePop<T extends Object?>([T? result]) async {
     if (_router.canPop()) {
@@ -107,6 +149,11 @@ class GoRouterPlug extends PluggableNavigator {
     return false;
   }
 
+  /// Navigates to a new route.
+  ///
+  /// [path]: The path to navigate to.
+  /// [arguments]: Optional arguments to pass to the route.
+  /// [queryParams]: Optional query parameters to include in the URL.
   @override
   void navigate(
     String path, {
@@ -126,11 +173,20 @@ class GoRouterPlug extends PluggableNavigator {
     );
   }
 
+  /// Pops the current route.
+  ///
+  /// [result]: Optional result to return to the previous route.
   @override
   void pop<T extends Object?>([T? result]) {
     _router.pop(result);
   }
 
+  /// Pops the current route and pushes a new named route.
+  ///
+  /// [routeName]: The name of the route to push.
+  /// [result]: Optional result to return to the previous route.
+  /// [arguments]: Optional arguments to pass to the new route.
+  /// [queryParams]: Optional query parameters to include in the URL.
   @override
   Future<T?> popAndPushNamed<T extends Object?, TO extends Object?>(
     String routeName, {
@@ -153,6 +209,9 @@ class GoRouterPlug extends PluggableNavigator {
     );
   }
 
+  /// Pops routes until the given predicate returns false.
+  ///
+  /// [predicate]: Function that determines whether to continue popping routes.
   @override
   void popUntil(bool Function(Route p1) predicate) {
     Route buildRoute() {
@@ -170,6 +229,9 @@ class GoRouterPlug extends PluggableNavigator {
     }
   }
 
+  /// Pushes a new route onto the navigation stack.
+  ///
+  /// [route]: The route to push.
   @override
   Future<T?> push<T extends Object?>(
     Route<T> route,
@@ -179,6 +241,11 @@ class GoRouterPlug extends PluggableNavigator {
     );
   }
 
+  /// Pushes a named route onto the navigation stack.
+  ///
+  /// [routeName]: The name of the route to push.
+  /// [arguments]: Optional arguments to pass to the route.
+  /// [queryParams]: Optional query parameters to include in the URL.
   @override
   Future<T?> pushNamed<T extends Object?>(
     String routeName, {
@@ -192,6 +259,12 @@ class GoRouterPlug extends PluggableNavigator {
     );
   }
 
+  /// Pushes a named route and removes all previous routes until the predicate returns false.
+  ///
+  /// [newRouteName]: The name of the route to push.
+  /// [predicate]: Function that determines which routes to remove.
+  /// [arguments]: Optional arguments to pass to the new route.
+  /// [queryParams]: Optional query parameters to include in the URL.
   @override
   Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
     String newRouteName,
@@ -213,6 +286,12 @@ class GoRouterPlug extends PluggableNavigator {
     );
   }
 
+  /// Replaces the current route with a new named route.
+  ///
+  /// [routeName]: The name of the route to push.
+  /// [result]: Optional result to return to the previous route.
+  /// [arguments]: Optional arguments to pass to the new route.
+  /// [queryParams]: Optional query parameters to include in the URL.
   @override
   Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(
     String routeName, {
@@ -232,6 +311,7 @@ class GoRouterPlug extends PluggableNavigator {
     );
   }
 
+  /// Disposes of the router.
   @override
   Future<Plug> dispose() {
     // TODO: implement dispose

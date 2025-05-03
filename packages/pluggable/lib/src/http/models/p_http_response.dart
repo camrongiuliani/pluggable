@@ -1,10 +1,33 @@
+/// HTTP response model for the Pluggable system.
+/// 
+/// This class represents a generic HTTP response with typed data.
+/// It includes headers, status code, response data, and a message.
+/// 
+/// Example usage:
+/// ```dart
+/// final response = PHttpResponse<String>(
+///   headers: {'Content-Type': 'text/plain'},
+///   statusCode: 200,
+///   data: 'Hello, World!',
+///   message: 'Success',
+/// );
+/// ```
 
+/// Generic HTTP response class
 class PHttpResponse<T> {
+  /// Response headers
   final Map<String, Object> headers;
+
+  /// HTTP status code
   final int statusCode;
+
+  /// Response data of type T
   final T? data;
+
+  /// Response message
   final String message;
 
+  /// Private constructor for internal use
   PHttpResponse._(
     this.headers,
     this.statusCode,
@@ -12,6 +35,7 @@ class PHttpResponse<T> {
     this.message,
   );
 
+  /// Creates a new HTTP response
   factory PHttpResponse({
     required Map<String, Object> headers,
     required int statusCode,
@@ -26,7 +50,7 @@ class PHttpResponse<T> {
     );
   }
 
-  // toJson
+  /// Converts the response to JSON
   Map<String, dynamic> toJson() {
     return {
       'headers': headers,
@@ -36,7 +60,7 @@ class PHttpResponse<T> {
     };
   }
 
-  // fromJson
+  /// Creates a response from JSON data
   factory PHttpResponse.fromJson(Map<String, dynamic> json) {
     return PHttpResponse(
       headers: json['headers'],
@@ -46,7 +70,7 @@ class PHttpResponse<T> {
     );
   }
 
-  // copyWith
+  /// Creates a copy of this response with the specified fields replaced
   PHttpResponse copyWith({
     Map<String, Object>? headers,
     int? statusCode,

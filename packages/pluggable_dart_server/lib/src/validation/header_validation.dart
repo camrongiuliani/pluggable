@@ -1,14 +1,46 @@
-
 import 'package:pluggable_dart_server/pluggable_dart_server.dart';
 
+/// A class for validating HTTP request headers.
+///
+/// This class provides various validation operations for HTTP headers,
+/// including existence checks, type validation, and value comparisons.
+///
+/// Example usage:
+/// ```dart
+/// final validator = HeaderValidation.exists(
+///   key: 'Authorization',
+///   errorMessage: 'Authorization header is required',
+/// );
+///
+/// final error = validator.validate(headers);
+/// if (error != null) {
+///   throw error;
+/// }
+/// ```
 class HeaderValidation<T extends Object?> {
+  /// The header key to validate.
   final String key;
+
+  /// The error message to use if validation fails.
   final String? errorMessage;
+
+  /// Whether to throw an exception on validation failure.
   final bool throws;
+
+  /// The validation operation to perform.
   final ValidationOperation operation;
+
+  /// The value to check against during validation.
   final T? checkedValue;
+
+  /// Custom validation function for complex validation rules.
   late final CustomValidator? customValidator;
 
+  /// Creates a validation rule that checks if a header exists.
+  ///
+  /// [key]: The header key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.exists({
     required this.key,
     this.throws = true,
@@ -18,6 +50,11 @@ class HeaderValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key is a required header',
         operation = ValidationOperation.exists;
 
+  /// Creates a validation rule that checks if a header is not null.
+  ///
+  /// [key]: The header key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.notNull({
     required this.key,
     this.throws = true,
@@ -27,6 +64,11 @@ class HeaderValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key cannot be null',
         operation = ValidationOperation.notNull;
 
+  /// Creates a validation rule that checks if a header is not null or empty.
+  ///
+  /// [key]: The header key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.notNullOrEmpty({
     required this.key,
     this.throws = true,
@@ -36,6 +78,12 @@ class HeaderValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key cannot be null or empty',
         operation = ValidationOperation.notNullOrEmpty;
 
+  /// Creates a validation rule that checks if a header equals a value.
+  ///
+  /// [key]: The header key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.equals({
     required this.key,
     required this.checkedValue,
@@ -46,6 +94,12 @@ class HeaderValidation<T extends Object?> {
             errorMessage ?? '$key was not equal to an expected value',
         operation = ValidationOperation.equals;
 
+  /// Creates a validation rule that checks if a header does not equal a value.
+  ///
+  /// [key]: The header key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.notEquals({
     required this.key,
     required this.checkedValue,
@@ -55,6 +109,12 @@ class HeaderValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key is an unsupported value',
         operation = ValidationOperation.notEquals;
 
+  /// Creates a validation rule that checks if a header contains a value.
+  ///
+  /// [key]: The header key to check.
+  /// [checkedValue]: The value to check for.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.contains({
     required this.key,
     required this.checkedValue,
@@ -64,6 +124,12 @@ class HeaderValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key did not contain an expected value',
         operation = ValidationOperation.contains;
 
+  /// Creates a validation rule that checks if a header does not contain a value.
+  ///
+  /// [key]: The header key to check.
+  /// [checkedValue]: The value to check for.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.notContains({
     required this.key,
     required this.checkedValue,
@@ -73,6 +139,13 @@ class HeaderValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key contained an unexpected value',
         operation = ValidationOperation.notContains;
 
+  /// Creates a validation rule that checks if a header is greater than a value.
+  ///
+  /// [key]: The header key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [orEqual]: Whether to allow equality.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.greaterThan({
     required this.key,
     required num checkedValue,
@@ -87,6 +160,13 @@ class HeaderValidation<T extends Object?> {
           false => ValidationOperation.greaterThan,
         };
 
+  /// Creates a validation rule that checks if a header is less than a value.
+  ///
+  /// [key]: The header key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [orEqual]: Whether to allow equality.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.lessThan({
     required this.key,
     required num checkedValue,
@@ -101,6 +181,11 @@ class HeaderValidation<T extends Object?> {
           false => ValidationOperation.lessThan,
         };
 
+  /// Creates a validation rule that checks if a header is of a specific type.
+  ///
+  /// [key]: The header key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.isType({
     required this.key,
     this.throws = true,
@@ -116,6 +201,11 @@ class HeaderValidation<T extends Object?> {
     };
   }
 
+  /// Creates a validation rule that checks if a header is a number.
+  ///
+  /// [key]: The header key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   HeaderValidation.isNum({
     required this.key,
     this.throws = true,
@@ -132,6 +222,10 @@ class HeaderValidation<T extends Object?> {
     };
   }
 
+  /// Validates the headers against the configured rules.
+  ///
+  /// [headers]: The headers to validate.
+  /// Returns an exception if validation fails, or null if validation passes.
   Exception? validate(
     Map<String, dynamic> headers,
   ) {
@@ -151,6 +245,7 @@ class HeaderValidation<T extends Object?> {
     };
   }
 
+  /// Validates that a header is not null (and optionally not empty).
   Exception? _notNull(
     Map<String, dynamic> headers, [
     bool orEmpty = false,
@@ -172,6 +267,7 @@ class HeaderValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a header exists.
   Exception? _exists(
     Map<String, dynamic> headers,
   ) {
@@ -182,6 +278,7 @@ class HeaderValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a header equals (or does not equal) a value.
   Exception? _equals(
     Map<String, dynamic> headers, [
     bool not = false,
@@ -197,6 +294,7 @@ class HeaderValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a header contains (or does not contain) a value.
   Exception? _contains(
     Map<String, dynamic> headers, [
     bool not = false,
@@ -222,6 +320,7 @@ class HeaderValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a header is greater than (or equal to) a value.
   Exception? _greaterThan(
     Map<String, dynamic> headers, [
     bool orEqual = false,
@@ -243,6 +342,7 @@ class HeaderValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a header is less than (or equal to) a value.
   Exception? _lessThan(
     Map<String, dynamic> headers, [
     bool orEqual = false,

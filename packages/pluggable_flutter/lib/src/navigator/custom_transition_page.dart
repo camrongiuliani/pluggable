@@ -3,186 +3,180 @@
 // found in the LICENSE file.
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
-/// Page with custom transition functionality.
+/// A page that allows for custom transitions instead of the default Material or Cupertino transitions.
 ///
-/// To be used instead of MaterialPage or CupertinoPage, which provide
-/// their own transitions.
+/// This class extends [Page] and provides a way to define custom transitions
+/// for route navigation.
+///
+/// Example usage:
+/// ```dart
+/// CustomTransitionPage(
+///   key: ValueKey('/home'),
+///   child: HomePage(),
+///   transitionsBuilder: (context, animation, secondaryAnimation, child) {
+///     return FadeTransition(
+///       opacity: animation,
+///       child: child,
+///     );
+///   },
+/// );
+/// ```
 class CustomTransitionPage<T> extends Page<T> {
-  /// Constructor for a page with custom transition functionality.
+  /// Creates a new [CustomTransitionPage].
   ///
-  /// To be used instead of MaterialPage or CupertinoPage, which provide
-  /// their own transitions.
+  /// The [key] parameter is optional and provides a key for the page.
+  /// The [child] parameter is required and specifies the widget to display.
+  /// The [transitionsBuilder] parameter is required and defines how to build the transition.
+  /// The [maintainState] parameter determines if the state should be maintained (defaults to true).
+  /// The [fullscreenDialog] parameter determines if the page is a fullscreen dialog (defaults to false).
+  /// The [opaque] parameter determines if the page is opaque (defaults to true).
+  /// The [barrierDismissible] parameter determines if the barrier can be dismissed (defaults to false).
+  /// The [barrierColor] parameter specifies the color of the barrier (defaults to null).
+  /// The [barrierLabel] parameter specifies the label for the barrier (defaults to null).
+  /// The [transitionDuration] parameter specifies the duration of the transition (defaults to 300ms).
+  /// The [reverseTransitionDuration] parameter specifies the duration of the reverse transition (defaults to 300ms).
   const CustomTransitionPage({
+    super.key,
     required this.child,
     required this.transitionsBuilder,
-    this.transitionDuration = const Duration(milliseconds: 300),
-    this.reverseTransitionDuration = const Duration(milliseconds: 300),
     this.maintainState = true,
     this.fullscreenDialog = false,
     this.opaque = true,
     this.barrierDismissible = false,
     this.barrierColor,
     this.barrierLabel,
-    super.key,
-    super.name,
-    super.arguments,
-    super.restorationId,
+    this.transitionDuration = const Duration(milliseconds: 300),
+    this.reverseTransitionDuration = const Duration(milliseconds: 300),
   });
 
-  /// The content to be shown in the Route created by this page.
+  /// The widget to display.
   final Widget child;
 
-  /// A duration argument to customize the duration of the custom page
-  /// transition.
-  ///
-  /// Defaults to 300ms.
-  final Duration transitionDuration;
+  /// The builder for the transition.
+  final Widget Function(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) transitionsBuilder;
 
-  /// A duration argument to customize the duration of the custom page
-  /// transition on pop.
-  ///
-  /// Defaults to 300ms.
-  final Duration reverseTransitionDuration;
-
-  /// Whether the route should remain in memory when it is inactive.
-  ///
-  /// If this is true, then the route is maintained, so that any futures it is
-  /// holding from the next route will properly resolve when the next route
-  /// pops. If this is not necessary, this can be set to false to allow the
-  /// framework to entirely discard the route's widget hierarchy when it is
-  /// not visible.
+  /// Whether to maintain the state of the route.
   final bool maintainState;
 
-  /// Whether this page route is a full-screen dialog.
-  ///
-  /// In Material and Cupertino, being fullscreen has the effects of making the
-  /// app bars have a close button instead of a back button. On iOS, dialogs
-  /// transitions animate differently and are also not closeable with the
-  /// back swipe gesture.
+  /// Whether the route is a fullscreen dialog.
   final bool fullscreenDialog;
 
-  /// Whether the route obscures previous routes when the transition is
-  /// complete.
-  ///
-  /// When an opaque route's entrance transition is complete, the routes
-  /// behind the opaque route will not be built to save resources.
+  /// Whether the route is opaque.
   final bool opaque;
 
-  /// Whether you can dismiss this route by tapping the modal barrier.
+  /// Whether the barrier can be dismissed.
   final bool barrierDismissible;
 
-  /// The color to use for the modal barrier.
-  ///
-  /// If this is null, the barrier will be transparent.
+  /// The color of the barrier.
   final Color? barrierColor;
 
-  /// The semantic label used for a dismissible barrier.
-  ///
-  /// If the barrier is dismissible, this label will be read out if
-  /// accessibility tools (like VoiceOver on iOS) focus on the barrier.
+  /// The label for the barrier.
   final String? barrierLabel;
 
-  /// Override this method to wrap the child with one or more transition
-  /// widgets that define how the route arrives on and leaves the screen.
-  ///
-  /// By default, the child (which contains the widget returned by buildPage) is
-  /// not wrapped in any transition widgets.
-  ///
-  /// The transitionsBuilder method, is called each time the Route's state
-  /// changes while it is visible (e.g. if the value of canPop changes on the
-  /// active route).
-  ///
-  /// The transitionsBuilder method is typically used to define transitions
-  /// that animate the new topmost route's comings and goings. When the
-  /// Navigator pushes a route on the top of its stack, the new route's
-  /// primary animation runs from 0.0 to 1.0. When the Navigator pops the
-  /// topmost route, e.g. because the use pressed the back button, the primary
-  /// animation runs from 1.0 to 0.0.
-  final Widget Function(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) transitionsBuilder;
+  /// The duration of the transition.
+  final Duration transitionDuration;
+
+  /// The duration of the reverse transition.
+  final Duration reverseTransitionDuration;
 
   @override
-  Route<T> createRoute(BuildContext context) =>
-      _CustomTransitionPageRoute<T>(this);
+  Route<T> createRoute(BuildContext context) {
+    return _CustomTransitionRoute<T>(
+      page: this,
+      settings: this,
+    );
+  }
 }
 
-class _CustomTransitionPageRoute<T> extends PageRoute<T> {
-  _CustomTransitionPageRoute(CustomTransitionPage<T> page)
-      : super(settings: page);
+/// A page with no transition effect.
+///
+/// This class extends [CustomTransitionPage] and provides a way to create
+/// a page without any transition effect.
+///
+/// Example usage:
+/// ```dart
+/// NoTransitionPage(
+///   key: ValueKey('/home'),
+///   child: HomePage(),
+/// );
+/// ```
+class NoTransitionPage<T> extends CustomTransitionPage<T> {
+  /// Creates a new [NoTransitionPage].
+  ///
+  /// The [key] parameter is optional and provides a key for the page.
+  /// The [child] parameter is required and specifies the widget to display.
+  /// The [maintainState] parameter determines if the state should be maintained (defaults to true).
+  /// The [fullscreenDialog] parameter determines if the page is a fullscreen dialog (defaults to false).
+  /// The [opaque] parameter determines if the page is opaque (defaults to true).
+  /// The [barrierDismissible] parameter determines if the barrier can be dismissed (defaults to false).
+  /// The [barrierColor] parameter specifies the color of the barrier (defaults to null).
+  /// The [barrierLabel] parameter specifies the label for the barrier (defaults to null).
+  const NoTransitionPage({
+    super.key,
+    required super.child,
+    super.maintainState = true,
+    super.fullscreenDialog = false,
+    super.opaque = true,
+    super.barrierDismissible = false,
+    super.barrierColor,
+    super.barrierLabel,
+  }) : super(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return child;
+          },
+        );
+}
 
-  CustomTransitionPage<T> get _page => settings as CustomTransitionPage<T>;
+class _CustomTransitionRoute<T> extends PageRoute<T> {
+  _CustomTransitionRoute({
+    required this.page,
+    required super.settings,
+  });
+
+  final CustomTransitionPage<T> page;
 
   @override
-  bool get barrierDismissible => _page.barrierDismissible;
+  bool get maintainState => page.maintainState;
 
   @override
-  Color? get barrierColor => _page.barrierColor;
+  bool get fullscreenDialog => page.fullscreenDialog;
 
   @override
-  String? get barrierLabel => _page.barrierLabel;
+  bool get opaque => page.opaque;
 
   @override
-  Duration get transitionDuration => _page.transitionDuration;
+  bool get barrierDismissible => page.barrierDismissible;
 
   @override
-  Duration get reverseTransitionDuration => _page.reverseTransitionDuration;
+  Color? get barrierColor => page.barrierColor;
 
   @override
-  bool get maintainState => _page.maintainState;
+  String? get barrierLabel => page.barrierLabel;
 
   @override
-  bool get fullscreenDialog => _page.fullscreenDialog;
+  Duration get transitionDuration => page.transitionDuration;
 
   @override
-  bool get opaque => _page.opaque;
+  Duration get reverseTransitionDuration => page.reverseTransitionDuration;
 
   @override
   Widget buildPage(
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
-  ) =>
-      Semantics(
-        scopesRoute: true,
-        explicitChildNodes: true,
-        child: _page.child,
-      );
-
-  @override
-  Widget buildTransitions(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child,
-  ) =>
-      _page.transitionsBuilder(
-        context,
-        animation,
-        secondaryAnimation,
-        child,
-      );
-}
-
-/// Custom transition page with no transition.
-class NoTransitionPage<T> extends CustomTransitionPage<T> {
-  /// Constructor for a page with no transition functionality.
-  const NoTransitionPage({
-    required super.child,
-    super.name,
-    super.arguments,
-    super.restorationId,
-    super.key,
-  }) : super(
-          transitionsBuilder: _transitionsBuilder,
-          transitionDuration: Duration.zero,
-          reverseTransitionDuration: Duration.zero,
-        );
-
-  static Widget _transitionsBuilder(
-          BuildContext context,
-          Animation<double> animation,
-          Animation<double> secondaryAnimation,
-          Widget child) =>
-      child;
+  ) {
+    return page.transitionsBuilder(
+      context,
+      animation,
+      secondaryAnimation,
+      page.child,
+    );
+  }
 }

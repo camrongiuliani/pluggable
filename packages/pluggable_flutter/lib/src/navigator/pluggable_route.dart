@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:pluggable_flutter/pluggable_flutter.dart';
 import 'package:pluggable_flutter/src/navigator/pluggable_route_transition.dart';
 import 'package:pluggable_flutter/src/navigator/routes/route_base.dart' as base;
 
@@ -11,8 +13,27 @@ enum RouteTransition {
   slideLeft,
 }
 
+/// A route in the Pluggable framework that supports various transition types.
+///
+/// This class extends [PluggableRouteBase] and provides different transition
+/// options for route navigation.
+///
+/// Example usage:
+/// ```dart
+/// final route = PluggableRoute(
+///   path: '/home',
+///   builder: (context) => HomePage(),
+///   transition: RouteTransition.slideLeft,
+/// );
+/// ```
 class PluggableRoute extends base.PluggableRoute
     implements base.PluggableRouteBase {
+  /// Creates a new [PluggableRoute].
+  ///
+  /// The [path] parameter is required and specifies the route path.
+  /// The [builder] parameter is required and defines how to build the route's widget.
+  /// The [transition] parameter specifies the transition type (defaults to none).
+  /// The [data] parameter can be used to pass additional data to the route.
   PluggableRoute({
     required super.path,
     required base.PluggableRouterWidgetBuilder builder,
@@ -20,11 +41,12 @@ class PluggableRoute extends base.PluggableRoute
     super.redirect,
     super.onExit,
     super.routes = const <base.PluggableRouteBase>[],
-    DetermineTransition? transition,
+    this.transition = RouteTransition.none,
+    super.data,
   }) : super(
           name: Uri.parse(path).path,
           pageBuilder: (context, state) {
-            return switch (transition?.call() ?? RouteTransition.fade) {
+            return switch (transition) {
               RouteTransition.none => RouteTransitionPage.none(
                   key: state.pageKey,
                   child: builder(context, state),
@@ -49,6 +71,9 @@ class PluggableRoute extends base.PluggableRoute
           },
         );
 
+  /// The transition type for this route.
+  final RouteTransition transition;
+
   PluggableRoute.redirect({
     required super.path,
     required base.PluggableRouteRedirect redirect,
@@ -57,8 +82,30 @@ class PluggableRoute extends base.PluggableRoute
         );
 }
 
+/// A shell route in the Pluggable framework that supports nested navigation.
+///
+/// This class extends [PluggableShellRouteBase] and provides a way to create
+/// nested navigation structures.
+///
+/// Example usage:
+/// ```dart
+/// final shellRoute = PluggableShellRoute(
+///   path: '/dashboard',
+///   builder: (context, child) => DashboardLayout(child: child),
+///   routes: [
+///     PluggableRoute(path: '/home', builder: (context) => HomePage()),
+///     PluggableRoute(path: '/profile', builder: (context) => ProfilePage()),
+///   ],
+/// );
+/// ```
 class PluggableShellRoute extends base.PluggableShellRoute
     implements base.PluggableRouteBase {
+  /// Creates a new [PluggableShellRoute].
+  ///
+  /// The [path] parameter is required and specifies the route path.
+  /// The [builder] parameter is required and defines how to build the shell layout.
+  /// The [routes] parameter contains the nested routes within this shell.
+  /// The [data] parameter can be used to pass additional data to the route.
   PluggableShellRoute({
     required super.routes,
     super.redirect,
@@ -68,5 +115,14 @@ class PluggableShellRoute extends base.PluggableShellRoute
     super.parentNavigatorKey,
     super.navigatorKey,
     super.restorationScopeId,
+    super.data,
   });
+
+  @override
+  Page<dynamic> buildPage(BuildContext context) {
+    return RouteTransitionPage.none(
+      key: ValueKey(path),
+      child: builder(context, const SizedBox()),
+    );
+  }
 }

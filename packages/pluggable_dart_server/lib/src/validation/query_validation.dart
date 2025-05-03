@@ -1,14 +1,46 @@
-
 import 'package:pluggable_dart_server/pluggable_dart_server.dart';
 
+/// A class for validating HTTP query parameters.
+///
+/// This class provides various validation operations for query parameters,
+/// including existence checks, type validation, and value comparisons.
+///
+/// Example usage:
+/// ```dart
+/// final validator = QueryParamValidation.exists(
+///   key: 'id',
+///   errorMessage: 'ID parameter is required',
+/// );
+///
+/// final error = validator.validate(queryParams);
+/// if (error != null) {
+///   throw error;
+/// }
+/// ```
 class QueryParamValidation<T extends Object?> {
+  /// The query parameter key to validate.
   final String key;
+
+  /// The error message to use if validation fails.
   final String? errorMessage;
+
+  /// Whether to throw an exception on validation failure.
   final bool throws;
+
+  /// The validation operation to perform.
   final ValidationOperation operation;
+
+  /// The value to check against during validation.
   final T? checkedValue;
+
+  /// Custom validation function for complex validation rules.
   late final CustomValidator? customValidator;
 
+  /// Creates a validation rule that checks if a query parameter exists.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.exists({
     required this.key,
     this.throws = true,
@@ -18,6 +50,11 @@ class QueryParamValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key is required',
         operation = ValidationOperation.exists;
 
+  /// Creates a validation rule that checks if a query parameter is not null.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.notNull({
     required this.key,
     this.throws = true,
@@ -27,6 +64,11 @@ class QueryParamValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key cannot be null',
         operation = ValidationOperation.notNull;
 
+  /// Creates a validation rule that checks if a query parameter is not null or empty.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.notNullOrEmpty({
     required this.key,
     this.throws = true,
@@ -36,6 +78,12 @@ class QueryParamValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key cannot be null or empty',
         operation = ValidationOperation.notNullOrEmpty;
 
+  /// Creates a validation rule that checks if a query parameter equals a value.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.equals({
     required this.key,
     required this.checkedValue,
@@ -46,6 +94,12 @@ class QueryParamValidation<T extends Object?> {
             errorMessage ?? '$key was not equal to an expected value',
         operation = ValidationOperation.equals;
 
+  /// Creates a validation rule that checks if a query parameter does not equal a value.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.notEquals({
     required this.key,
     required this.checkedValue,
@@ -55,6 +109,12 @@ class QueryParamValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key is an unsupported value',
         operation = ValidationOperation.notEquals;
 
+  /// Creates a validation rule that checks if a query parameter contains a value.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [checkedValue]: The value to check for.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.contains({
     required this.key,
     required this.checkedValue,
@@ -64,6 +124,12 @@ class QueryParamValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key did not contain an expected value',
         operation = ValidationOperation.contains;
 
+  /// Creates a validation rule that checks if a query parameter does not contain a value.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [checkedValue]: The value to check for.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.notContains({
     required this.key,
     required this.checkedValue,
@@ -73,6 +139,13 @@ class QueryParamValidation<T extends Object?> {
         errorMessage = errorMessage ?? '$key contained an unexpected value',
         operation = ValidationOperation.notContains;
 
+  /// Creates a validation rule that checks if a query parameter is greater than a value.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [orEqual]: Whether to allow equality.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.greaterThan({
     required this.key,
     required num checkedValue,
@@ -87,6 +160,13 @@ class QueryParamValidation<T extends Object?> {
           false => ValidationOperation.greaterThan,
         };
 
+  /// Creates a validation rule that checks if a query parameter is less than a value.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [checkedValue]: The value to compare against.
+  /// [orEqual]: Whether to allow equality.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.lessThan({
     required this.key,
     required num checkedValue,
@@ -101,6 +181,11 @@ class QueryParamValidation<T extends Object?> {
           false => ValidationOperation.lessThan,
         };
 
+  /// Creates a validation rule that checks if a query parameter is of a specific type.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.isType({
     required this.key,
     this.throws = true,
@@ -116,6 +201,11 @@ class QueryParamValidation<T extends Object?> {
     };
   }
 
+  /// Creates a validation rule that checks if a query parameter is a number.
+  ///
+  /// [key]: The query parameter key to check.
+  /// [throws]: Whether to throw an exception on failure.
+  /// [errorMessage]: Custom error message.
   QueryParamValidation.isNum({
     required this.key,
     this.throws = true,
@@ -132,6 +222,10 @@ class QueryParamValidation<T extends Object?> {
     };
   }
 
+  /// Validates the query parameters against the configured rules.
+  ///
+  /// [parameters]: The query parameters to validate.
+  /// Returns an exception if validation fails, or null if validation passes.
   Exception? validate(
     Map<String, dynamic> parameters,
   ) {
@@ -159,6 +253,7 @@ class QueryParamValidation<T extends Object?> {
     };
   }
 
+  /// Validates that a query parameter is not null (and optionally not empty).
   Exception? _notNull(
     Map<String, dynamic> parameters, [
     bool orEmpty = false,
@@ -180,6 +275,7 @@ class QueryParamValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a query parameter equals (or does not equal) a value.
   Exception? _equals(
     Map<String, dynamic> parameters, [
     bool not = false,
@@ -195,6 +291,7 @@ class QueryParamValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a query parameter contains (or does not contain) a value.
   Exception? _contains(
     Map<String, dynamic> parameters, [
     bool not = false,
@@ -220,6 +317,7 @@ class QueryParamValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a query parameter is greater than (or equal to) a value.
   Exception? _greaterThan(
     Map<String, dynamic> parameters, [
     bool orEqual = false,
@@ -241,6 +339,7 @@ class QueryParamValidation<T extends Object?> {
     return null;
   }
 
+  /// Validates that a query parameter is less than (or equal to) a value.
   Exception? _lessThan(
     Map<String, dynamic> parameters, [
     bool orEqual = false,

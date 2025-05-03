@@ -11,25 +11,67 @@ import 'package:pluggable/pluggable.dart';
 
 import 'exceptions.dart';
 
+/// Internal adapter class for Redis operations.
+///
+/// This class handles the low-level Redis operations and provides
+/// thread-safe access to Redis data. It manages connections, locks,
+/// and data serialization/deserialization.
+///
+/// The adapter supports:
+/// - Connection management
+/// - Lock acquisition and release
+/// - Data expiration
+/// - Type-safe data storage and retrieval
 class _RedisAdapter<T extends Object> {
+  /// The Redis command interface.
   late Command command;
+
+  /// The Redis database index.
   late int dbIdx;
+
+  /// The type of data being stored.
   final Type type;
+
+  /// The Redis server host.
   final String host;
+
+  /// The Redis server port.
   final int port;
+
+  /// The Redis server password, if any.
   final String? password;
+
+  /// Timeout for lock release in milliseconds.
   final int lockReleaseTimeout;
+
+  /// Number of retries for lock acquisition.
   final int lockRetries;
+
+  /// Interval between lock acquisition retries in milliseconds.
   final int lockRetryInterval;
+
+  /// The Redis connection.
   final RedisConnection _connection;
+
+  /// Unique identifier for this adapter instance.
   final String lockIdentity;
+
+  /// Duration after which stored items expire.
   final Duration? expiresIn;
+
+  /// Function to decode stored values.
   final DecodeFunc<T>? fromEncodable;
 
+  /// Whether the adapter is connected to Redis.
   bool _open = false;
+
+  /// Lock for transaction operations.
   final _transLock = Lock();
+
+  /// Lock for connection operations.
   final _openLock = Lock();
 
+  /// Creates a new [_RedisAdapter] with the given configuration.
   _RedisAdapter({
     required this.host,
     required this.port,
@@ -43,11 +85,13 @@ class _RedisAdapter<T extends Object> {
         _connection = RedisConnection(),
         lockIdentity = Uuid().v4();
 
+  /// Gets the Redis expiration parameters.
   List<dynamic> get expirationParams => switch (expiresIn == null) {
         true => [],
         false => ['PX', expiresIn!.inMilliseconds],
       };
 
+  /// Closes the Redis connection.
   Future<void> close() async {
     if (!_open) {
       return;
@@ -56,6 +100,7 @@ class _RedisAdapter<T extends Object> {
     return command.get_connection().close();
   }
 
+  /// Pings the Redis server to check connectivity.
   Future<bool> ping() async {
     if (!_open) {
       return false;
@@ -71,6 +116,7 @@ class _RedisAdapter<T extends Object> {
     }
   }
 
+  /// Gets all stored values, optionally filtered by key.
   Future<Map<String, dynamic>> getAll([String? key]) async {
     if (!_open) {
       return {};
@@ -117,6 +163,13 @@ class _RedisAdapter<T extends Object> {
     return {};
   }
 
+  /// Opens a connection to the Redis server.
+  ///
+  /// This method:
+  /// 1. Establishes a secure connection
+  /// 2. Authenticates if a password is provided
+  /// 3. Selects the appropriate database
+  /// 4. Acquires necessary locks
   Future<void> open() async {
     if (_open) {
       return;
@@ -134,8 +187,6 @@ class _RedisAdapter<T extends Object> {
         );
 
         command = await _connection.connectWithSocket(secureSocket);
-
-        // command = await _connection.connectSecure(host, port);
 
         if (password != null) {
           await command.send_object(['AUTH', password]);
@@ -193,12 +244,13 @@ class _RedisAdapter<T extends Object> {
     } on HandshakeException catch (e) {
       throw SecurityException('Handshake error: $e');
     } on LockAcquisitionException catch (_) {
-      rethrow; // Rethrow the lock-specific exception
+      rethrow;
     } catch (e) {
       throw OpenException('Failed to open connection: $e');
     }
   }
 
+  /// Checks if a key is locked by another process.
   Future<bool> isExtLocked(String key, String trace) async {
     if (!_open) return false;
 
@@ -212,6 +264,10 @@ class _RedisAdapter<T extends Object> {
         result != trace;
   }
 
+  /// Attempts to acquire a lock for a key.
+  ///
+  /// This method will retry acquiring the lock up to [maxAttempts] times,
+  /// waiting [attemptDelay] milliseconds between attempts.
   Future<bool> acquireLock(
     String key,
     String trace, [
@@ -264,6 +320,7 @@ class _RedisAdapter<T extends Object> {
     }
   }
 
+  /// Releases a lock for a key.
   Future releaseLock(String key, String trace) async {
     if (!_open) return;
 
@@ -275,23 +332,12 @@ class _RedisAdapter<T extends Object> {
       tag: '$runtimeType',
     );
 
-    // Start transaction on key
-    // await command.send_object(['WATCH', lockKey]);
-
-    // Read and check if lock is the same
     var keyId = await command.get(lockKey);
 
-    if (keyId != trace) {
-      // return command.send_object(['UNWATCH']);
-    }
-
-    // Remove the lock if it matches
     if (keyId == trace) {
       return _transLock.synchronized(
         () async {
-          // await command.send_object(['MULTI']);
           await command.send_object(['DEL', lockKey]);
-          // await command.send_object(['EXEC']);
           Pluggable.logger.v(
             '${Isolate.current.debugName} - Released lock',
             tag: '$runtimeType',
@@ -299,12 +345,10 @@ class _RedisAdapter<T extends Object> {
         },
         timeout: const Duration(milliseconds: 6000),
       );
-    } else {
-      // Cancel transaction if it doesn't match
-      // await command.send_object(['UNWATCH']);
     }
   }
 
+  /// Gets all keys in the current database.
   Future<Iterable<String>> get keys {
     return command.send_object(['KEYS', '*']).then((result) {
       if (result is! List) {
@@ -317,6 +361,7 @@ class _RedisAdapter<T extends Object> {
     });
   }
 
+  /// Gets the raw string value for a key.
   Future<String> _rawValue(String key) async {
     await ensureInitialized();
 
@@ -329,6 +374,7 @@ class _RedisAdapter<T extends Object> {
     });
   }
 
+  /// Checks if a key exists in the database.
   Future<bool> containsKey(String key) async {
     await ensureInitialized();
 
@@ -337,10 +383,14 @@ class _RedisAdapter<T extends Object> {
     });
   }
 
+  /// Clears all data from the current database.
   Future<void> dump() {
     return command.send_object(['FLUSHALL', 'SYNC']);
   }
 
+  /// Stores a value in the database.
+  ///
+  /// If the value is null, the key is removed from the database.
   Future<void> put(
     String key,
     T? entry, [
@@ -356,8 +406,6 @@ class _RedisAdapter<T extends Object> {
     };
 
     final String identity = trace ?? lockIdentity;
-
-    // Pluggable.logger.v('${Isolate.current.debugName} - ID = $identity');
 
     return acquireLock(key, identity).then((hasLock) {
       if (!hasLock) {
@@ -388,6 +436,7 @@ class _RedisAdapter<T extends Object> {
     });
   }
 
+  /// Stores a value in the database only if the key doesn't exist.
   Future<bool> putIfAbsent(
     String key,
     T entry, [
@@ -423,6 +472,7 @@ class _RedisAdapter<T extends Object> {
     });
   }
 
+  /// Ensures the Redis connection is initialized and healthy.
   Future<void> ensureInitialized() async {
     try {
       final r = await command.send_object(['PING']);
@@ -468,6 +518,7 @@ class _RedisAdapter<T extends Object> {
     }
   }
 
+  /// Retrieves a value from the database.
   Future<T?> get(String key) async {
     await ensureInitialized();
 
@@ -483,6 +534,7 @@ class _RedisAdapter<T extends Object> {
     });
   }
 
+  /// Retrieves a value and replaces it with a new value atomically.
   Future<T?> getAndPut(
     String key,
     T value, [
@@ -517,29 +569,63 @@ class _RedisAdapter<T extends Object> {
   }
 }
 
+/// A storage implementation using Redis as the backend.
+///
+/// This class provides persistent storage using Redis, a fast in-memory
+/// data store. It supports:
+/// - Thread-safe operations
+/// - Data expiration
+/// - Locking mechanisms
+/// - Type-safe data storage and retrieval
+///
+/// Example usage:
+/// ```dart
+/// final storage = RedisStoragePlug(
+///   host: 'localhost',
+///   port: 6379,
+///   password: 'your_password',
+/// );
+/// await storage.init();
+/// await storage.open<String>(expiry: Duration(hours: 1));
+/// await storage.put('key', 'value');
+/// final value = await storage.get<String>('key');
+/// ```
 class RedisStoragePlug extends PluggableStorageProvider {
+  /// Whether the storage has been initialized.
   bool initialized = false;
 
+  /// Map of type to Redis adapters.
   final Map<Type, _RedisAdapter> _caches = {};
 
+  /// The Redis server host.
   final String host;
+
+  /// The Redis server port.
   final int port;
+
+  /// The Redis server password, if any.
   final String? password;
+
+  /// Lock for connection operations.
   final _openLock = Lock();
 
+  /// Creates a new [RedisStoragePlug] with the given configuration.
   RedisStoragePlug({
     required this.host,
     required this.port,
     this.password,
   });
 
+  /// Gets the number of open caches.
   int get len => _caches.length;
 
+  /// Gets the Redis adapter for the specified type.
   _RedisAdapter<T> _getCache<T extends Object>() {
     assert(_caches.containsKey(T), 'Vault of type $T not open');
     return _caches[T]! as _RedisAdapter<T>;
   }
 
+  /// Gets all stored values for a specific type, optionally filtered by key.
   @override
   Future<Map<String, dynamic>> getAllForType(
     String type, [
@@ -566,6 +652,7 @@ class RedisStoragePlug extends PluggableStorageProvider {
     });
   }
 
+  /// Initializes the storage provider.
   @override
   Future<PluggableStorageProvider> init() async {
     if (initialized) {
@@ -582,6 +669,7 @@ class RedisStoragePlug extends PluggableStorageProvider {
     return this;
   }
 
+  /// Pings all open Redis connections to check their health.
   Future<Map<String, dynamic>> ping() async {
     return _openLock.synchronized(() async {
       final results = <String, dynamic>{};
@@ -605,16 +693,14 @@ class RedisStoragePlug extends PluggableStorageProvider {
     });
   }
 
+  /// Opens a cache for the specified type with the given configuration.
   @override
   Future<void> open<T extends Object>({
     required Duration expiry,
     DecodeFunc<T>? fromEncodable,
   }) async {
     return _openLock.synchronized(() async {
-      // Pluggable.logger.v('${Isolate.current.debugName} - OPENING $T');
-
       if (_caches.containsKey(T) && _caches[T]!._open) {
-        // Pluggable.logger.v('Cannot reopen a cache without first closing it.');
         return;
       }
 
@@ -640,28 +726,33 @@ class RedisStoragePlug extends PluggableStorageProvider {
     });
   }
 
+  /// Returns all keys stored for the specified type.
   @override
   Future<Iterable<String>> keys<T extends Object>() {
     return _getCache<T>().keys;
   }
 
+  /// Checks if a key exists in the storage for the specified type.
   @override
   Future<bool> containsKey<T extends Object>(String key) {
     return _getCache<T>().containsKey(key);
   }
 
+  /// Closes the cache for the specified type.
   @override
   Future<PluggableStorageProvider> close<T extends Object>() async {
     await _caches[T]?.close();
     return this;
   }
 
+  /// Clears all data of the specified type from the storage.
   @override
   Future<PluggableStorageProvider> dump<T extends Object>() async {
     await _getCache<T>().dump();
     return this;
   }
 
+  /// Stores a value in the storage with the specified key.
   @override
   Future<void> put<T extends Object>(
     String key,
@@ -673,6 +764,7 @@ class RedisStoragePlug extends PluggableStorageProvider {
     });
   }
 
+  /// Stores a value in the storage only if the key doesn't already exist.
   @override
   Future<bool> putIfAbsent<T extends Object>(
     String key,
@@ -682,6 +774,10 @@ class RedisStoragePlug extends PluggableStorageProvider {
     return _getCache<T>().putIfAbsent(key, value);
   }
 
+  /// Retrieves a value from storage by key.
+  ///
+  /// If the key doesn't exist and a [fetch] function is provided,
+  /// it will be called to retrieve the value, which will then be stored.
   @override
   Future<T?> get<T extends Object>(
     String key, [
@@ -705,11 +801,9 @@ class RedisStoragePlug extends PluggableStorageProvider {
     final String identity = trace ?? cache.lockIdentity;
 
     if (await cache.isExtLocked(key, identity)) {
-      // Pluggable.logger.v('${Isolate.current.debugName} - EXT LOCKED');
       await Future.delayed(const Duration(milliseconds: 200));
       return get<T>(key, fetch, trace);
     } else if (isKeyInFlight<T>(key)) {
-      // Pluggable.logger.v('${Isolate.current.debugName} - IN FLIGHT');
       return inFlightRequest<T>(key);
     }
 
@@ -718,11 +812,7 @@ class RedisStoragePlug extends PluggableStorageProvider {
     value ??= await cache.get(key);
 
     if (value == null && fetch != null) {
-      // Pluggable.logger.v('${Isolate.current.debugName} - FETCH ACQ LOCK');
-
       bool hasLock = await cache.acquireLock(key, identity);
-
-      // Pluggable.logger.v('${Isolate.current.debugName} - ACQUIRED IN GET');
 
       if (!hasLock) {
         throw Exception('Unable to achieve lock on key $key');
@@ -732,7 +822,6 @@ class RedisStoragePlug extends PluggableStorageProvider {
 
       if (fetchedValue != null) {
         await put<T>(key, fetchedValue, trace);
-        // Pluggable.logger.v('${Isolate.current.debugName} - SET $fetchedValue');
         return fetchedValue;
       }
     } else if (value != null) {
@@ -746,15 +835,13 @@ class RedisStoragePlug extends PluggableStorageProvider {
     return value;
   }
 
+  /// Retrieves a value from storage and replaces it with a new value.
   @override
   Future<T?> getAndPut<T extends Object>(
     String key,
     T value, [
     String? trace,
   ]) {
-    return _getCache<T>().getAndPut(
-      key,
-      value,
-    );
+    return _getCache<T>().getAndPut(key, value, trace);
   }
 }
