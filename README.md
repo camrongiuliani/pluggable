@@ -11,7 +11,7 @@ Pluggable provides core abstractions and implementations for building modular ap
 - **Dependency Injection**: Manage dependencies and services
 - **Navigation**: Handle routing and navigation with custom transitions
 - **Storage**: Support for various storage backends
-- **HTTP**: Flexible HTTP client with support for different request types
+- **HTTP Server**: Server-side HTTP handling with support for different request types
 - **Analytics**: Track user behavior and application metrics
 - **Logging**: Comprehensive logging capabilities
 
@@ -20,10 +20,12 @@ Pluggable provides core abstractions and implementations for building modular ap
 A typical project using Pluggable might be organized as follows:
 
 - **core**: Shared business logic, models, and services
-- **ui**: Flutter-based user interface, using Pluggable for navigation, theming, and state management
+- **ui**: Flutter-based user interface, using Pluggable for navigation and theming
 - **api**: Dart server application, using Pluggable for routing, dependency injection, and storage
 
 ## Getting Started
+
+---
 
 ### Flutter Application Example
 
@@ -59,6 +61,44 @@ class FeatureModule extends PluggableModule {
 
 #### 3. Set Up Navigation with Guards and Transitions
 
+You can use either a custom navigation plugin or the GoRouterPlug for navigation.
+
+**Option A: Using GoRouterPlug**
+
+```dart
+// main.dart
+import 'package:pluggable_flutter/pluggable_flutter.dart';
+import 'core_module.dart';
+import 'feature_module.dart';
+
+void main() {
+  runPluggableApp(
+    navigationPlugin: GoRouterPlug(
+      initialRoute: '/login',
+      routes: [
+        PluggableRoute(
+          path: '/login',
+          builder: (context) => LoginPage(),
+        ),
+        PluggableRoute(
+          path: '/dashboard',
+          builder: (context) => DashboardPage(),
+          guard: AuthGuard(),
+        ),
+      ],
+    ),
+    modules: [
+      CoreModule(),
+      FeatureModule(),
+    ],
+    storagePlugin: InMemoryStoragePlug(),
+    theme: AppTheme.light(),
+  );
+}
+```
+
+**Option B: Using a Custom Navigation Plugin**
+
 ```dart
 // navigation.dart
 import 'package:pluggable_flutter/pluggable_flutter.dart';
@@ -76,11 +116,7 @@ final routes = [
     guard: AuthGuard(), // Custom route guard
   ),
 ];
-```
 
-#### 4. Initialize the App
-
-```dart
 // main.dart
 import 'package:pluggable_flutter/pluggable_flutter.dart';
 import 'core_module.dart';
@@ -103,7 +139,7 @@ void main() {
 }
 ```
 
-#### 5. Use Dependency Injection in Widgets
+#### 4. Use Dependency Injection in Widgets
 
 ```dart
 // dashboard_page.dart
@@ -135,89 +171,87 @@ import 'package:pluggable/pluggable.dart';
 class ApiModule extends PluggableModule {
   @override
   void bind() {
-    register<ApiController>(() => ApiControllerImpl());
     register<AuthService>(() => AuthServiceImpl());
+    register<StorageService>(() => StorageServiceImpl());
   }
 }
 ```
 
-#### 2. Set Up Server Routes
+#### 2. Create a Handler
 
 ```dart
-// server_routes.dart
+// resource_handler.dart
 import 'package:pluggable/pluggable.dart';
 
-final apiRoutes = [
-  PluggableRoute(
-    path: '/api/v1/resource',
-    method: HttpMethod.get,
-    handler: (context) async {
-      final controller = context.get<ApiController>();
-      return controller.getResource(context.request);
-    },
-    guard: ApiAuthGuard(),
-  ),
-  PluggableRoute(
-    path: '/api/v1/resource',
-    method: HttpMethod.post,
-    handler: (context) async {
-      final controller = context.get<ApiController>();
-      return controller.createResource(context.request);
-    },
-  ),
-];
-```
+class ResourceHandler extends PRequestHandler {
+  ResourceHandler({
+    required super.request,
+  });
 
-#### 3. Initialize the Server
-
-```dart
-// main.dart
-import 'package:pluggable/pluggable.dart';
-import 'core_module.dart';
-import 'api_module.dart';
-import 'server_routes.dart';
-
-void main() async {
-  final pluggable = await initPluggable(
-    modules: [
-      CoreModule(),
-      ApiModule(),
-    ],
-    storagePlugin: RedisStoragePlug(connectionString: 'redis://localhost:6379'),
-    routes: apiRoutes,
-  );
-
-  // Start the HTTP server
-  await pluggable.get<ServerService>().start(port: 8080);
-}
-```
-
-#### 4. Use Dependency Injection in Controllers
-
-```dart
-// api_controller.dart
-import 'package:pluggable/pluggable.dart';
-
-class ApiControllerImpl implements ApiController {
-  final StorageService storage;
-  final AnalyticsService analytics;
-
-  ApiControllerImpl()
-      : storage = Pluggable.get<StorageService>(),
-        analytics = Pluggable.get<AnalyticsService>();
-
-  Future<Response> getResource(Request request) async {
-    analytics.trackEvent('get_resource');
+  @override
+  Future<Response> get() async {
     final data = await storage.get('resource_key');
     return Response.ok(data);
   }
 
-  Future<Response> createResource(Request request) async {
+  @override
+  Future<Response> post() async {
     final payload = await request.body();
     await storage.put('resource_key', payload);
-    analytics.trackEvent('create_resource');
     return Response.created('Resource created');
   }
+}
+```
+
+#### 3. Set Up Route Handler
+
+```dart
+// routes/resource/index.dart
+import 'package:dart_frog/dart_frog.dart';
+import 'package:pluggable_dart_server/pluggable_dart_server.dart';
+import 'resource_handler.dart';
+
+Future<Response> onRequest(RequestContext context) async {
+  return Pluggable.server.handle(
+    request: context,
+    handler: (request) => ResourceHandler(
+      request: request,
+    ),
+  );
+}
+```
+
+#### 4. Initialize the Server with DartFrogServerPlug
+
+```dart
+// main.dart
+import 'dart:async';
+import 'dart:io';
+import 'package:dart_frog/dart_frog.dart';
+import 'package:pluggable_dart_server/pluggable_dart_server.dart';
+import 'package:dart_frog_server_plug/dart_frog_server_plug.dart';
+
+import 'core_module.dart';
+import 'api_module.dart';
+
+Future<HttpServer> run(Handler handler, InternetAddress ip, int port) async {
+  final serverPath = Platform.environment['SERVER_PATH'] ?? '';
+
+  return runPluggableServer(
+    server: DartFrogServerPlug(
+      internetAddress: ip,
+      port: port,
+      rootHandler: handler,
+    ),
+    modules: [
+      CoreModule(),
+      ApiModule(),
+    ],
+    mounts: [
+      if (serverPath.isNotEmpty) serverPath,
+      '/',
+    ],
+  );
 }
 ```
 
@@ -231,17 +265,6 @@ class ApiControllerImpl implements ApiController {
 class CustomStoragePlug extends PluggableStorage {
   // Implement custom storage logic here
 }
-```
-
-### HTTP Client Usage
-
-```dart
-final response = await PHttpRequest.post(
-  'https://api.example.com/data',
-  body: {'name': 'example'},
-  headers: {'Authorization': 'Bearer token'},
-  cache: true,
-);
 ```
 
 ### Analytics and Logging
