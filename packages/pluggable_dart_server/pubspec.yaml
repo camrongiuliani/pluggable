@@ -2,7 +2,7 @@ name: pluggable_dart_server
 description: "A Pluggable Dart Server."
 # pubspec_overrides.yaml
 
-version: 0.0.1-pre.8
+version: 0.0.1-pre.9
 
 environment:
   sdk: ^3.6.0
