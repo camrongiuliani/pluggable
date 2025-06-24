@@ -42,7 +42,6 @@ class PluggableRoute extends base.PluggableRoute
     super.onExit,
     super.routes = const <base.PluggableRouteBase>[],
     this.transition = RouteTransition.none,
-    super.data,
   }) : super(
           name: Uri.parse(path).path,
           pageBuilder: (context, state) {
@@ -77,6 +76,7 @@ class PluggableRoute extends base.PluggableRoute
   PluggableRoute.redirect({
     required super.path,
     required base.PluggableRouteRedirect redirect,
+    this.transition = RouteTransition.none,
   }) : super(
           redirect: redirect,
         );
@@ -105,7 +105,6 @@ class PluggableShellRoute extends base.PluggableShellRoute
   /// The [path] parameter is required and specifies the route path.
   /// The [builder] parameter is required and defines how to build the shell layout.
   /// The [routes] parameter contains the nested routes within this shell.
-  /// The [data] parameter can be used to pass additional data to the route.
   PluggableShellRoute({
     required super.routes,
     super.redirect,
@@ -115,14 +114,5 @@ class PluggableShellRoute extends base.PluggableShellRoute
     super.parentNavigatorKey,
     super.navigatorKey,
     super.restorationScopeId,
-    super.data,
   });
-
-  @override
-  Page<dynamic> buildPage(BuildContext context) {
-    return RouteTransitionPage.none(
-      key: ValueKey(path),
-      child: builder(context, const SizedBox()),
-    );
-  }
 }

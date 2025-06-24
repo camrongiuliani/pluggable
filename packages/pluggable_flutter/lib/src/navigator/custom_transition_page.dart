@@ -118,7 +118,7 @@ class NoTransitionPage<T> extends CustomTransitionPage<T> {
   /// The [barrierDismissible] parameter determines if the barrier can be dismissed (defaults to false).
   /// The [barrierColor] parameter specifies the color of the barrier (defaults to null).
   /// The [barrierLabel] parameter specifies the label for the barrier (defaults to null).
-  const NoTransitionPage({
+  NoTransitionPage({
     super.key,
     required super.child,
     super.maintainState = true,
