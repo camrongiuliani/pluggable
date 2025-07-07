@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 import 'package:flutter/material.dart';
 import 'package:pluggable_flutter/pluggable_flutter.dart';
 
@@ -42,7 +43,8 @@ Future<void> runPluggableApp({
   PluggableAnalytics? analyticsPlugin,
   PluggableLogger? loggingPlugin,
   PluggableDI? diPlugin,
-  ThemeData? theme,
+  ThemeData Function(BuildContext context)? themeBuilder,
+  Widget Function(BuildContext context, Widget child)? builder,
 }) async {
   await initPluggable(
     modules: modules,
@@ -56,9 +58,19 @@ Future<void> runPluggableApp({
   runApp(
     StreamBuilder(
       stream: Pluggable.stream,
-      builder: (_, __) {
+      builder: (ctx, __) {
+        if (builder != null) {
+          return builder(
+            ctx,
+            MaterialApp.router(
+              theme: themeBuilder?.call(ctx),
+              routerConfig: Pluggable.navigator.config,
+            ),
+          );
+        }
+
         return MaterialApp.router(
-          theme: theme,
+          theme: themeBuilder?.call(ctx),
           routerConfig: Pluggable.navigator.config,
         );
       },
