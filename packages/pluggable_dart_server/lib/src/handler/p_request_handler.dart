@@ -32,7 +32,7 @@ class PRequestHandler {
   final QueryParamValidator? queryValidator;
 
   /// Optional validator for request headers.
-  final HeaderValidation? headerValidator;
+  final HeaderValidator? headerValidator;
 
   /// Creates a new request handler.
   ///
@@ -179,7 +179,8 @@ class PRequestHandler {
     );
 
     headerValidator?.validate(
-      request.headers,
+      httpMethod: request.method,
+      headers: request.headers,
     );
 
     return PHttpResponse(
