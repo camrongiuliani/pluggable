@@ -43,9 +43,7 @@ Future<PluggableImpl> initPluggable({
 
   await pluggable.navigator.updateRoutes(
     pluggable.modules
-        .map(
-          (m) => m as PluggableFlutterModule,
-        )
+        .whereType<PluggableFlutterModule>()
         .map(
           (m) => m.buildRoutes(),
         )
@@ -86,7 +84,7 @@ extension PluggableFlutter on PluggableImpl {
       newModule.bind();
 
       for (final module in modules) {
-        if (module != newModule) {
+        if (module != newModule && module is! PluggableFlutterModule) {
           module.unbind();
         }
       }

@@ -42,6 +42,7 @@ Future<void> runPluggableApp({
   PluggableAnalytics? analyticsPlugin,
   PluggableLogger? loggingPlugin,
   PluggableDI? diPlugin,
+  FutureOr<void> Function()? initCallback,
   ThemeData Function(BuildContext context)? themeBuilder,
   Widget Function(BuildContext context, Widget child)? builder,
 }) async {
@@ -53,6 +54,8 @@ Future<void> runPluggableApp({
     loggingPlugin: loggingPlugin,
     diPlugin: diPlugin,
   );
+
+  await initCallback?.call();
 
   runApp(
     StreamBuilder(
