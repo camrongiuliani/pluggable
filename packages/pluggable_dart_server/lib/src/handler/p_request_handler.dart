@@ -34,6 +34,9 @@ class PRequestHandler {
   /// Optional validator for request headers.
   final HeaderValidator? headerValidator;
 
+  /// Response headers to be set in the response.
+  final Map<String, Object> _responseHeaders = {};
+
   /// Creates a new request handler.
   ///
   /// [request]: The HTTP request to handle.
@@ -66,6 +69,27 @@ class PRequestHandler {
       tag: '$runtimeType',
     );
   }
+
+  /// Adds a response header to the handler.
+  void addResponseHeader(
+    String key,
+    Object value,
+  ) {
+    _responseHeaders[key] = value;
+  }
+
+  /// Removes a response header from the handler.
+  void removeResponseHeader(String key) {
+    _responseHeaders.remove(key);
+  }
+
+  /// Clears all response headers.
+  void clearResponseHeaders() {
+    _responseHeaders.clear();
+  }
+
+  /// Gets the current response headers.
+  Map<String, Object> get responseHeaders => _responseHeaders;
 
   /// Checks if the given data is a primitive Dart type.
   ///
@@ -129,6 +153,7 @@ class PRequestHandler {
               _ => ContentType.text.mimeType,
             },
           },
+          ..._responseHeaders,
         },
       );
     }).onError((error, stackTrace) {
