@@ -105,8 +105,8 @@ extension PluggableFlutter on PluggableImpl {
       };
     }
 
-    final matches = modules.where((module) {
-      return (module as PluggableFlutterModule).buildRoutes().any(
+    final matches = modules.whereType<PluggableFlutterModule>().where((module) {
+      return module.buildRoutes().any(
             (r) => recursiveCheck(r),
           );
     }).toList();
