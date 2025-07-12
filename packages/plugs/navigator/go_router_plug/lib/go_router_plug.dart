@@ -45,9 +45,21 @@ class GoRouterPlug extends PluggableNavigator {
     required this.initialRoute,
   }) {
     key = GlobalKey<NavigatorState>();
+
+    final String initialPath = Uri.base.fragment;
+
     _routeConfig = ValueNotifier<RoutingConfig>(
       RoutingConfig(
         routes: [],
+        redirect: (_, state) async {
+          return switch (state.uri.toString()) {
+            '/' => switch (initialPath) {
+                '' || '/' => initialRoute,
+                _ => initialPath,
+              },
+            _ => null,
+          };
+        },
       ),
     );
   }
