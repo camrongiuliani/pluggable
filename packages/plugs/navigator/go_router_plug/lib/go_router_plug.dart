@@ -47,15 +47,7 @@ class GoRouterPlug extends PluggableNavigator {
     key = GlobalKey<NavigatorState>();
     _routeConfig = ValueNotifier<RoutingConfig>(
       RoutingConfig(
-        routes: [
-          GoRoute(
-            path: switch (initialRoute) {
-              '' => '/',
-              _ => initialRoute,
-            },
-            builder: (_, __) => const SizedBox.shrink(),
-          ),
-        ],
+        routes: [],
       ),
     );
   }
