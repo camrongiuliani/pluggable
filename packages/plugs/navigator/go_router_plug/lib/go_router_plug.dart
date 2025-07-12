@@ -28,7 +28,7 @@ class GoRouterPlug extends PluggableNavigator {
   final String initialRoute;
 
   /// Configuration for the router's routes.
-  late final _routeConfig;
+  late final ValueNotifier<RoutingConfig> _routeConfig;
 
   /// The navigator key used for navigation.
   @override
