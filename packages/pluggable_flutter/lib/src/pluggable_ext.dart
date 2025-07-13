@@ -83,8 +83,8 @@ extension PluggableFlutter on PluggableImpl {
     if (!newModule.bound) {
       newModule.bind();
 
-      for (final module in modules) {
-        if (module != newModule && module is! PluggableFlutterModule) {
+      for (final module in modules.whereType<PluggableFlutterModule>()) {
+        if (module != newModule) {
           module.unbind();
         }
       }
