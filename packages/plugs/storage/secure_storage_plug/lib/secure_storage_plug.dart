@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:pluggable/pluggable.dart';
 import 'package:stash/stash_api.dart';
 import 'package:stash_hive/stash_hive.dart';
@@ -51,9 +52,8 @@ class SecureStoragePlug extends PluggableStorageProvider {
     return await newHiveDefaultCacheStore().then((store) {
       _store = store;
       initialized = true;
-      Pluggable.logger.v(
-        'Secure vault store initialized',
-        tag: '$runtimeType',
+      debugPrint(
+        '$runtimeType initialized',
       );
       return this;
     });
