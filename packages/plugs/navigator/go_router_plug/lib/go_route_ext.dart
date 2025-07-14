@@ -30,6 +30,7 @@ extension GoRouteConverter on PluggableRouteBase {
         ),
       final PluggableShellRoute r => ShellRoute(
           parentNavigatorKey: parentNavigatorKey,
+          navigatorKey: r.navigatorKey,
           builder: r.builder?.asGoRouterShellRouteBuilder,
           pageBuilder: r.pageBuilder?.asGoRouterShellRoutePageBuilder,
           redirect: redirect?.asGoRouterRedirect,
