@@ -115,4 +115,26 @@ class PluggableShellRoute extends base.PluggableShellRoute
     super.navigatorKey,
     super.restorationScopeId,
   });
+
+  PluggableShellRoute copyWith({
+    List<base.PluggableRouteBase>? routes,
+    base.PluggableRouteRedirect? redirect,
+    base.PluggableShellRouteBuilder? builder,
+    base.PluggableShellRoutePageBuilder? pageBuilder,
+    List<NavigatorObserver>? observers,
+    GlobalKey<NavigatorState>? parentNavigatorKey,
+    GlobalKey<NavigatorState>? navigatorKey,
+    String? restorationScopeId,
+  }) {
+    return PluggableShellRoute(
+      routes: routes ?? this.routes,
+      redirect: redirect ?? this.redirect,
+      builder: builder ?? this.builder,
+      pageBuilder: pageBuilder ?? this.pageBuilder,
+      observers: observers ?? this.observers,
+      parentNavigatorKey: parentNavigatorKey ?? this.parentNavigatorKey,
+      navigatorKey: navigatorKey ?? this.navigatorKey,
+      restorationScopeId: restorationScopeId ?? this.restorationScopeId,
+    );
+  }
 }
