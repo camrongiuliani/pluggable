@@ -1,3 +1,9 @@
+## 0.0.1-pre.8
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
 ## 0.0.1-pre.6
 
  - **FEAT**: add remote storage option.

@@ -1,3 +1,12 @@
+## 0.0.1-pre.8
+
+ - **FIX**: remove more Flutter refs.
+ - **FIX**: move away from ChangeNotifier.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: dart server plug support.
+ - **FEAT**: add dart server and some additional plugs.
+
 ## 0.0.1-pre.6
 
  - **FEAT**: add remote storage option.

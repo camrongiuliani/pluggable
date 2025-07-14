@@ -3,6 +3,131 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-07-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cartographer_mapper_plug` - `v0.0.1-pre.8`](#cartographer_mapper_plug---v001-pre8)
+ - [`dart_frog_server_plug` - `v0.0.1-pre.13`](#dart_frog_server_plug---v001-pre13)
+ - [`expire_cache_storage_plug` - `v0.0.1-pre.8`](#expire_cache_storage_plug---v001-pre8)
+ - [`go_router_plug` - `v0.0.1-pre.20`](#go_router_plug---v001-pre20)
+ - [`in_memory_storage_plug` - `v0.0.1-pre.8`](#in_memory_storage_plug---v001-pre8)
+ - [`object_box_storage_plug` - `v0.0.1-pre.8`](#object_box_storage_plug---v001-pre8)
+ - [`pluggable` - `v0.0.1-pre.8`](#pluggable---v001-pre8)
+ - [`pluggable_dart_server` - `v0.0.1-pre.12`](#pluggable_dart_server---v001-pre12)
+ - [`pluggable_di_getit` - `v0.0.1-pre.8`](#pluggable_di_getit---v001-pre8)
+ - [`pluggable_flutter` - `v0.0.1-pre.15`](#pluggable_flutter---v001-pre15)
+ - [`redis_storage_plug` - `v0.0.1-pre.8`](#redis_storage_plug---v001-pre8)
+ - [`secure_storage_plug` - `v0.0.1-pre.8`](#secure_storage_plug---v001-pre8)
+
+---
+
+#### `cartographer_mapper_plug` - `v0.0.1-pre.8`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: dart server plug support.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `dart_frog_server_plug` - `v0.0.1-pre.13`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: dart server plug support.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `expire_cache_storage_plug` - `v0.0.1-pre.8`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `go_router_plug` - `v0.0.1-pre.20`
+
+ - **FIX**: nav init.
+ - **FIX**: expose navigatorKey prop.
+ - **FIX**: type issue.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: init issues.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `in_memory_storage_plug` - `v0.0.1-pre.8`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `object_box_storage_plug` - `v0.0.1-pre.8`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `pluggable` - `v0.0.1-pre.8`
+
+ - **FIX**: remove more Flutter refs.
+ - **FIX**: move away from ChangeNotifier.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: dart server plug support.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `pluggable_dart_server` - `v0.0.1-pre.12`
+
+ - **FIX**: headerValidator.
+ - **FIX**: (pluggable_dart_server) inc build.
+ - **FIX**: (pluggable_dart_server) serialization issues.
+ - **FEAT**: add ability to set response headers.
+ - **FEAT**: expose cache control.
+ - **FEAT**: expose cache control.
+ - **FEAT**: (pluggable_dart_server) add runPluggableServer.
+ - **FEAT**: dart server plug support.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `pluggable_di_getit` - `v0.0.1-pre.8`
+
+ - **FIX**: remove more Flutter refs.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `pluggable_flutter` - `v0.0.1-pre.15`
+
+ - **FIX**: nav init.
+ - **FIX**: type issue.
+ - **FIX**: PluggableFlutterModule type check.
+ - **FIX**: some module init issues, add initCallback.
+ - **FIX**: init issues.
+ - **FIX**: move away from ChangeNotifier.
+ - **FEAT**: allow for builder and theme builder in flutter.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `redis_storage_plug` - `v0.0.1-pre.8`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `secure_storage_plug` - `v0.0.1-pre.8`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+
 ## 2025-04-16
 
 ### Changes

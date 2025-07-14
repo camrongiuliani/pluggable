@@ -1,6 +1,6 @@
 name: pluggable
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.7
+version: 0.0.1-pre.8
 # pubspec_overrides.yaml
 
 environment:
@@ -15,11 +15,11 @@ dependencies:
   uuid: any
   collection: any
 
-  pluggable_di_getit: 0.0.1-pre.7
+  pluggable_di_getit: 0.0.1-pre.8
 
-  in_memory_storage_plug: 0.0.1-pre.7
+  in_memory_storage_plug: 0.0.1-pre.8
 
-  cartographer_mapper_plug: 0.0.1-pre.7
+  cartographer_mapper_plug: 0.0.1-pre.8
 
 dev_dependencies:
   flutter_lints: ^5.0.0
