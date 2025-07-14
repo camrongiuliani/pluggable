@@ -28,7 +28,14 @@ class GoRouterPlug extends PluggableNavigator {
   final String initialRoute;
 
   /// Configuration for the router's routes.
-  late final ValueNotifier<RoutingConfig> _routeConfig;
+  // late final ValueNotifier<RoutingConfig> _routeConfig;
+  ValueNotifier<RoutingConfig>? _config;
+
+  ValueNotifier<RoutingConfig> get _routeConfig => _config ??= ValueNotifier(
+        const RoutingConfig(
+          routes: [],
+        ),
+      );
 
   /// The navigator key used for navigation.
   @override
@@ -45,23 +52,6 @@ class GoRouterPlug extends PluggableNavigator {
     required this.initialRoute,
   }) {
     key = GlobalKey<NavigatorState>();
-
-    final String initialPath = Uri.base.fragment;
-
-    _routeConfig = ValueNotifier<RoutingConfig>(
-      RoutingConfig(
-        routes: [],
-        redirect: (_, state) async {
-          return switch (state.uri.toString()) {
-            '/' => switch (initialPath) {
-                '' || '/' => initialRoute,
-                _ => initialPath,
-              },
-            _ => null,
-          };
-        },
-      ),
-    );
   }
 
   /// Initializes the router with the specified configuration.
@@ -96,7 +86,19 @@ class GoRouterPlug extends PluggableNavigator {
   Future<void> updateRoutes(
     Iterable<PluggableRouteBase> routes,
   ) async {
+    final String initialPath = Uri.base.fragment;
+
     _routeConfig.value = RoutingConfig(
+      redirect: (_, state) async {
+        return switch (state.uri.toString()) {
+          '/error' => initialRoute,
+          '/' => switch (initialPath) {
+              '' || '/' => initialRoute,
+              _ => initialPath,
+            },
+          _ => null,
+        };
+      },
       routes: routes
           .map(
             (route) => route.asGoRoute,
