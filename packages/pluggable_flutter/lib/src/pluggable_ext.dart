@@ -39,7 +39,10 @@ Future<PluggableImpl> initPluggable({
     diPlugin: diPlugin,
   );
 
-  await pluggable.plugin<PluggableNavigator>(navigationPlugin);
+  await pluggable.plugin<PluggableNavigator>(
+    navigationPlugin,
+    init: false,
+  );
 
   await pluggable.navigator.updateRoutes(
     pluggable.modules
@@ -49,6 +52,8 @@ Future<PluggableImpl> initPluggable({
         )
         .flattened,
   );
+
+  await navigationPlugin.init();
 
   pluggable.navigator.addListener(
     pluggable._handleModuleBinding,
