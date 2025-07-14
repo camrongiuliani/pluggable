@@ -1,3 +1,7 @@
+## 0.0.1-pre.21
+
+ - **FEAT**: support for shell route remapping based on keys.
+
 ## 0.0.1-pre.20
 
  - **FIX**: nav init.

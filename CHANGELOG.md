@@ -15,6 +15,32 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`go_router_plug` - `v0.0.1-pre.21`](#go_router_plug---v001-pre21)
+ - [`pluggable_flutter` - `v0.0.1-pre.16`](#pluggable_flutter---v001-pre16)
+
+---
+
+#### `go_router_plug` - `v0.0.1-pre.21`
+
+ - **FEAT**: support for shell route remapping based on keys.
+
+#### `pluggable_flutter` - `v0.0.1-pre.16`
+
+ - **FEAT**: add copyWith to shell route.
+
+
+## 2025-07-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`cartographer_mapper_plug` - `v0.0.1-pre.8`](#cartographer_mapper_plug---v001-pre8)
  - [`dart_frog_server_plug` - `v0.0.1-pre.13`](#dart_frog_server_plug---v001-pre13)
  - [`expire_cache_storage_plug` - `v0.0.1-pre.8`](#expire_cache_storage_plug---v001-pre8)
