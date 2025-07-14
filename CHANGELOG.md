@@ -15,6 +15,30 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`secure_storage_plug` - `v0.0.1-pre.10`](#secure_storage_plug---v001-pre10)
+
+---
+
+#### `secure_storage_plug` - `v0.0.1-pre.10`
+
+ - **FIX**: premature log.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+
+## 2025-07-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`go_router_plug` - `v0.0.1-pre.21`](#go_router_plug---v001-pre21)
  - [`pluggable_flutter` - `v0.0.1-pre.16`](#pluggable_flutter---v001-pre16)
 
