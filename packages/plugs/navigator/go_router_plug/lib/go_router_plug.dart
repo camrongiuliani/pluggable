@@ -51,7 +51,9 @@ class GoRouterPlug extends PluggableNavigator {
   GoRouterPlug({
     required this.initialRoute,
   }) {
-    key = GlobalKey<NavigatorState>();
+    key = GlobalKey<NavigatorState>(
+      debugLabel: 'GoRouterPlug',
+    );
   }
 
   /// Initializes the router with the specified configuration.
@@ -69,11 +71,11 @@ class GoRouterPlug extends PluggableNavigator {
       observers: observers,
       initialLocation: initialRoute,
       routingConfig: _routeConfig,
-      onException: (context, state, router) {
-        Pluggable.logger.e('Exception: ${state.error}', tag: 'CORE');
-
-        router.go('/error');
-      },
+      // onException: (context, state, router) {
+      //   Pluggable.logger.e('Exception: ${state.error}', tag: 'CORE');
+      //
+      //   router.go('/error');
+      // },
     );
 
     return this;
@@ -99,11 +101,7 @@ class GoRouterPlug extends PluggableNavigator {
           _ => null,
         };
       },
-      routes: routes
-          .map(
-            (route) => route.asGoRoute,
-          )
-          .toList(),
+      routes: routes.asGoRoutes,
     );
   }
 

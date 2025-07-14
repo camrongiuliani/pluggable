@@ -1,5 +1,80 @@
+import 'package:flutter/material.dart';
 import 'package:pluggable_flutter/pluggable_flutter.dart';
 import 'package:go_router/go_router.dart';
+
+typedef Remap = ({
+  GlobalKey<NavigatorState> source,
+  GlobalKey<NavigatorState> destination,
+});
+
+/// Extension on [Iterable<PluggableRouteBase>] to convert a list of Pluggable routes to GoRouter routes.
+extension GoRouteListConverter on Iterable<PluggableRouteBase> {
+  /// Converts a list of Pluggable routes to a list of GoRouter routes.
+  ///
+  /// This extension method allows you to easily convert a collection of
+  /// Pluggable routes into their GoRouter equivalents, making it convenient
+  /// to work with both routing systems.
+  List<RouteBase> get asGoRoutes {
+    Map<Remap, List<PluggableShellRoute>> remapMap = {};
+
+    for (final route in this) {
+      if (route is PluggableShellRoute) {
+        final matches = whereType<PluggableShellRoute>().where((r) {
+          return r.parentNavigatorKey == route.navigatorKey;
+        }).toList();
+
+        if (matches.isNotEmpty) {
+          for (final match in matches) {
+            final remap = (
+              source: match.navigatorKey,
+              destination: route.navigatorKey,
+            );
+
+            if (!remapMap.containsKey(remap)) {
+              remapMap[remap] = [];
+            }
+            remapMap[remap]!.add(match);
+          }
+        }
+      }
+    }
+
+    final result = <PluggableRouteBase>[];
+
+    for (final route in this) {
+      if (route is PluggableShellRoute) {
+        final isDestShell = remapMap.keys
+            .map((k) => k.destination)
+            .any((k) => k == route.navigatorKey);
+
+        final isSourceShell = remapMap.keys
+            .map((k) => k.source)
+            .any((k) => k == route.navigatorKey);
+
+        if (isDestShell) {
+          result.add(
+            route.copyWith(
+              routes: [
+                ...route.routes,
+                ...remapMap.entries
+                    .where((e) => e.key.destination == route.navigatorKey)
+                    .expand((e) => e.value),
+              ],
+            ),
+          );
+
+          continue;
+        } else if (isSourceShell) {
+          continue;
+        }
+      }
+
+      result.add(route);
+    }
+
+    return result.map((r) => r.asGoRoute).toList();
+  }
+}
 
 /// Extension on [PluggableRouteBase] to convert Pluggable routes to GoRouter routes.
 ///
@@ -17,6 +92,7 @@ extension GoRouteConverter on PluggableRouteBase {
   /// Handles both regular routes and shell routes, converting all their
   /// properties and nested routes to the GoRouter format.
   RouteBase get asGoRoute {
+    StatefulShellRoute;
     return switch (this) {
       final PluggableRoute r => GoRoute(
           path: r.path,
