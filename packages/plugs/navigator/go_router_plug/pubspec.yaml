@@ -1,6 +1,6 @@
 name: go_router_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.25
+version: 0.0.1-pre.27
 # pubspec_overrides.yaml
 
 environment:

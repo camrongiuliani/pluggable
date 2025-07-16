@@ -15,6 +15,41 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`go_router_plug` - `v0.0.1-pre.27`](#go_router_plug---v001-pre27)
+
+---
+
+#### `go_router_plug` - `v0.0.1-pre.27`
+
+ - **FIX**: imports.
+ - **FIX**: nav init.
+ - **FIX**: expose navigatorKey prop.
+ - **FIX**: type issue.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: init issues.
+ - **FEAT**: add transitions.
+ - **FEAT**: support for shell route remapping based on keys.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
+
+## 2025-07-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`go_router_plug` - `v0.0.1-pre.25`](#go_router_plug---v001-pre25)
 
 ---

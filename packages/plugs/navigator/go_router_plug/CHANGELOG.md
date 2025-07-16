@@ -1,3 +1,21 @@
+## 0.0.1-pre.27
+
+ - **FIX**: imports.
+ - **FIX**: nav init.
+ - **FIX**: expose navigatorKey prop.
+ - **FIX**: type issue.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: _routeConfig init.
+ - **FIX**: init issues.
+ - **FEAT**: add transitions.
+ - **FEAT**: support for shell route remapping based on keys.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
 ## 0.0.1-pre.25
 
  - **FIX**: imports.
