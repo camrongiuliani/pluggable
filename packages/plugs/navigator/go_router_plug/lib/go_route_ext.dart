@@ -99,36 +99,7 @@ extension GoRouteConverter on PluggableRouteBase {
           name: r.name,
           parentNavigatorKey: parentNavigatorKey,
           builder: r.builder?.asGoRouterWidgetBuilder,
-          pageBuilder: switch (r.pageBuilder == null) {
-            false => r.pageBuilder!.asGoRouterPageBuilder,
-            true => (c, s) {
-              return switch (r.pageBuilder) {
-                null => null,
-                _ => switch (r.transition) {
-                  RouteTransition.none => RouteTransitionPage.none(
-                    key: s.pageKey,
-                    child: r.builder!.asGoRouterWidgetBuilder!(c, s),
-                  ),
-                  RouteTransition.fade => RouteTransitionPage.fade(
-                    key: s.pageKey,
-                    child: r.builder!.asGoRouterWidgetBuilder!(c, s),
-                  ),
-                  RouteTransition.slideUp => RouteTransitionPage.slideUp(
-                    key: s.pageKey,
-                    child: r.builder!.asGoRouterWidgetBuilder!(c, s),
-                  ),
-                  RouteTransition.slideDown => RouteTransitionPage.slideDown(
-                    key: s.pageKey,
-                    child: r.builder!.asGoRouterWidgetBuilder!(c, s),
-                  ),
-                  RouteTransition.slideLeft => RouteTransitionPage.slideLeft(
-                    key: s.pageKey,
-                    child: r.builder!.asGoRouterWidgetBuilder!(c, s),
-                  ),
-                },
-              }!;
-            }
-          },
+          pageBuilder: r.pageBuilder?.asGoRouterPageBuilder,
           onExit: r.onExit?.asGoRouterExitCallback,
           redirect: redirect?.asGoRouterRedirect,
           routes: routes.map((r) => r.asGoRoute).toList(),
