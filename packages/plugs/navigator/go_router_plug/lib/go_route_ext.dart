@@ -133,6 +133,7 @@ extension _PluggableRouterPageBuilderExt on PluggableRouterPageBuilder? {
         context,
         PluggableRouteState(
           route: state.uri,
+          matchedLocation: state.matchedLocation,
           params: state.uri.queryParameters,
           pageKey: state.pageKey,
           data: state.extra,
@@ -158,6 +159,7 @@ extension _PluggableRouterWidgetBuilderExt on PluggableRouterWidgetBuilder? {
         context,
         PluggableRouteState(
           route: state.uri,
+          matchedLocation: state.matchedLocation,
           params: state.uri.queryParameters,
           pageKey: state.pageKey,
           data: state.extra,
@@ -184,6 +186,7 @@ extension _PluggableShellRoutePageBuilderExt
         context,
         PluggableRouteState(
           route: state.uri,
+          matchedLocation: state.matchedLocation,
           params: state.uri.queryParameters,
           pageKey: state.pageKey,
           data: state.extra,
@@ -210,6 +213,7 @@ extension _PluggableShellRouteBuilderExt on PluggableShellRouteBuilder? {
         context,
         PluggableRouteState(
           route: state.uri,
+          matchedLocation: state.matchedLocation,
           params: state.uri.queryParameters,
           pageKey: state.pageKey,
           data: state.extra,
@@ -236,6 +240,7 @@ extension _PluggableRouterExitCallbackExt on PluggableRouterExitCallback? {
         context,
         PluggableRouteState(
           route: state.uri,
+          matchedLocation: state.matchedLocation,
           params: state.uri.queryParameters,
           pageKey: state.pageKey,
           data: state.extra,
@@ -261,6 +266,7 @@ extension _PluggableRouteRedirectExt on PluggableRouteRedirect? {
         context,
         PluggableRouteState(
           route: state.uri,
+          matchedLocation: state.matchedLocation,
           params: state.uri.queryParameters,
           pageKey: state.pageKey,
           data: state.extra,
