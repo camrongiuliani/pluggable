@@ -108,13 +108,45 @@ class PluggableShellRoute extends base.PluggableShellRoute
   PluggableShellRoute({
     required super.routes,
     super.redirect,
-    super.builder,
-    super.pageBuilder,
     super.observers,
     super.parentNavigatorKey,
     super.navigatorKey,
     super.restorationScopeId,
-  });
+    this.transition = RouteTransition.none,
+    PluggableShellRouteBuilder? builder,
+    PluggableShellRoutePageBuilder? pageBuilder,
+  }) : super(
+          builder: builder ?? (_, __, child) => child,
+          pageBuilder: pageBuilder ??
+              (context, state, child) {
+                final buildInternal = builder ?? (_, __, child) => child;
+                return switch (transition) {
+                  RouteTransition.none => RouteTransitionPage.none(
+                      key: state.pageKey,
+                      child: buildInternal(context, state, child),
+                    ),
+                  RouteTransition.fade => RouteTransitionPage.fade(
+                      key: state.pageKey,
+                      child: buildInternal(context, state, child),
+                    ),
+                  RouteTransition.slideUp => RouteTransitionPage.slideUp(
+                      key: state.pageKey,
+                      child: buildInternal(context, state, child),
+                    ),
+                  RouteTransition.slideDown => RouteTransitionPage.slideDown(
+                      key: state.pageKey,
+                      child: buildInternal(context, state, child),
+                    ),
+                  RouteTransition.slideLeft => RouteTransitionPage.slideLeft(
+                      key: state.pageKey,
+                      child: buildInternal(context, state, child),
+                    ),
+                };
+              },
+        );
+
+  /// The transition type for this route.
+  final RouteTransition transition;
 
   PluggableShellRoute copyWith({
     List<base.PluggableRouteBase>? routes,
