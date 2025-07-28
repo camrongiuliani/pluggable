@@ -1,3 +1,7 @@
+## 0.0.1-pre.13
+
+ - Update a dependency to the latest release.
+
 ## 0.0.1-pre.12
 
  - **FIX**: headerValidator.

@@ -1,3 +1,7 @@
+## 0.0.1-pre.19
+
+ - **FIX**: navigation issues.
+
 ## 0.0.1-pre.18
 
  - **FIX**: nav init.

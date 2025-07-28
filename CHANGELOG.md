@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-07-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`pluggable` - `v0.0.1-pre.9`](#pluggable---v001-pre9)
+ - [`pluggable_flutter` - `v0.0.1-pre.19`](#pluggable_flutter---v001-pre19)
+ - [`pluggable_di_getit` - `v0.0.1-pre.9`](#pluggable_di_getit---v001-pre9)
+ - [`cartographer_mapper_plug` - `v0.0.1-pre.9`](#cartographer_mapper_plug---v001-pre9)
+ - [`redis_storage_plug` - `v0.0.1-pre.9`](#redis_storage_plug---v001-pre9)
+ - [`in_memory_storage_plug` - `v0.0.1-pre.9`](#in_memory_storage_plug---v001-pre9)
+ - [`object_box_storage_plug` - `v0.0.1-pre.9`](#object_box_storage_plug---v001-pre9)
+ - [`expire_cache_storage_plug` - `v0.0.1-pre.9`](#expire_cache_storage_plug---v001-pre9)
+ - [`secure_storage_plug` - `v0.0.1-pre.11`](#secure_storage_plug---v001-pre11)
+ - [`pluggable_dart_server` - `v0.0.1-pre.13`](#pluggable_dart_server---v001-pre13)
+ - [`go_router_plug` - `v0.0.1-pre.30`](#go_router_plug---v001-pre30)
+ - [`dart_frog_server_plug` - `v0.0.1-pre.14`](#dart_frog_server_plug---v001-pre14)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `pluggable_di_getit` - `v0.0.1-pre.9`
+ - `cartographer_mapper_plug` - `v0.0.1-pre.9`
+ - `redis_storage_plug` - `v0.0.1-pre.9`
+ - `in_memory_storage_plug` - `v0.0.1-pre.9`
+ - `object_box_storage_plug` - `v0.0.1-pre.9`
+ - `expire_cache_storage_plug` - `v0.0.1-pre.9`
+ - `secure_storage_plug` - `v0.0.1-pre.11`
+ - `pluggable_dart_server` - `v0.0.1-pre.13`
+ - `go_router_plug` - `v0.0.1-pre.30`
+ - `dart_frog_server_plug` - `v0.0.1-pre.14`
+
+---
+
+#### `pluggable` - `v0.0.1-pre.9`
+
+ - **FIX**: navigation issues.
+
+#### `pluggable_flutter` - `v0.0.1-pre.19`
+
+ - **FIX**: navigation issues.
+
+
 ## 2025-07-23
 
 ### Changes

@@ -1,13 +1,13 @@
 name: in_memory_storage_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.8
+version: 0.0.1-pre.9
 # pubspec_overrides.yaml
 
 environment:
   sdk: ^3.6.1
 
 dependencies:
-  pluggable: 0.0.1-pre.8
+  pluggable: 0.0.1-pre.9
 
 dev_dependencies:
   flutter_lints: ^5.0.0

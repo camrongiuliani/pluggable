@@ -1,3 +1,7 @@
+## 0.0.1-pre.9
+
+ - **FIX**: navigation issues.
+
 ## 0.0.1-pre.8
 
  - **FIX**: remove more Flutter refs.
