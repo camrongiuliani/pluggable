@@ -1,5 +1,5 @@
 /// Core implementation of the Pluggable framework.
-/// 
+///
 /// This file contains the main implementation of the Pluggable system,
 /// which provides a modular architecture for building extensible applications.
 /// It manages plugins, handles initialization, and provides access to various
@@ -15,7 +15,7 @@ import 'package:cartographer_mapper_plug/cartographer_mapper_plug.dart';
 import 'package:in_memory_storage_plug/in_memory_storage_plug.dart';
 
 /// Global accessor for the Pluggable instance.
-/// 
+///
 /// Returns the current instance of [PluggableImpl] if it exists and is initialized.
 /// Throws an exception if Pluggable hasn't been initialized yet.
 // ignore: non_constant_identifier_names
@@ -28,10 +28,10 @@ PluggableImpl get Pluggable {
 }
 
 /// Initializes the Pluggable framework with optional modules and plugins.
-/// 
+///
 /// This function sets up the core Pluggable system with default or provided plugins
 /// for various functionalities like logging, storage, analytics, etc.
-/// 
+///
 /// [modules] - List of modules to be initialized
 /// [storagePlugin] - Optional custom storage plugin
 /// [analyticsPlugin] - Optional custom analytics plugin
@@ -86,7 +86,7 @@ Future<PluggableImpl> initPluggable({
 }
 
 /// The main implementation class of the Pluggable framework.
-/// 
+///
 /// This class manages the lifecycle of plugins, provides access to system components,
 /// and handles event communication between different parts of the system.
 class PluggableImpl extends DartNotifier {
@@ -118,14 +118,14 @@ class PluggableImpl extends DartNotifier {
   }
 
   /// Retrieves a plugin of the specified type
-  /// 
+  ///
   /// Throws an exception if the plugin is not found
   T get<T extends Plug<T>>() {
     return plugins.firstWhere((p) => p is T) as T;
   }
 
   /// Safely retrieves a plugin of the specified type
-  /// 
+  ///
   /// Returns null if the plugin is not found
   T? maybeGet<T extends Plug<T>>() {
     return plugins.firstWhereOrNull((p) => p is T) as T?;
@@ -167,7 +167,7 @@ class PluggableImpl extends DartNotifier {
   }
 
   /// Adds a new plugin to the system
-  /// 
+  ///
   /// [plug] - The plugin to add
   /// [allowReassignment] - Whether to allow replacing existing plugins
   /// [notify] - Whether to notify listeners of the change
@@ -175,6 +175,7 @@ class PluggableImpl extends DartNotifier {
     covariant Plug<T> plug, {
     bool allowReassignment = false,
     bool notify = true,
+    bool init = true,
   }) async {
     logger.v(
       'Trying to plug in ${plug.runtimeType}',
@@ -193,9 +194,11 @@ class PluggableImpl extends DartNotifier {
       }
     }
 
-    plugins.add(
-      await plug.init(),
-    );
+    if (init) {
+      await plug.init();
+    }
+
+    plugins.add(plug);
 
     if (containsPlugin<T>()) {
       logger.v(
