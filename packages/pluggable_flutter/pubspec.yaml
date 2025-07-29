@@ -2,7 +2,7 @@ name: pluggable_flutter
 description: "Pluggable"
 # pubspec_overrides.yaml
 
-version: 0.0.1-pre.19
+version: 0.0.1-pre.21
 
 environment:
   sdk: ^3.6.0

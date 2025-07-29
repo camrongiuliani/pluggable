@@ -1,3 +1,18 @@
+## 0.0.1-pre.21
+
+ - **FIX**: navigation issues.
+ - **FIX**: nav init.
+ - **FIX**: type issue.
+ - **FIX**: PluggableFlutterModule type check.
+ - **FIX**: some module init issues, add initCallback.
+ - **FIX**: init issues.
+ - **FIX**: move away from ChangeNotifier.
+ - **FEAT**: add copyWith to shell route.
+ - **FEAT**: allow for builder and theme builder in flutter.
+ - **FEAT**: expose cache control.
+ - **FEAT**: add remote storage option.
+ - **FEAT**: add dart server and some additional plugs.
+
 ## 0.0.1-pre.19
 
  - **FIX**: navigation issues.
