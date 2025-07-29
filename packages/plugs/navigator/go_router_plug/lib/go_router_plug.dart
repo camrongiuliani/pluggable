@@ -50,8 +50,9 @@ class GoRouterPlug extends PluggableNavigator {
   /// [initialRoute]: The route to navigate to when the app starts.
   GoRouterPlug({
     required this.initialRoute,
+    GlobalKey<NavigatorState>? rootNavigatorKey,
   }) {
-    key = GlobalKey<NavigatorState>(
+    key = rootNavigatorKey ?? GlobalKey<NavigatorState>(
       debugLabel: 'GoRouterPlug',
     );
   }

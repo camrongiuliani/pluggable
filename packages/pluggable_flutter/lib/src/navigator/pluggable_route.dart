@@ -113,37 +113,38 @@ class PluggableShellRoute extends base.PluggableShellRoute
     super.navigatorKey,
     super.restorationScopeId,
     this.transition = RouteTransition.none,
-    PluggableShellRouteBuilder? builder,
-    PluggableShellRoutePageBuilder? pageBuilder,
-  }) : super(
-          builder: builder,
-          pageBuilder: (context, state, child) {
-            final key = ValueKey('${state.pageKey.value}_${state.route.path}');
-
-            return switch (transition) {
-              RouteTransition.none => RouteTransitionPage.none(
-                  key: key,
-                  child: builder?.call(context, state, child) ?? child,
-                ),
-              RouteTransition.fade => RouteTransitionPage.fade(
-                  key: key,
-                  child: builder?.call(context, state, child) ?? child,
-                ),
-              RouteTransition.slideUp => RouteTransitionPage.slideUp(
-                  key: key,
-                  child: builder?.call(context, state, child) ?? child,
-                ),
-              RouteTransition.slideDown => RouteTransitionPage.slideDown(
-                  key: key,
-                  child: builder?.call(context, state, child) ?? child,
-                ),
-              RouteTransition.slideLeft => RouteTransitionPage.slideLeft(
-                  key: key,
-                  child: builder?.call(context, state, child) ?? child,
-                ),
-            };
-          },
-        );
+    super.builder,
+    super.pageBuilder,
+  });
+  // : super(
+  //         builder: builder,
+  //         pageBuilder: (context, state, child) {
+  //           final key = ValueKey('${state.pageKey.value}_${state.route.path}');
+  //
+  //           return switch (transition) {
+  //             RouteTransition.none => RouteTransitionPage.none(
+  //                 key: key,
+  //                 child: builder?.call(context, state, child) ?? child,
+  //               ),
+  //             RouteTransition.fade => RouteTransitionPage.fade(
+  //                 key: key,
+  //                 child: builder?.call(context, state, child) ?? child,
+  //               ),
+  //             RouteTransition.slideUp => RouteTransitionPage.slideUp(
+  //                 key: key,
+  //                 child: builder?.call(context, state, child) ?? child,
+  //               ),
+  //             RouteTransition.slideDown => RouteTransitionPage.slideDown(
+  //                 key: key,
+  //                 child: builder?.call(context, state, child) ?? child,
+  //               ),
+  //             RouteTransition.slideLeft => RouteTransitionPage.slideLeft(
+  //                 key: key,
+  //                 child: builder?.call(context, state, child) ?? child,
+  //               ),
+  //           };
+  //         },
+  //       );
 
   /// The transition type for this route.
   final RouteTransition transition;

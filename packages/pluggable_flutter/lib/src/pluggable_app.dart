@@ -60,7 +60,8 @@ Future<void> runPluggableApp({
   runApp(
     StreamBuilder(
       stream: Pluggable.stream,
-      builder: (ctx, __) {
+      builder: (ctx, ss) {
+
         if (builder != null) {
           return builder(
             ctx,
