@@ -1,3 +1,7 @@
+## 0.0.1-pre.10
+
+ - **FIX**: redis plug init.
+
 ## 0.0.1-pre.9
 
  - Update a dependency to the latest release.

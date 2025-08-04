@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-08-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`redis_storage_plug` - `v0.0.1-pre.10`](#redis_storage_plug---v001-pre10)
+
+---
+
+#### `redis_storage_plug` - `v0.0.1-pre.10`
+
+ - **FIX**: redis plug init.
+
+
 ## 2025-07-29
 
 ### Changes
