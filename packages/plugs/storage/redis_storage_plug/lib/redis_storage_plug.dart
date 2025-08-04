@@ -661,9 +661,8 @@ class RedisStoragePlug extends PluggableStorageProvider {
 
     initialized = true;
 
-    Pluggable.logger.v(
+    print(
       '${Isolate.current.debugName} - Redis store initialized',
-      tag: '$runtimeType',
     );
 
     return this;
