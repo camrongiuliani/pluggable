@@ -1,3 +1,8 @@
+## 0.0.1-pre.22
+
+ - **FEAT**: added datadog_logger_plug.
+ - **FEAT**: added datadog_logger_plug.
+
 ## 0.0.1-pre.21
 
  - **FIX**: navigation issues.

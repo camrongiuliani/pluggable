@@ -1,12 +1,12 @@
 name: datadog_logger_plug
 description: "A DataDog Logger Plugin for Pluggable"
-version: 0.0.1
+version: 0.0.2
 
 environment:
   sdk: ^3.7.2
 
 dependencies:
-  pluggable: 0.0.1-pre.9
+  pluggable: 0.0.1-pre.10
   #  pluggable_flutter: ^0.0.1-pre.21
   dio: ^5.1.1
   collection: any

@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`datadog_logger_plug` - `v0.0.2`](#datadog_logger_plug---v002)
+ - [`pluggable` - `v0.0.1-pre.10`](#pluggable---v001-pre10)
+ - [`pluggable_dart_server` - `v0.0.1-pre.14`](#pluggable_dart_server---v001-pre14)
+ - [`pluggable_flutter` - `v0.0.1-pre.22`](#pluggable_flutter---v001-pre22)
+ - [`pluggable_di_getit` - `v0.0.1-pre.10`](#pluggable_di_getit---v001-pre10)
+ - [`cartographer_mapper_plug` - `v0.0.1-pre.10`](#cartographer_mapper_plug---v001-pre10)
+ - [`redis_storage_plug` - `v0.0.1-pre.11`](#redis_storage_plug---v001-pre11)
+ - [`in_memory_storage_plug` - `v0.0.1-pre.10`](#in_memory_storage_plug---v001-pre10)
+ - [`object_box_storage_plug` - `v0.0.1-pre.10`](#object_box_storage_plug---v001-pre10)
+ - [`expire_cache_storage_plug` - `v0.0.1-pre.10`](#expire_cache_storage_plug---v001-pre10)
+ - [`secure_storage_plug` - `v0.0.1-pre.12`](#secure_storage_plug---v001-pre12)
+ - [`go_router_plug` - `v0.0.1-pre.33`](#go_router_plug---v001-pre33)
+ - [`dart_frog_server_plug` - `v0.0.1-pre.15`](#dart_frog_server_plug---v001-pre15)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `pluggable_di_getit` - `v0.0.1-pre.10`
+ - `cartographer_mapper_plug` - `v0.0.1-pre.10`
+ - `redis_storage_plug` - `v0.0.1-pre.11`
+ - `in_memory_storage_plug` - `v0.0.1-pre.10`
+ - `object_box_storage_plug` - `v0.0.1-pre.10`
+ - `expire_cache_storage_plug` - `v0.0.1-pre.10`
+ - `secure_storage_plug` - `v0.0.1-pre.12`
+ - `go_router_plug` - `v0.0.1-pre.33`
+ - `dart_frog_server_plug` - `v0.0.1-pre.15`
+
+---
+
+#### `datadog_logger_plug` - `v0.0.2`
+
+ - **FEAT**: added datadog_logger_plug.
+ - **FEAT**: added datadog_logger_plug.
+
+#### `pluggable` - `v0.0.1-pre.10`
+
+ - **FEAT**: added datadog_logger_plug.
+ - **FEAT**: added datadog_logger_plug.
+
+#### `pluggable_dart_server` - `v0.0.1-pre.14`
+
+ - **FEAT**: added datadog_logger_plug.
+
+#### `pluggable_flutter` - `v0.0.1-pre.22`
+
+ - **FEAT**: added datadog_logger_plug.
+ - **FEAT**: added datadog_logger_plug.
+
+
 ## 2025-08-04
 
 ### Changes

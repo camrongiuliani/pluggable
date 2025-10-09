@@ -1,3 +1,7 @@
+## 0.0.1-pre.33
+
+ - Update a dependency to the latest release.
+
 ## 0.0.1-pre.32
 
  - **FIX**: imports.
