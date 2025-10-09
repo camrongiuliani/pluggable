@@ -1,7 +1,6 @@
 name: datadog_logger_plug
-description: "A new Flutter package project."
+description: "A DataDog Logger Plugin for Pluggable"
 version: 0.0.1
-publish_to: 'none'
 
 environment:
   sdk: ^3.7.2

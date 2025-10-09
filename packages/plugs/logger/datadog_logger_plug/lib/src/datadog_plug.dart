@@ -282,7 +282,6 @@ mixin _DioMixin implements InterceptorsWrapper {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.headers.putIfAbsent('x-request-id', () => const Uuid().v4());
-    options.headers.putIfAbsent('x-savana-request-id', () => const Uuid().v4());
 
     handler.next(options);
   }
