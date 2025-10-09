@@ -193,7 +193,6 @@ class PluggableImpl extends DartNotifier {
       );
 
       if (allowReassignment) {
-        print('allowReassignment');
         await Future.wait(
           plugins.whereType<T>().map(
                 (p) => p.dispose(),

@@ -45,13 +45,6 @@ Future<PluggableImpl> initPluggable({
       notify: false,
       allowReassignment: true,
     );
-
-    for (final plugin in Pluggable.plugins) {
-      print('datype: ${plugin.runtimeType}');
-    }
-
-    // print('datype: ${loggingPlugin.runtimeType} : inited : ${Pluggable.initialized}');
-    // print('datype2: ${Pluggable.logger.runtimeType}');
   }
 
   await Pluggable.plugin<PluggableNavigator>(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pluggable_flutter/pluggable_flutter.dart';
-import 'package:pluggable_flutter/src/navigator/pluggable_route_transition.dart';
 import 'package:pluggable_flutter/src/navigator/routes/route_base.dart' as base;
 
 typedef DetermineTransition = RouteTransition Function();
