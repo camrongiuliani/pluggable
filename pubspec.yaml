@@ -1,22 +1,23 @@
 name: _
 description: "Pluggable"
 homepage: https://www.savanainc.com
-workspace:
-  - packages/pluggable
-  - packages/pluggable_flutter
-  - packages/pluggable_dart_server
-  - packages/plugs/di/pluggable_di_getit
-  - packages/plugs/navigator/go_router_plug
-  - packages/plugs/storage/expire_cache_storage_plug
-  - packages/plugs/storage/in_memory_storage_plug
-  - packages/plugs/storage/redis_storage_plug
-  - packages/plugs/storage/object_box_storage_plug
-  - packages/plugs/storage/secure_storage_plug
-  - packages/plugs/mapper/cartographer_mapper_plug
-  - packages/plugs/server/dart_frog_server_plug
+#workspace:
+#  - packages/pluggable
+#  - packages/pluggable_flutter
+#  - packages/pluggable_dart_server
+#  - packages/plugs/di/pluggable_di_getit
+#  - packages/plugs/navigator/go_router_plug
+#  - packages/plugs/storage/expire_cache_storage_plug
+#  - packages/plugs/storage/in_memory_storage_plug
+#  - packages/plugs/storage/redis_storage_plug
+#  - packages/plugs/storage/object_box_storage_plug
+#  - packages/plugs/storage/secure_storage_plug
+#  - packages/plugs/mapper/cartographer_mapper_plug
+#  - packages/plugs/server/dart_frog_server_plug
 
 environment:
   sdk: ^3.6.1
-
+dependencies:
+  universal_io: ^2.2.2
 dev_dependencies:
   melos: ^6.3.2

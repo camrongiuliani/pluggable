@@ -40,14 +40,22 @@ Future<HttpServer> runPluggableServer({
   SecurityContext? securityContext,
   bool shared = false,
 }) async {
-  await initPluggable(
+  final pluggable = await initPluggable(
     modules: modules,
     storagePlugin: storagePlugin,
     analyticsPlugin: analyticsPlugin,
-    loggingPlugin: loggingPlugin,
+    loggingPlugin: ConsoleLoggerPlug(),
     diPlugin: diPlugin,
     server: server,
   );
+
+  if (loggingPlugin != null) {
+    await pluggable.plugin<PluggableLogger>(
+      loggingPlugin,
+      notify: false,
+      allowReassignment: true,
+    );
+  }
 
   return Pluggable.server.run(
     ip: server.ip,

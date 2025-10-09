@@ -110,7 +110,7 @@ class PluggableImpl extends DartNotifier {
   StreamSubscription? triggerStreamSubscription;
 
   /// List of all active plugins
-  final List<Plug> plugins = [];
+  final List<Plug> plugins = List.empty(growable: true);
 
   /// Getter for all registered modules
   Iterable<PluggableModule> get modules {
@@ -128,7 +128,11 @@ class PluggableImpl extends DartNotifier {
   ///
   /// Returns null if the plugin is not found
   T? maybeGet<T extends Plug<T>>() {
-    return plugins.firstWhereOrNull((p) => p is T) as T?;
+    try {
+      return plugins.firstWhereOrNull((p) => p is T) as T?;
+    } catch (_) {
+      return null;
+    }
   }
 
   /// Debug mode flag
@@ -139,7 +143,7 @@ class PluggableImpl extends DartNotifier {
 
   /// Accessor for logger, falls back to console logger if not initialized
   PluggableLogger get logger => switch (initialized) {
-        true => get(),
+        true => maybeGet() ?? ConsoleLoggerPlug(),
         false => _initLogger,
       };
 
@@ -183,15 +187,28 @@ class PluggableImpl extends DartNotifier {
     );
 
     if (containsPlugin<T>()) {
+      logger.v(
+        '${plug.runtimeType} already plugged in, allow reassignment: $allowReassignment',
+        tag: '$runtimeType',
+      );
+
       if (allowReassignment) {
+        print('allowReassignment');
         await Future.wait(
           plugins.whereType<T>().map(
                 (p) => p.dispose(),
               ),
         );
+
+        plugins.removeWhere((p) => p is T);
       } else {
         throw Exception('${plug.runtimeType} already plugged in');
       }
+    } else if (allowReassignment) {
+      logger.v(
+        'Warning: allowReassignment is true but no existing plugin of type ${plug.runtimeType} found.',
+        tag: '$runtimeType',
+      );
     }
 
     if (init) {

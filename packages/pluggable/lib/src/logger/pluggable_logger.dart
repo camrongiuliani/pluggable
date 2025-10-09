@@ -90,13 +90,14 @@ class ConsoleLoggerPlug extends PluggableLogger {
     String? tag,
     Object? err,
     StackTrace? stackTrace,
-  }) =>
-      _log(
-        message,
-        tag: tag,
-        err: err,
-        stackTrace: stackTrace,
-      );
+  }) {
+    _log(
+      message,
+      tag: tag,
+      err: err,
+      stackTrace: stackTrace,
+    );
+  }
 
   @override
   void header(

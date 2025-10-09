@@ -31,21 +31,36 @@ Future<PluggableImpl> initPluggable({
   PluggableLogger? loggingPlugin,
   PluggableDI? diPlugin,
 }) async {
-  final pluggable = await core.initPluggable(
+  await core.initPluggable(
     modules: modules,
     storagePlugin: storagePlugin,
     analyticsPlugin: analyticsPlugin,
-    loggingPlugin: loggingPlugin,
+    loggingPlugin: ConsoleLoggerPlug(),
     diPlugin: diPlugin,
   );
 
-  await pluggable.plugin<PluggableNavigator>(
+  if (loggingPlugin != null) {
+    await Pluggable.plugin<PluggableLogger>(
+      loggingPlugin,
+      notify: false,
+      allowReassignment: true,
+    );
+
+    for (final plugin in Pluggable.plugins) {
+      print('datype: ${plugin.runtimeType}');
+    }
+
+    // print('datype: ${loggingPlugin.runtimeType} : inited : ${Pluggable.initialized}');
+    // print('datype2: ${Pluggable.logger.runtimeType}');
+  }
+
+  await Pluggable.plugin<PluggableNavigator>(
     navigationPlugin,
     init: false,
   );
 
-  await pluggable.navigator.updateRoutes(
-    pluggable.modules
+  await Pluggable.navigator.updateRoutes(
+    Pluggable.modules
         .whereType<PluggableFlutterModule>()
         .map(
           (m) => m.buildRoutes(),
@@ -55,11 +70,11 @@ Future<PluggableImpl> initPluggable({
 
   await navigationPlugin.init();
 
-  pluggable.navigator.addListener(
-    pluggable._handleModuleBinding,
+  Pluggable.navigator.addListener(
+    Pluggable._handleModuleBinding,
   );
 
-  return pluggable;
+  return Pluggable;
 }
 
 /// Flutter-specific extensions for the Pluggable framework.

@@ -1,0 +1,24 @@
+name: datadog_logger_plug
+description: "A new Flutter package project."
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  pluggable: 0.0.1-pre.9
+  #  pluggable_flutter: ^0.0.1-pre.21
+  dio: ^5.1.1
+  collection: any
+  universal_io: ^2.2.2
+
+  synchronized: ^3.1.0+1
+  http: ^1.2.1
+  uuid:
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.14
+  freezed: ^2.5.7
+  json_serializable: ^6.9.0
