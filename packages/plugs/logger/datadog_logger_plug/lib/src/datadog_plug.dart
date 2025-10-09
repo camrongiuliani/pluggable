@@ -84,20 +84,33 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
   }
 
   @override
-  void d(String message, {String? tag, Object? err, StackTrace? stackTrace}) {
+  void d(
+    String message, {
+    String? tag,
+    Object? err,
+    String? traceId,
+    StackTrace? stackTrace,
+  }) {
     if (_consoleLogLevel.index >= LogLevel.debug.index) {
-      _consoleLogger.d(message, tag: tag, err: err, stackTrace: stackTrace);
+      _consoleLogger.d(
+        message,
+        tag: tag,
+        traceId: traceId,
+        err: err,
+        stackTrace: stackTrace,
+      );
     }
 
     if (_remoteLogLevel.index >= LogLevel.debug.index) {
       _log(
         baseRequest.copyWith(
-          requestId: tag ?? '',
-          traceId: const Uuid().v4(),
+          requestId: traceId ?? tag ?? '',
+          traceId: traceId ?? const Uuid().v4(),
           message: [
             '[LOG]',
             '[DEBUG]',
             if (tag != null) '[$tag]',
+            if (traceId != null) '[$traceId]',
             message,
           ].join(' '),
           statusCategory: StatusCategory.info,
@@ -107,20 +120,33 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
   }
 
   @override
-  void e(String message, {String? tag, Object? err, StackTrace? stackTrace}) {
+  void e(
+    String message, {
+    String? tag,
+    String? traceId,
+    Object? err,
+    StackTrace? stackTrace,
+  }) {
     if (_consoleLogLevel.index >= LogLevel.error.index) {
-      _consoleLogger.e(message, tag: tag, err: err, stackTrace: stackTrace);
+      _consoleLogger.e(
+        message,
+        tag: tag,
+        traceId: traceId,
+        err: err,
+        stackTrace: stackTrace,
+      );
     }
 
     if (_remoteLogLevel.index >= LogLevel.error.index) {
       _log(
         baseRequest.copyWith(
-          requestId: tag ?? '',
-          traceId: const Uuid().v4(),
+          requestId: traceId ?? tag ?? '',
+          traceId: traceId ?? const Uuid().v4(),
           message: [
             '[LOG]',
             '[ERROR]',
             if (tag != null) '[$tag]',
+            if (traceId != null) '[$traceId]',
             message,
           ].join(' '),
           statusCategory: StatusCategory.error,
@@ -144,20 +170,33 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
   }
 
   @override
-  void i(String message, {String? tag, Object? err, StackTrace? stackTrace}) {
+  void i(
+    String message, {
+    String? tag,
+    String? traceId,
+    Object? err,
+    StackTrace? stackTrace,
+  }) {
     if (_consoleLogLevel.index >= LogLevel.info.index) {
-      _consoleLogger.i(message, tag: tag, err: err, stackTrace: stackTrace);
+      _consoleLogger.i(
+        message,
+        tag: tag,
+        traceId: traceId,
+        err: err,
+        stackTrace: stackTrace,
+      );
     }
 
     if (_remoteLogLevel.index >= LogLevel.info.index) {
       _log(
         baseRequest.copyWith(
-          requestId: tag ?? '',
-          traceId: const Uuid().v4(),
+          requestId: traceId ?? tag ?? '',
+          traceId: traceId ?? const Uuid().v4(),
           message: [
             '[LOG]',
             '[INFO]',
             if (tag != null) '[$tag]',
+            if (traceId != null) '[$traceId]',
             message,
           ].join(' '),
           statusCategory: StatusCategory.info,
@@ -171,22 +210,30 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
     String message, {
     bool showPrefix = true,
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   }) {
     if (_consoleLogLevel.index >= LogLevel.verbose.index) {
-      _consoleLogger.v(message, tag: tag, err: err, stackTrace: stackTrace);
+      _consoleLogger.v(
+        message,
+        tag: tag,
+        traceId: traceId,
+        err: err,
+        stackTrace: stackTrace,
+      );
     }
 
     if (_remoteLogLevel.index >= LogLevel.verbose.index) {
       _log(
         baseRequest.copyWith(
-          requestId: tag ?? '',
-          traceId: const Uuid().v4(),
+          requestId: traceId ?? tag ?? '',
+          traceId: traceId ?? const Uuid().v4(),
           message: [
             '[LOG]',
             '[VERBOSE]',
             if (tag != null) '[$tag]',
+            if (traceId != null) '[$traceId]',
             message,
           ].join(' '),
           statusCategory: StatusCategory.info,
@@ -361,93 +408,97 @@ class LoggingClient extends http.BaseClient {
     final method = PHttpMethod.parse(request.method.toUpperCase());
 
     final response = await switch (method) {
-      PHttpMethod.head => _inner.head(request.url, headers: request.headers),
-      PHttpMethod.options => _inner.head(request.url, headers: request.headers),
-      PHttpMethod.get => _inner.get(request.url, headers: request.headers),
-      PHttpMethod.post => _inner.post(
-        request.url,
-        headers: request.headers,
-        body: switch (request) {
-          http.Request r => r.body,
-          http.MultipartRequest r => switch (r.fields.isEmpty) {
-            true => null,
-            false => r.fields,
-          },
-          http.StreamedRequest r => r.sink,
-          http.BaseRequest() => null,
-        },
-      ),
-      PHttpMethod.put => _inner.put(
-        request.url,
-        headers: request.headers,
-        body: switch (request) {
-          http.Request r => r.body,
-          http.MultipartRequest r => switch (r.fields.isEmpty) {
-            true => null,
-            false => r.fields,
-          },
-          http.StreamedRequest r => r.sink,
-          http.BaseRequest() => null,
-        },
-      ),
-      PHttpMethod.delete => _inner.delete(
-        request.url,
-        headers: request.headers,
-        body: switch (request) {
-          http.Request r => r.body,
-          http.MultipartRequest r => switch (r.fields.isEmpty) {
-            true => null,
-            false => r.fields,
-          },
-          http.StreamedRequest r => r.sink,
-          http.BaseRequest() => null,
-        },
-      ),
-      PHttpMethod.patch => _inner.patch(
-        request.url,
-        headers: request.headers,
-        body: switch (request) {
-          http.Request r => r.body,
-          http.MultipartRequest r => switch (r.fields.isEmpty) {
-            true => null,
-            false => r.fields,
-          },
-          http.StreamedRequest r => r.sink,
-          http.BaseRequest() => null,
-        },
-      ),
-    }
-    .onError(
-      (error, stackTrace) {
-        logger.outboundRequest(
-          request: dataRequest,
-          response: PHttpResponse(
-            statusCode: 0,
-            message: error.toString(),
-            headers: {},
-            data: null,
+          PHttpMethod.head => _inner.head(
+            request.url,
+            headers: request.headers,
           ),
-        );
-
-        if (error is Exception) {
-          throw error;
-        } else {
-          throw Exception(error.toString());
+          PHttpMethod.options => _inner.head(
+            request.url,
+            headers: request.headers,
+          ),
+          PHttpMethod.get => _inner.get(request.url, headers: request.headers),
+          PHttpMethod.post => _inner.post(
+            request.url,
+            headers: request.headers,
+            body: switch (request) {
+              http.Request r => r.body,
+              http.MultipartRequest r => switch (r.fields.isEmpty) {
+                true => null,
+                false => r.fields,
+              },
+              http.StreamedRequest r => r.sink,
+              http.BaseRequest() => null,
+            },
+          ),
+          PHttpMethod.put => _inner.put(
+            request.url,
+            headers: request.headers,
+            body: switch (request) {
+              http.Request r => r.body,
+              http.MultipartRequest r => switch (r.fields.isEmpty) {
+                true => null,
+                false => r.fields,
+              },
+              http.StreamedRequest r => r.sink,
+              http.BaseRequest() => null,
+            },
+          ),
+          PHttpMethod.delete => _inner.delete(
+            request.url,
+            headers: request.headers,
+            body: switch (request) {
+              http.Request r => r.body,
+              http.MultipartRequest r => switch (r.fields.isEmpty) {
+                true => null,
+                false => r.fields,
+              },
+              http.StreamedRequest r => r.sink,
+              http.BaseRequest() => null,
+            },
+          ),
+          PHttpMethod.patch => _inner.patch(
+            request.url,
+            headers: request.headers,
+            body: switch (request) {
+              http.Request r => r.body,
+              http.MultipartRequest r => switch (r.fields.isEmpty) {
+                true => null,
+                false => r.fields,
+              },
+              http.StreamedRequest r => r.sink,
+              http.BaseRequest() => null,
+            },
+          ),
         }
-      },
-    )
-    .then((res) {
-      httpResponse = PHttpResponse(
-        statusCode: res.statusCode,
-        message: res.reasonPhrase ?? '',
-        headers: res.headers,
-        data: res.body,
-      );
+        .onError((error, stackTrace) {
+          logger.outboundRequest(
+            request: dataRequest,
+            response: PHttpResponse(
+              statusCode: 0,
+              message: error.toString(),
+              headers: {},
+              data: null,
+            ),
+          );
 
-      logger.outboundRequest(request: dataRequest, response: httpResponse);
+          if (error is Exception) {
+            throw error;
+          } else {
+            throw Exception(error.toString());
+          }
+        })
+        .then((res) {
+          httpResponse = PHttpResponse(
+            statusCode: res.statusCode,
+            message: res.reasonPhrase ?? '',
+            headers: res.headers,
+            data: res.body,
+          );
 
-      return res;
-    });
+          logger.outboundRequest(request: dataRequest, response: httpResponse);
+
+          return res;
+        });
 
     return http.StreamedResponse(
       Stream.value(response.bodyBytes),

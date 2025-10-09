@@ -10,6 +10,7 @@ abstract class PluggableLogger extends Plug<PluggableLogger> {
     String message, {
     bool showPrefix = true,
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   });
@@ -18,6 +19,7 @@ abstract class PluggableLogger extends Plug<PluggableLogger> {
   void d(
     String message, {
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   });
@@ -26,6 +28,7 @@ abstract class PluggableLogger extends Plug<PluggableLogger> {
   void i(
     String message, {
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   });
@@ -42,6 +45,7 @@ abstract class PluggableLogger extends Plug<PluggableLogger> {
   void e(
     String message, {
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   });
@@ -59,12 +63,14 @@ class ConsoleLoggerPlug extends PluggableLogger {
     String message, {
     bool showPrefix = true,
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   }) =>
       _log(
         message,
         tag: tag,
+        traceId: traceId,
         err: err,
         stackTrace: stackTrace,
       );
@@ -73,12 +79,14 @@ class ConsoleLoggerPlug extends PluggableLogger {
   void d(
     String message, {
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   }) =>
       _log(
         message,
         tag: tag,
+        traceId: traceId,
         err: err,
         stackTrace: stackTrace,
       );
@@ -88,12 +96,14 @@ class ConsoleLoggerPlug extends PluggableLogger {
   void i(
     String message, {
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   }) {
     _log(
       message,
       tag: tag,
+      traceId: traceId,
       err: err,
       stackTrace: stackTrace,
     );
@@ -117,12 +127,14 @@ class ConsoleLoggerPlug extends PluggableLogger {
   void e(
     String message, {
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   }) =>
       _log(
         message,
         tag: tag,
+        traceId: traceId,
         err: err,
         stackTrace: stackTrace,
       );
@@ -130,10 +142,17 @@ class ConsoleLoggerPlug extends PluggableLogger {
   void _log(
     String message, {
     String? tag,
+    String? traceId,
     Object? err,
     StackTrace? stackTrace,
   }) {
-    print('[$tag] - $message');
+    print(
+      [
+        if (tag != null) '[$tag]',
+        if (traceId != null) '[$traceId]',
+        message,
+      ].join(' - '),
+    );
 
     if (err != null) {
       print(err);
