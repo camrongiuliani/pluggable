@@ -2,11 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:pluggable/pluggable.dart';
-import 'package:uuid/uuid.dart';
 import 'package:dio/dio.dart';
 
 import '../../util/content_details.dart';
-import 'exports.dart';
 
 extension HXT on Headers {
   Map<String, String> toMap() {
