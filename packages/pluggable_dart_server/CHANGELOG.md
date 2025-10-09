@@ -1,3 +1,7 @@
+## 0.0.1-pre.15
+
+ - Update a dependency to the latest release.
+
 ## 0.0.1-pre.14
 
  - **FEAT**: added datadog_logger_plug.

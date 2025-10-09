@@ -1,3 +1,7 @@
+## 0.0.3
+
+ - **FEAT**: update logging to include traceId.
+
 ## 0.0.2
 
  - **FEAT**: added datadog_logger_plug.

@@ -15,6 +15,59 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`datadog_logger_plug` - `v0.0.3`](#datadog_logger_plug---v003)
+ - [`pluggable` - `v0.0.1-pre.11`](#pluggable---v001-pre11)
+ - [`pluggable_flutter` - `v0.0.1-pre.23`](#pluggable_flutter---v001-pre23)
+ - [`pluggable_di_getit` - `v0.0.1-pre.11`](#pluggable_di_getit---v001-pre11)
+ - [`cartographer_mapper_plug` - `v0.0.1-pre.11`](#cartographer_mapper_plug---v001-pre11)
+ - [`redis_storage_plug` - `v0.0.1-pre.12`](#redis_storage_plug---v001-pre12)
+ - [`in_memory_storage_plug` - `v0.0.1-pre.11`](#in_memory_storage_plug---v001-pre11)
+ - [`object_box_storage_plug` - `v0.0.1-pre.11`](#object_box_storage_plug---v001-pre11)
+ - [`expire_cache_storage_plug` - `v0.0.1-pre.11`](#expire_cache_storage_plug---v001-pre11)
+ - [`secure_storage_plug` - `v0.0.1-pre.13`](#secure_storage_plug---v001-pre13)
+ - [`pluggable_dart_server` - `v0.0.1-pre.15`](#pluggable_dart_server---v001-pre15)
+ - [`go_router_plug` - `v0.0.1-pre.34`](#go_router_plug---v001-pre34)
+ - [`dart_frog_server_plug` - `v0.0.1-pre.16`](#dart_frog_server_plug---v001-pre16)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `pluggable_flutter` - `v0.0.1-pre.23`
+ - `pluggable_di_getit` - `v0.0.1-pre.11`
+ - `cartographer_mapper_plug` - `v0.0.1-pre.11`
+ - `redis_storage_plug` - `v0.0.1-pre.12`
+ - `in_memory_storage_plug` - `v0.0.1-pre.11`
+ - `object_box_storage_plug` - `v0.0.1-pre.11`
+ - `expire_cache_storage_plug` - `v0.0.1-pre.11`
+ - `secure_storage_plug` - `v0.0.1-pre.13`
+ - `pluggable_dart_server` - `v0.0.1-pre.15`
+ - `go_router_plug` - `v0.0.1-pre.34`
+ - `dart_frog_server_plug` - `v0.0.1-pre.16`
+
+---
+
+#### `datadog_logger_plug` - `v0.0.3`
+
+ - **FEAT**: update logging to include traceId.
+
+#### `pluggable` - `v0.0.1-pre.11`
+
+ - **FEAT**: update logging to include traceId.
+
+
+## 2025-10-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`datadog_logger_plug` - `v0.0.2`](#datadog_logger_plug---v002)
  - [`pluggable` - `v0.0.1-pre.10`](#pluggable---v001-pre10)
  - [`pluggable_dart_server` - `v0.0.1-pre.14`](#pluggable_dart_server---v001-pre14)
