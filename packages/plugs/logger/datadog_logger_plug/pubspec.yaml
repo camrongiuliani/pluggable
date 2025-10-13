@@ -13,6 +13,8 @@ dependencies:
   universal_io: ^2.2.2
 
   synchronized: ^3.1.0+1
+  dart_frog: ^1.0.0
+  shelf: ^1.4.2
   http: ^1.2.1
   uuid:
 

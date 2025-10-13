@@ -14,6 +14,7 @@ class CartographerMapperPlug extends PluggableMapper {
     List<Mapper> creators,
   ) {
     _mappers.addAll(
+        // (for final m in creators)
         creators.map((m) {
           Pluggable.logger.i('Registered mapper of type ${m.from} to ${m.to}');
           return m;

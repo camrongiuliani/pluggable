@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:pluggable/pluggable.dart';
 
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
+import 'package:shelf/shelf.dart' as shelf;
+import 'package:dart_frog/dart_frog.dart' as frog;
 import 'package:uuid/uuid.dart';
 import 'package:universal_io/io.dart';
 
@@ -10,7 +14,8 @@ import 'mappers/exports.dart';
 import 'util/log_batcher.dart';
 import 'models/models.dart';
 
-class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
+class DataDogAnalyticsPlug extends PluggableLogger
+    with _DioMixin, _ShelfMixin, _DartFrogMixin {
   final ConsoleLoggerPlug _consoleLogger;
   final String _source;
   final String _service;
@@ -79,8 +84,8 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
     return this;
   }
 
-  http.Client httpClient([http.Client? client]) {
-    return LoggingClient(client ?? http.Client());
+  http.Client httpClient({String? traceId, http.Client? client}) {
+    return LoggingClient(client: client ?? http.Client(), traceId: traceId);
   }
 
   @override
@@ -246,21 +251,27 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
     _logBatcher.addLog(payload);
   }
 
-  void outboundRequest({
+  void apiRequest({
     required PHttpRequest request,
+    required LogType type,
     PHttpResponse? response,
   }) {
     _log(
       DDApiLogRequest(
         apiKey: _apiKey,
         loggingUrl: _loggingUrl,
-        timestamp: DateTime.now().toUtc().toIso8601String(),
+        timestamp:
+            request.headers['x-exec-time']?.toString() ??
+            DateTime.now().toUtc().toIso8601String(),
         requestId: request.requestId,
         traceId: request.requestId,
         source: _source,
         hostname: _hostname,
         message: [
-          '[OUTBOUND]',
+          switch (type) {
+            LogType.outboundRequest => '[OUTBOUND]',
+            LogType.inboundRequest => '[INBOUND]',
+          },
           '[${request.method.value}]',
           '[${response?.message ?? 'OK'}]',
           '[${request.requestId}]',
@@ -269,7 +280,7 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
         service: _service,
         tags: ['env_name:$_hostname', 'zone:$_service'].join(','),
         statusCategory: StatusCategory.fromHttpStatusCode(response?.statusCode),
-        type: LogType.outboundRequest,
+        type: type,
         http: HttpDetails(
           url: request.uri.toString(),
           statusCode: response?.statusCode,
@@ -306,12 +317,137 @@ class DataDogAnalyticsPlug extends PluggableLogger with _DioMixin {
   }
 }
 
+mixin _ShelfMixin {
+  DataDogAnalyticsPlug get logger => Pluggable.logger as DataDogAnalyticsPlug;
+
+  shelf.Middleware get shelfMiddleware => (innerHandler) {
+    final execStartTime = DateTime.now().toUtc();
+
+    return (request) async {
+      try {
+        final reqBytes = <int>[];
+        final resBytes = <int>[];
+
+        PHttpRequest? pReq;
+        PHttpResponse? pResp;
+
+        final reqId = request.headers['x-request-id'] ?? const Uuid().v4();
+
+        return Future.value(
+          innerHandler(
+            request.change(
+              headers: Map.from(request.headers)
+                ..putIfAbsent('x-request-id', () => reqId),
+              body: request.read().transform<List<int>>(
+                StreamTransformer<Uint8List, List<int>>.fromHandlers(
+                  handleData: (data, sink) {
+                    sink.add(data);
+                    reqBytes.addAll(data);
+                  },
+                  handleDone: (sink) {
+                    sink.close();
+
+                    final contentType = request.headers['content-type'] ?? '';
+                    final requestData = switch (contentType) {
+                      'application/json' => jsonDecode(utf8.decode(reqBytes)),
+                      'text' || 'text/plain' => utf8.decode(reqBytes),
+                      // 'application/x-www-form-urlencoded' => await copy.formData(),
+                      _ => '<non-textual content>',
+                    };
+
+                    pReq = PHttpRequest.withData(
+                      uri: request.requestedUri,
+                      requestId: reqId,
+                      method: PHttpMethod.parse(request.method.toUpperCase()),
+                      headers: request.headers.map(
+                        (key, value) => MapEntry(key, value.toString()),
+                      ),
+                      queryParameters: request.requestedUri.queryParameters,
+                      // persistentConnection: request.persistentConnection,
+                      clientIP:
+                          request.context['shelf.io.connection_info'] != null
+                              ? (request.context['shelf.io.connection_info']
+                                      as HttpConnectionInfo)
+                                  .remoteAddress
+                                  .address
+                              : '',
+                      followRedirects: true,
+                      maxRedirects: 5,
+                      data: requestData,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ).then((response) {
+          return response.change(
+            body: response.read().cast<List<int>>().transform<List<int>>(
+              StreamTransformer<List<int>, List<int>>.fromHandlers(
+                handleData: (data, sink) {
+                  sink.add(data);
+                  resBytes.addAll(data);
+                },
+                handleDone: (sink) {
+                  sink.close();
+
+                  final contentType = response.headers['content-type'] ?? '';
+                  final responseData = switch (contentType) {
+                    'application/json' => jsonDecode(utf8.decode(resBytes)),
+                    'text' || 'text/plain' => utf8.decode(resBytes),
+                    // 'application/x-www-form-urlencoded' => await copy.formData(),
+                    _ => '<non-textual content>',
+                  };
+                  pResp = PHttpResponse(
+                    headers: response.headers,
+                    statusCode: response.statusCode,
+                    data: responseData,
+                    message: switch (response.statusCode) {
+                      >= 200 && < 300 => 'OK',
+                      >= 400 && < 500 => 'Client Error',
+                      >= 500 => 'Server Error',
+                      _ => 'General Error',
+                    },
+                  );
+
+                  logger.apiRequest(
+                    request: pReq!.copyWith(
+                      headers: {
+                        ...pReq!.headers,
+                        'x-exec-time': execStartTime.toIso8601String(),
+                      },
+                    ),
+                    response: pResp!,
+                    type: LogType.inboundRequest,
+                  );
+                },
+              ),
+            ),
+          );
+        });
+      } catch (e) {
+        // ignore: avoid_print
+        print('Error in datadog logging plug shelf middleware: $e');
+        return innerHandler(request);
+      }
+    };
+  };
+}
+
+mixin _DartFrogMixin {
+  DataDogAnalyticsPlug get logger => Pluggable.logger as DataDogAnalyticsPlug;
+
+  frog.Middleware get dartFrogMiddleware =>
+      frog.fromShelfMiddleware(logger.shelfMiddleware);
+}
+
 mixin _DioMixin implements InterceptorsWrapper {
   DataDogAnalyticsPlug get logger => Pluggable.logger as DataDogAnalyticsPlug;
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    logger.outboundRequest(
+    logger.apiRequest(
+      type: LogType.outboundRequest,
       request: Pluggable.mapper.map(err.requestOptions),
       response: Pluggable.mapper.map(switch (err.response) {
         null => Response(
@@ -329,6 +465,10 @@ mixin _DioMixin implements InterceptorsWrapper {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.headers.putIfAbsent('x-request-id', () => const Uuid().v4());
+    options.headers.putIfAbsent(
+      'x-exec-time',
+      () => DateTime.now().toUtc().toIso8601String(),
+    );
 
     handler.next(options);
   }
@@ -345,7 +485,11 @@ mixin _DioMixin implements InterceptorsWrapper {
         final request = results[0] as PHttpRequest;
         final resp = results[1] as PHttpResponse;
 
-        logger.outboundRequest(request: request, response: resp);
+        logger.apiRequest(
+          request: request,
+          response: resp,
+          type: LogType.outboundRequest,
+        );
       });
     } catch (e) {
       print('Error logging outbound request: $e');
@@ -360,11 +504,14 @@ class LoggingClient extends http.BaseClient {
 
   final http.Client _inner;
 
-  LoggingClient(this._inner);
+  LoggingClient({required http.Client client, this.traceId}) : _inner = client;
+
+  final String? traceId;
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    final reqId = request.headers['x-request-id'] ?? const Uuid().v4();
+    final reqId =
+        traceId ?? request.headers['x-request-id'] ?? const Uuid().v4();
     request.headers.putIfAbsent('x-request-id', () => reqId);
 
     final dataRequest = PHttpRequest.withData(
@@ -471,7 +618,8 @@ class LoggingClient extends http.BaseClient {
           ),
         }
         .onError((error, stackTrace) {
-          logger.outboundRequest(
+          logger.apiRequest(
+            type: LogType.outboundRequest,
             request: dataRequest,
             response: PHttpResponse(
               statusCode: 0,
@@ -495,7 +643,11 @@ class LoggingClient extends http.BaseClient {
             data: res.body,
           );
 
-          logger.outboundRequest(request: dataRequest, response: httpResponse);
+          logger.apiRequest(
+            request: dataRequest,
+            response: httpResponse,
+            type: LogType.outboundRequest,
+          );
 
           return res;
         });

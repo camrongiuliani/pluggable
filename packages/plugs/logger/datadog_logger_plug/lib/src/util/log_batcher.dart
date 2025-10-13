@@ -12,6 +12,9 @@ const bool kIsWeb = identical(0, 0.0);
 
 const List<String> _maskedKeys = [
   'password',
+  'DD-API-KEY',
+  'token',
+  'authorization',
   'access_token',
   'auth_token',
   'ssn',
@@ -82,7 +85,9 @@ class LogBatcher {
   }
 
   void addLog(DDLogRequest log) {
-    if (kIsWeb) {
+    bool isStream = log is DDApiLogRequest && log.http.request.body is Stream;
+
+    if (kIsWeb || isStream) {
       _logQueue.add(
         log.copyWith(
           message: Sanitizer.obfuscate(log.message, maskedKeys: _maskedKeys),
@@ -109,12 +114,41 @@ class LogBatcher {
       return;
     }
 
-    final batch = List<DDLogRequest>.from(_logQueue);
-    _logQueue.clear();
+    try {
+      final batch = List<DDLogRequest>.from(_logQueue).map((e) {
+        return switch (e) {
+          DDApiLogRequest r => r.copyWith(
+              message: Sanitizer.obfuscate(r.message, maskedKeys: _maskedKeys),
+              http: r.http.copyWith(
+                request: r.http.request.copyWith(
+                  body: switch (r.http.request.body) {
+                    String s => Sanitizer.obfuscate(s, maskedKeys: _maskedKeys),
+                    Map<String, dynamic> m => Sanitizer.obfuscateMap(
+                        m,
+                        maskedKeys: _maskedKeys,
+                      ),
+                    _ => r.http.request.body,
+                  },
+                ),
+              ),
+            ),
+          DDLogRequest r => r.copyWith(
+              message: Sanitizer.obfuscate(r.message, maskedKeys: _maskedKeys),
+            ),
+        };
+      }).toList();
 
-    await _postBatch(batch);
-    if (kIsWeb) {
-      _resetTimer();
+      _logQueue.clear();
+
+      await _postBatch(batch);
+    } catch (e, s) {
+      // Never rethrow any error. We don't want to break the app because of a log.
+      // ignore: avoid_print
+      print('Error flushing logs: $e\n$s');
+    } finally {
+      if (kIsWeb) {
+        _resetTimer();
+      }
     }
   }
 
@@ -140,7 +174,10 @@ class LogBatcher {
       // Datadog batch API expects a newline-separated JSON array
       final data = jsonEncode(batch.map((log) => log.toJson()).toList());
       await dio.post('/logs', data: data);
-    } catch (e) {
+    } catch (e, s) {
+      // Never rethrow any error. We don't want to break the app because of a log.
+      // ignore: avoid_print
+      print('Error sending logs: $e\n$s');
       // Re-queue failed logs
       // _logQueue.insertAll(0, batch);
     }
@@ -174,92 +211,106 @@ class LogBatcher {
 }
 
 // Isolate entry point
-Future<void> _isolateEntryPoint(SendPort mainSendPort) async {
-  final isolateReceivePort = ReceivePort();
-  mainSendPort.send(isolateReceivePort.sendPort);
+void _isolateEntryPoint(SendPort mainSendPort) {
+  runZonedGuarded(
+    () {
+      final isolateReceivePort = ReceivePort();
+      mainSendPort.send(isolateReceivePort.sendPort);
 
-  late final String apiKey;
-  late final String loggingUrl;
-  late final Duration batchInterval;
-  late final int batchSize;
-  late final int connectTimeoutMs;
-  late final int receiveTimeoutMs;
+      late final String apiKey;
+      late final String loggingUrl;
+      late final Duration batchInterval;
+      late final int batchSize;
+      late final int connectTimeoutMs;
+      late final int receiveTimeoutMs;
 
-  final logQueue = <DDLogRequest>[];
-  Timer? timer;
-  StreamSubscription? subscription;
-  var configured = false;
+      final logQueue = <DDLogRequest>[];
+      Timer? timer;
+      StreamSubscription? subscription;
+      var configured = false;
 
-  Future<void> postBatch(List<DDLogRequest> batch) async {
-    if (batch.isEmpty) return;
-    try {
-      final dio = Dio(
-        BaseOptions(
-          baseUrl: loggingUrl,
-          headers: {'DD-API-KEY': apiKey},
-          connectTimeout: Duration(milliseconds: connectTimeoutMs),
-          receiveTimeout: Duration(milliseconds: receiveTimeoutMs),
-        ),
-      );
-      final data = jsonEncode(batch.map((log) => log.toJson()).toList());
+      Future<void> postBatch(List<DDLogRequest> batch) async {
+        if (batch.isEmpty) return;
+        try {
+          final dio = Dio(
+            BaseOptions(
+              baseUrl: loggingUrl,
+              headers: {'DD-API-KEY': apiKey},
+              connectTimeout: Duration(milliseconds: connectTimeoutMs),
+              receiveTimeout: Duration(milliseconds: receiveTimeoutMs),
+            ),
+          );
+          final data = jsonEncode(batch.map((log) => log.toJson()).toList());
 
-      await dio.post('/logs', data: data);
-    } catch (e) {
-      // For simplicity, we\'ll just print it.
-      print('Error sending logs from isolate: $e');
-    }
-  }
-
-  Future<void> flush() async {
-    if (logQueue.isEmpty) return;
-    final batch = List<DDLogRequest>.from(logQueue);
-    logQueue.clear();
-    await postBatch(batch);
-  }
-
-  void resetTimer() {
-    timer?.cancel();
-    timer = Timer.periodic(batchInterval, (_) => flush());
-  }
-
-  subscription = isolateReceivePort.listen((message) async {
-    if (!configured) {
-      // The first message is the configuration.
-      final config = message as Map;
-      apiKey = config['apiKey'] as String;
-      loggingUrl = config['loggingUrl'] as String;
-      batchInterval = Duration(seconds: config['batchIntervalSeconds'] as int);
-      batchSize = config['batchSize'] as int;
-      connectTimeoutMs = config['connectTimeoutMs'] as int;
-      receiveTimeoutMs = config['receiveTimeoutMs'] as int;
-      configured = true;
-
-      resetTimer(); // Start the timer now that we have the interval.
-      return;
-    }
-    // Subsequent messages
-    if (message is DDLogRequest) {
-      logQueue.add(
-        message.copyWith(
-          message: Sanitizer.obfuscate(
-            message.message,
-            maskedKeys: _maskedKeys,
-          ),
-        ),
-      );
-      if (logQueue.length >= batchSize) {
-        await flush();
-        resetTimer();
+          await dio.post('/logs', data: data);
+        } catch (e, s) {
+          // ignore: avoid_print
+          print('Error sending logs from isolate: $e\n$s');
+        }
       }
-    } else if (message is Map && message['command'] == 'dispose') {
-      final replyPort = message['replyPort'] as SendPort;
-      timer?.cancel();
-      await flush();
-      replyPort.send('disposed');
 
-      // Clean up
-      await subscription?.cancel();
-      isolateReceivePort.close();
-    }
-  });
+      Future<void> flush() async {
+        if (logQueue.isEmpty) return;
+        final batch = List<DDLogRequest>.from(logQueue);
+        logQueue.clear();
+        await postBatch(batch);
+      }
+
+      void resetTimer() {
+        timer?.cancel();
+        timer = Timer.periodic(batchInterval, (_) => flush());
+      }
+
+      subscription = isolateReceivePort.listen((message) async {
+        try {
+          if (!configured) {
+            // The first message is the configuration.
+            final config = message as Map;
+            apiKey = config['apiKey'] as String;
+            loggingUrl = config['loggingUrl'] as String;
+            batchInterval =
+                Duration(seconds: config['batchIntervalSeconds'] as int);
+            batchSize = config['batchSize'] as int;
+            connectTimeoutMs = config['connectTimeoutMs'] as int;
+            receiveTimeoutMs = config['receiveTimeoutMs'] as int;
+            configured = true;
+
+            resetTimer(); // Start the timer now that we have the interval.
+            return;
+          }
+          // Subsequent messages
+          if (message is DDLogRequest) {
+            logQueue.add(
+              message.copyWith(
+                message: Sanitizer.obfuscate(
+                  message.message,
+                  maskedKeys: _maskedKeys,
+                ),
+              ),
+            );
+            if (logQueue.length >= batchSize) {
+              await flush();
+              resetTimer();
+            }
+          } else if (message is Map && message['command'] == 'dispose') {
+            final replyPort = message['replyPort'] as SendPort;
+            timer?.cancel();
+            await flush();
+            replyPort.send('disposed');
+
+            // Clean up
+            await subscription?.cancel();
+            isolateReceivePort.close();
+          }
+        } catch (e, s) {
+          // ignore: avoid_print
+          print('Error in isolate: $e\n$s');
+        }
+      });
+    },
+    (e, s) {
+      // ignore: avoid_print
+      print('Unhandled error in isolate: $e\n$s');
+    },
+  );
 }

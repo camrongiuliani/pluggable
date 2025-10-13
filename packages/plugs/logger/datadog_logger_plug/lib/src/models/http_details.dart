@@ -41,4 +41,29 @@ class HttpDetails {
 
     return data;
   }
+
+  // copyWith
+  HttpDetails copyWith({
+    String? url,
+    int? statusCode,
+    String? statusMessage,
+    int? statusSubCategory,
+    PHttpMethod? method,
+    StatusCategory? statusCategory,
+    UrlDetails? urlDetails,
+    RequestDetails? request,
+    ResponseDetails? response,
+  }) {
+    return HttpDetails(
+      url: url ?? this.url,
+      statusCode: statusCode ?? this.statusCode,
+      statusMessage: statusMessage ?? this.statusMessage,
+      statusSubCategory: statusSubCategory ?? this.statusSubCategory,
+      method: method ?? this.method,
+      statusCategory: statusCategory ?? this.statusCategory,
+      urlDetails: urlDetails ?? this.urlDetails,
+      request: request ?? this.request,
+      response: response ?? this.response,
+    );
+  }
 }

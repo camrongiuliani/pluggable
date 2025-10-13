@@ -3,6 +3,7 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_server_plug/mappers/request_mapper.dart';
 import 'package:dart_frog_server_plug/mappers/response_mapper.dart';
 import 'package:pluggable_dart_server/pluggable_dart_server.dart';
+import 'package:uuid/uuid.dart';
 
 class DartFrogServerPlug extends DartServerPlug {
   final Handler rootHandler;
@@ -56,14 +57,23 @@ class DartFrogServerPlug extends DartServerPlug {
     required REQUEST request,
     required RequestHandler handler,
   }) async {
-    final result = await handler(
-      await Pluggable.mapper.mapAsync<RequestContext, PHttpRequest>(
-        request as RequestContext,
-      ),
-    ).execute();
+    final context = request as RequestContext;
 
-    return Pluggable.mapper.map<PHttpResponse, Response>(
+    final req = await Pluggable.mapper.mapAsync<RequestContext, PHttpRequest>(
+      context,
+    );
+
+    final result = await handler(req).execute();
+
+    final mapped = Pluggable.mapper.map<PHttpResponse, Response>(
       result,
+    );
+
+    return mapped.copyWith(
+      headers: {
+        'x-request-id': req.requestId,
+        ...mapped.headers,
+      },
     ) as RES;
   }
 }

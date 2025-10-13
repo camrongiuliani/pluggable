@@ -1,13 +1,22 @@
 import 'dart:convert';
 
 class Sanitizer {
+  /// Obfuscates sensitive information in json map.
+  /// Returns a new map with sensitive information obfuscated.
+  static Map<String, dynamic> obfuscateMap(
+    Map<String, dynamic> jsonMap, {
+    List<String> maskedKeys = const [],
+  }) {
+    return _sanitizeMap(jsonMap, maskedKeys);
+  }
+
   /// Obfuscates sensitive information in the message.
   /// If the message contains a JSON string, it will be parsed and sanitized recursively.
   /// Keys in [maskedKeys] will have their values obfuscated.
   static String obfuscate(
-      String message, {
-        List<String> maskedKeys = const [],
-      }) {
+    String message, {
+    List<String> maskedKeys = const [],
+  }) {
     for (int i = 0; i < message.length; i++) {
       final char = message[i];
       if (char == '{' || char == '[') {
@@ -40,12 +49,12 @@ class Sanitizer {
   }
 
   static Map<String, dynamic> _sanitizeMap(
-      Map<String, dynamic> map,
-      List<String> maskedKeys,
-      ) {
+    Map<String, dynamic> map,
+    List<String> maskedKeys,
+  ) {
     final sanitizedMap = <String, dynamic>{};
     map.forEach((key, value) {
-      if (maskedKeys.contains(key)) {
+      if (maskedKeys.map((e) => e.toLowerCase()).contains(key.toLowerCase())) {
         sanitizedMap[key] = _maskValue(value);
       } else if (value is Map<String, dynamic>) {
         sanitizedMap[key] = _sanitizeMap(value, maskedKeys);
@@ -61,9 +70,9 @@ class Sanitizer {
   }
 
   static List<dynamic> _sanitizeList(
-      List<dynamic> list,
-      List<String> maskedKeys,
-      ) {
+    List<dynamic> list,
+    List<String> maskedKeys,
+  ) {
     return list.map((item) {
       if (item is Map<String, dynamic>) {
         return _sanitizeMap(item, maskedKeys);
@@ -92,6 +101,7 @@ class Sanitizer {
     message = _obfuscateSocialSecurityNumbersStr(message);
     message = _obfuscateEINStr(message);
     message = _obfuscateITINStr(message);
+    message = _obfuscateJWTStr(message);
     return message;
   }
 
@@ -99,7 +109,15 @@ class Sanitizer {
   static String _obfuscateAccountNumbersStr(String message) {
     return message.replaceAllMapped(
       RegExp(r'\b(\d{3,8})(\d{4})\b'),
-          (match) => '${'*' * match.group(1)!.length}${match.group(2)}',
+      (match) => '${'*' * match.group(1)!.length}${match.group(2)}',
+    );
+  }
+
+  /// Obfuscate JWT (JSON Web Tokens)
+  static String _obfuscateJWTStr(String message) {
+    return message.replaceAllMapped(
+      RegExp(r'\b([A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+)\b'),
+      (match) => '***.***.*** (JWT Redacted)',
     );
   }
 
@@ -107,7 +125,7 @@ class Sanitizer {
   static String _obfuscateCreditCardNumbersStr(String message) {
     return message.replaceAllMapped(
       RegExp(r'\b(\d{12})(\d{4})\b'),
-          (match) => '${'*' * 12}${match.group(2)}',
+      (match) => '${'*' * 12}${match.group(2)}',
     );
   }
 
@@ -115,7 +133,7 @@ class Sanitizer {
   static String _obfuscateSocialSecurityNumbersStr(String message) {
     return message.replaceAllMapped(
       RegExp(r'\b(\d{5})(\d{4})\b'),
-          (match) => '${'*' * 5}${match.group(2)}',
+      (match) => '${'*' * 5}${match.group(2)}',
     );
   }
 
@@ -123,7 +141,7 @@ class Sanitizer {
   static String _obfuscateEINStr(String message) {
     return message.replaceAllMapped(
       RegExp(r'\b(\d{2})-(\d{7})\b'),
-          (match) => '${'*' * 2}-${'*' * 7}',
+      (match) => '${'*' * 2}-${'*' * 7}',
     );
   }
 
@@ -131,7 +149,7 @@ class Sanitizer {
   static String _obfuscateITINStr(String message) {
     return message.replaceAllMapped(
       RegExp(r'\b(\d{3})-(\d{2})-(\d{4})\b'),
-          (match) => '${'*' * 3}-${'*' * 2}-${'*' * 4}',
+      (match) => '${'*' * 3}-${'*' * 2}-${'*' * 4}',
     );
   }
 }

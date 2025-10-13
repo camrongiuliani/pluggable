@@ -47,26 +47,10 @@ class PRequestHandler {
     this.queryValidator,
     this.headerValidator,
   }) {
-    Pluggable.logger.header(
-      '$runtimeType created [${request.method.value}] for ${request.requestId}',
-      tag: '$runtimeType',
-    );
     Pluggable.logger.v(
-      'Query Parameters ${request.queryParameters}',
-      showPrefix: true,
+      '$runtimeType created [${request.method.value}]',
       tag: '$runtimeType',
-    );
-
-    final data = switch (request) {
-      PHttpFormDataRequest r => r.data,
-      PHttpJsonDataRequest r => r.data,
-      _ => null,
-    };
-
-    Pluggable.logger.v(
-      'Request Body: $data',
-      showPrefix: true,
-      tag: '$runtimeType',
+      traceId: request.requestId,
     );
   }
 
@@ -145,6 +129,7 @@ class PRequestHandler {
           false => data,
         },
         headers: {
+          'x-request-id': request.requestId,
           HttpHeaders.contentTypeHeader: switch (isJson) {
             true => ContentType.json.mimeType,
             _ =>
