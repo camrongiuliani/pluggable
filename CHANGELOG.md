@@ -3,6 +3,70 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`cartographer_mapper_plug` - `v0.0.1-pre.13`](#cartographer_mapper_plug---v001-pre13)
+ - [`pluggable_dart_server` - `v0.0.1-pre.17`](#pluggable_dart_server---v001-pre17)
+ - [`pluggable` - `v0.0.1-pre.12`](#pluggable---v001-pre12)
+ - [`pluggable_flutter` - `v0.0.1-pre.24`](#pluggable_flutter---v001-pre24)
+ - [`pluggable_di_getit` - `v0.0.1-pre.12`](#pluggable_di_getit---v001-pre12)
+ - [`datadog_logger_plug` - `v0.0.4+1`](#datadog_logger_plug---v0041)
+ - [`redis_storage_plug` - `v0.0.1-pre.13`](#redis_storage_plug---v001-pre13)
+ - [`in_memory_storage_plug` - `v0.0.1-pre.12`](#in_memory_storage_plug---v001-pre12)
+ - [`object_box_storage_plug` - `v0.0.1-pre.12`](#object_box_storage_plug---v001-pre12)
+ - [`expire_cache_storage_plug` - `v0.0.1-pre.12`](#expire_cache_storage_plug---v001-pre12)
+ - [`secure_storage_plug` - `v0.0.1-pre.14`](#secure_storage_plug---v001-pre14)
+ - [`go_router_plug` - `v0.0.1-pre.35`](#go_router_plug---v001-pre35)
+ - [`dart_frog_server_plug` - `v0.0.1-pre.17`](#dart_frog_server_plug---v001-pre17)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `pluggable` - `v0.0.1-pre.12`
+ - `pluggable_flutter` - `v0.0.1-pre.24`
+ - `pluggable_di_getit` - `v0.0.1-pre.12`
+ - `datadog_logger_plug` - `v0.0.4+1`
+ - `redis_storage_plug` - `v0.0.1-pre.13`
+ - `in_memory_storage_plug` - `v0.0.1-pre.12`
+ - `object_box_storage_plug` - `v0.0.1-pre.12`
+ - `expire_cache_storage_plug` - `v0.0.1-pre.12`
+ - `secure_storage_plug` - `v0.0.1-pre.14`
+ - `go_router_plug` - `v0.0.1-pre.35`
+ - `dart_frog_server_plug` - `v0.0.1-pre.17`
+
+---
+
+#### `cartographer_mapper_plug` - `v0.0.1-pre.13`
+
+ - **FEAT**: expose cache control.
+ - **FEAT**: dart server plug support.
+ - **FEAT**: add dart server and some additional plugs.
+
+#### `pluggable_dart_server` - `v0.0.1-pre.17`
+
+ - **FIX**: headerValidator.
+ - **FIX**: (pluggable_dart_server) inc build.
+ - **FIX**: (pluggable_dart_server) serialization issues.
+ - **FEAT**: added datadog_logger_plug.
+ - **FEAT**: add ability to set response headers.
+ - **FEAT**: expose cache control.
+ - **FEAT**: expose cache control.
+ - **FEAT**: (pluggable_dart_server) add runPluggableServer.
+ - **FEAT**: dart server plug support.
+ - **FEAT**: add dart server and some additional plugs.
+
+
 ## 2025-10-09
 
 ### Changes
