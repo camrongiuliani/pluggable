@@ -1,6 +1,6 @@
 name: go_router_plug
 description: "Pluggable - Plug-n-Play Architecture"
-version: 0.0.1-pre.35
+version: 0.0.1-pre.36
 # pubspec_overrides.yaml
 
 environment:
@@ -14,7 +14,7 @@ dependencies:
   go_router: ^16.0.0
   collection: ^1.19.0
 
-  pluggable_flutter: 0.0.1-pre.24
+  pluggable_flutter: 0.0.1-pre.25
 
 dev_dependencies:
   flutter_test:

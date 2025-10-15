@@ -1,3 +1,7 @@
+## 0.0.1-pre.25
+
+ - **FIX**: datadog logger.
+
 ## 0.0.1-pre.24
 
  - Update a dependency to the latest release.

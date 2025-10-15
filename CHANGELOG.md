@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`datadog_logger_plug` - `v0.0.4+3`](#datadog_logger_plug---v0043)
+ - [`pluggable_flutter` - `v0.0.1-pre.25`](#pluggable_flutter---v001-pre25)
+ - [`go_router_plug` - `v0.0.1-pre.36`](#go_router_plug---v001-pre36)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `go_router_plug` - `v0.0.1-pre.36`
+
+---
+
+#### `datadog_logger_plug` - `v0.0.4+3`
+
+ - **FIX**: datadog logger.
+
+#### `pluggable_flutter` - `v0.0.1-pre.25`
+
+ - **FIX**: datadog logger.
+
+
 ## 2025-10-13
 
 ### Changes
