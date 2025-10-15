@@ -23,7 +23,7 @@ packages:
       path: "../plugs/mapper/cartographer_mapper_plug"
       relative: true
     source: path
-    version: "0.0.1-pre.11"
+    version: "0.0.1-pre.13"
   characters:
     dependency: transitive
     description:
@@ -152,7 +152,7 @@ packages:
       path: "../plugs/storage/in_memory_storage_plug"
       relative: true
     source: path
-    version: "0.0.1-pre.11"
+    version: "0.0.1-pre.12"
   json_annotation:
     dependency: transitive
     description:
@@ -231,14 +231,14 @@ packages:
       path: "../pluggable"
       relative: true
     source: path
-    version: "0.0.1-pre.11"
+    version: "0.0.1-pre.12"
   pluggable_di_getit:
     dependency: "direct main"
     description:
       path: "../plugs/di/pluggable_di_getit"
       relative: true
     source: path
-    version: "0.0.1-pre.11"
+    version: "0.0.1-pre.12"
   rxdart:
     dependency: transitive
     description:

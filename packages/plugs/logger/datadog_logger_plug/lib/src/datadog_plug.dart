@@ -446,18 +446,32 @@ mixin _DioMixin implements InterceptorsWrapper {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    logger.apiRequest(
-      type: LogType.outboundRequest,
-      request: Pluggable.mapper.map(err.requestOptions),
-      response: Pluggable.mapper.map(switch (err.response) {
-        null => Response(
-          requestOptions: err.requestOptions,
-          statusCode: 0,
-          statusMessage: err.message ?? err.stackTrace.toString(),
+    try {
+      Future.wait([
+        Pluggable.mapper.mapAsync<RequestOptions, PHttpRequest>(
+          err.requestOptions,
         ),
-        _ => err.response!,
-      }),
-    );
+        Pluggable.mapper.mapAsync<Response, PHttpResponse>(
+          err.response ??
+              Response(
+                requestOptions: err.requestOptions,
+                statusCode: 0,
+                statusMessage: err.message ?? err.stackTrace.toString(),
+              ),
+        ),
+      ]).then((results) {
+        final request = results[0] as PHttpRequest;
+        final resp = results[1] as PHttpResponse;
+
+        logger.apiRequest(
+          request: request,
+          response: resp,
+          type: LogType.outboundRequest,
+        );
+      });
+    } catch (e) {
+      print('Error logging outbound request error: $e');
+    }
 
     handler.next(err);
   }
