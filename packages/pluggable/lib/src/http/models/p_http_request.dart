@@ -18,6 +18,7 @@ import 'package:pluggable/pluggable.dart';
 
 part 'p_http_form_data_request.dart';
 part 'p_http_json_request.dart';
+part 'p_http_bytes_request.dart';
 
 /// Base class for HTTP requests
 sealed class _BaseRequest {
@@ -167,6 +168,7 @@ class PHttpRequest extends _BaseRequest {
     final fromJson = switch (data) {
       PFormData() => PHttpFormDataRequest.fromJson,
       Map<String, dynamic>() => PHttpJsonDataRequest.fromJson,
+      List<int>() => PHttpBytesDataRequest.fromJson,
       _ => PHttpRequest.fromJson,
     };
 
@@ -175,6 +177,7 @@ class PHttpRequest extends _BaseRequest {
       'data': switch (data) {
         PFormData() => data.toJson(),
         Map<String, dynamic>() => data,
+        List<int>() => data,
         _ => data,
       },
     });

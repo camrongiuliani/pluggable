@@ -25,7 +25,7 @@ class FrogRequestMapper extends AsyncMapper<RequestContext, PHttpRequest> {
       queryParameters: source.request.uri.queryParameters,
       requestId: source.request.headers['x-request-id'] ?? Uuid().v4(),
       data: switch (data) {
-        FormData() => mapper.map(data),
+        FormData() => await mapper.mapAsync<FormData, PFormData>(data),
         _ => data,
       },
       method: mapper.map(source.request.method),
@@ -37,15 +37,15 @@ class FrogRequestMapper extends AsyncMapper<RequestContext, PHttpRequest> {
     final isFormUrlEncoded = _isFormUrlEncoded(contentType);
     final isMultipartFormData = _isMultipartFormData(contentType);
     final isJson = _isJson(contentType);
-    final isStream = _isStream(contentType);
+    final isText = _isText(contentType);
 
     return switch (isFormUrlEncoded || isMultipartFormData) {
       true => context.request.formData(),
       false => switch (isJson) {
           true => context.request.json(),
-          false => switch (isStream) {
-              true => context.request.bytes().toFuture(),
-              false => context.request.body(),
+          false => switch (isText) {
+              true => context.request.body(),
+              false => context.request.bytes().toFuture(),
             },
         },
     };
@@ -74,9 +74,11 @@ class FrogRequestMapper extends AsyncMapper<RequestContext, PHttpRequest> {
     'octet-stream',
   );
 
-  static bool _isStream(ContentType? contentType) {
+  static bool _isText(ContentType? contentType) {
     if (contentType == null) return false;
-    return contentType.mimeType == octetStreamDataContentType.mimeType;
+    return contentType.primaryType == 'text' ||
+        _isJson(contentType) ||
+        _isFormUrlEncoded(contentType);
   }
 
   static bool _isJson(ContentType? contentType) {
@@ -112,36 +114,32 @@ class HttpMethodMapper extends Mapper<HttpMethod, PHttpMethod> {
   }
 }
 
-class FormDataMapper extends Mapper<FormData, PFormData> {
+class FormDataMapper extends AsyncMapper<FormData, PFormData> {
   FormDataMapper(super.mapper);
 
   @override
-  PFormData map(FormData source) {
+  Future<PFormData> mapAsync(FormData source) async {
+    final mappedFiles = <String, PFormFile>{};
+    for (final entry in source.files.entries) {
+      mappedFiles[entry.key] = await mapper.mapAsync(entry.value);
+    }
+    
     return PFormData(
       fields: source.fields,
-      files: source.files.map(
-        (key, file) {
-          return MapEntry(
-            key,
-            mapper.map(file),
-          );
-        },
-      ),
+      files: mappedFiles,
     );
   }
 }
 
-class FormFileMapper extends Mapper<UploadedFile, PFormFile> {
+class FormFileMapper extends AsyncMapper<UploadedFile, PFormFile> {
   FormFileMapper(super.mapper);
 
   @override
-  PFormFile map(UploadedFile source) {
+  Future<PFormFile> mapAsync(UploadedFile source) async {
     return PFormFile(
       source.name,
       source.contentType,
-      Stream.fromFuture(
-        source.readAsBytes(),
-      ),
+      await source.readAsBytes(),
     );
   }
 }

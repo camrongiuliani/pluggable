@@ -549,7 +549,7 @@ class LoggingClient extends http.BaseClient {
               file.field: PFormFile(
                 file.field,
                 ContentType.parse(file.contentType.mimeType),
-                file.finalize(),
+                [], // Pass empty bytes for stream mapping in logger
               ),
           },
         ),
