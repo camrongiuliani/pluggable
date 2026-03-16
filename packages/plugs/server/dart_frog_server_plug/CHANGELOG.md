@@ -1,3 +1,7 @@
+## 0.0.1-pre.18
+
+ - **FEAT**: add formdata and binary support.
+
 ## 0.0.1-pre.17
 
  - Update a dependency to the latest release.

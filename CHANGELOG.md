@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-03-16
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`dart_frog_server_plug` - `v0.0.1-pre.18`](#dart_frog_server_plug---v001-pre18)
+ - [`datadog_logger_plug` - `v0.0.5`](#datadog_logger_plug---v005)
+ - [`pluggable` - `v0.0.1-pre.13`](#pluggable---v001-pre13)
+ - [`pluggable_flutter` - `v0.0.1-pre.26`](#pluggable_flutter---v001-pre26)
+ - [`pluggable_di_getit` - `v0.0.1-pre.13`](#pluggable_di_getit---v001-pre13)
+ - [`cartographer_mapper_plug` - `v0.0.1-pre.14`](#cartographer_mapper_plug---v001-pre14)
+ - [`redis_storage_plug` - `v0.0.1-pre.14`](#redis_storage_plug---v001-pre14)
+ - [`in_memory_storage_plug` - `v0.0.1-pre.13`](#in_memory_storage_plug---v001-pre13)
+ - [`object_box_storage_plug` - `v0.0.1-pre.13`](#object_box_storage_plug---v001-pre13)
+ - [`expire_cache_storage_plug` - `v0.0.1-pre.13`](#expire_cache_storage_plug---v001-pre13)
+ - [`secure_storage_plug` - `v0.0.1-pre.15`](#secure_storage_plug---v001-pre15)
+ - [`pluggable_dart_server` - `v0.0.1-pre.18`](#pluggable_dart_server---v001-pre18)
+ - [`go_router_plug` - `v0.0.1-pre.37`](#go_router_plug---v001-pre37)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `pluggable_flutter` - `v0.0.1-pre.26`
+ - `pluggable_di_getit` - `v0.0.1-pre.13`
+ - `cartographer_mapper_plug` - `v0.0.1-pre.14`
+ - `redis_storage_plug` - `v0.0.1-pre.14`
+ - `in_memory_storage_plug` - `v0.0.1-pre.13`
+ - `object_box_storage_plug` - `v0.0.1-pre.13`
+ - `expire_cache_storage_plug` - `v0.0.1-pre.13`
+ - `secure_storage_plug` - `v0.0.1-pre.15`
+ - `pluggable_dart_server` - `v0.0.1-pre.18`
+ - `go_router_plug` - `v0.0.1-pre.37`
+
+---
+
+#### `dart_frog_server_plug` - `v0.0.1-pre.18`
+
+ - **FEAT**: add formdata and binary support.
+
+#### `datadog_logger_plug` - `v0.0.5`
+
+ - **FEAT**: add formdata and binary support.
+
+#### `pluggable` - `v0.0.1-pre.13`
+
+ - **FEAT**: add formdata and binary support.
+
+
 ## 2025-10-15
 
 ### Changes

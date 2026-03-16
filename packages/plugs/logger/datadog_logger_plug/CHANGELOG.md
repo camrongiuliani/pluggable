@@ -1,3 +1,7 @@
+## 0.0.5
+
+ - **FEAT**: add formdata and binary support.
+
 ## 0.0.4+3
 
  - **FIX**: datadog logger.
