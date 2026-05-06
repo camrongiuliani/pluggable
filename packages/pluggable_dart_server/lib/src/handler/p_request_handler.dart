@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:pluggable_dart_server/pluggable_dart_server.dart';
-import 'dart:io';
 
 /// A base class for handling HTTP requests in the Pluggable server.
 ///
@@ -75,6 +75,17 @@ class PRequestHandler {
   /// Gets the current response headers.
   Map<String, Object> get responseHeaders => _responseHeaders;
 
+  /// Overrides the response `Content-Type` for this handler.
+  ///
+  /// This is a convenience around [addResponseHeader] for the common case of
+  /// just wanting to use a non-default content type while keeping the
+  /// standard `{ "requestId": ..., "data": ... }` body wrapping. For full
+  /// control over the response body, return a [PRawResponse] from your
+  /// handler method instead.
+  void setContentType(ContentType contentType) {
+    _responseHeaders[HttpHeaders.contentTypeHeader] = contentType.value;
+  }
+
   /// Checks if the given data is a primitive Dart type.
   ///
   /// Primitive types include:
@@ -103,6 +114,12 @@ class PRequestHandler {
   /// 4. Handles any errors that occur
   FutureOr<PHttpResponse> execute() async {
     return _execute().then((response) {
+      // If the handler returned a fully custom response, pass it through
+      // verbatim — no body wrapping, no content-type auto-detection.
+      if (response.data is PRawResponse) {
+        return _buildRawResponse(response.data as PRawResponse);
+      }
+
       final data = switch (isPrimitiveDartType(response.data)) {
         true => response.data,
         false =>
@@ -174,6 +191,30 @@ class PRequestHandler {
         },
       );
     });
+  }
+
+  /// Builds a [PHttpResponse] from a [PRawResponse] returned by a handler.
+  ///
+  /// Headers are layered in this precedence (later overrides earlier):
+  /// 1. `x-request-id` (when [PRawResponse.includeRequestId] is true).
+  /// 2. Auto-applied `Content-Type` (when [PRawResponse.contentType] is set).
+  /// 3. Headers added on the handler via [addResponseHeader].
+  /// 4. Headers supplied directly on the [PRawResponse].
+  PHttpResponse _buildRawResponse(PRawResponse raw) {
+    final headers = <String, Object>{
+      if (raw.includeRequestId) 'x-request-id': request.requestId,
+      if (raw.contentType != null)
+        HttpHeaders.contentTypeHeader: raw.contentType!.value,
+      ..._responseHeaders,
+      ...raw.headers,
+    };
+
+    return PHttpResponse(
+      statusCode: raw.statusCode,
+      headers: headers,
+      data: raw.body,
+      message: 'message',
+    );
   }
 
   /// Internal method that executes the request and returns a response.

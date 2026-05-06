@@ -15,6 +15,12 @@ class FrogResponseMapper extends Mapper<PHttpResponse, Response> {
             headers: source.headers,
             body: s,
           ),
+      List<int> b =>
+          Response.bytes(
+            statusCode: source.statusCode,
+            headers: source.headers,
+            body: b,
+          ),
       _ =>
           Response(
             statusCode: source.statusCode,
