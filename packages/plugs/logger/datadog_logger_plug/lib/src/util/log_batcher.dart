@@ -31,6 +31,48 @@ const List<String> _maskedKeys = [
   'secret',
 ];
 
+/// Returns a copy of [log] with all sensitive fields masked. Covers the
+/// log message, request/response headers, and request/response bodies for
+/// [DDApiLogRequest]; for a plain [DDLogRequest] only the message is touched.
+///
+/// Exposed at file scope (not as an instance method) so that the logging
+/// isolate entry point — which cannot reach `LogBatcher` state — can call it.
+DDLogRequest sanitizeLogRequest(DDLogRequest log) {
+  final sanitizedMessage = Sanitizer.obfuscate(log.message, maskedKeys: _maskedKeys);
+
+  if (log is DDApiLogRequest) {
+    final req = log.http.request;
+    final sanitizedRequest = req.copyWith(
+      headers: Sanitizer.obfuscateMap(req.headers, maskedKeys: _maskedKeys),
+      body: _sanitizeBody(req.body),
+    );
+
+    final resp = log.http.response;
+    final sanitizedResponse = resp?.copyWith(
+      headers: Sanitizer.obfuscateMap(resp.headers, maskedKeys: _maskedKeys),
+      body: _sanitizeBody(resp.body),
+    );
+
+    return log.copyWith(
+      message: sanitizedMessage,
+      http: log.http.copyWith(
+        request: sanitizedRequest,
+        response: sanitizedResponse,
+      ),
+    );
+  }
+
+  return log.copyWith(message: sanitizedMessage);
+}
+
+dynamic _sanitizeBody(dynamic body) {
+  return switch (body) {
+    String s => Sanitizer.obfuscate(s, maskedKeys: _maskedKeys),
+    Map<String, dynamic> m => Sanitizer.obfuscateMap(m, maskedKeys: _maskedKeys),
+    _ => body,
+  };
+}
+
 class LogBatcher {
   final String _apiKey;
   final String _loggingUrl;
@@ -88,11 +130,7 @@ class LogBatcher {
     bool isStream = log is DDApiLogRequest && log.http.request.body is Stream;
 
     if (kIsWeb || isStream) {
-      _logQueue.add(
-        log.copyWith(
-          message: Sanitizer.obfuscate(log.message, maskedKeys: _maskedKeys),
-        ),
-      );
+      _logQueue.add(log);
       if (_logQueue.length >= _batchSize) {
         _flush();
       }
@@ -115,28 +153,7 @@ class LogBatcher {
     }
 
     try {
-      final batch = List<DDLogRequest>.from(_logQueue).map((e) {
-        return switch (e) {
-          DDApiLogRequest r => r.copyWith(
-              message: Sanitizer.obfuscate(r.message, maskedKeys: _maskedKeys),
-              http: r.http.copyWith(
-                request: r.http.request.copyWith(
-                  body: switch (r.http.request.body) {
-                    String s => Sanitizer.obfuscate(s, maskedKeys: _maskedKeys),
-                    Map<String, dynamic> m => Sanitizer.obfuscateMap(
-                        m,
-                        maskedKeys: _maskedKeys,
-                      ),
-                    _ => r.http.request.body,
-                  },
-                ),
-              ),
-            ),
-          DDLogRequest r => r.copyWith(
-              message: Sanitizer.obfuscate(r.message, maskedKeys: _maskedKeys),
-            ),
-        };
-      }).toList();
+      final batch = List<DDLogRequest>.from(_logQueue).map(sanitizeLogRequest).toList();
 
       _logQueue.clear();
 
@@ -280,14 +297,7 @@ void _isolateEntryPoint(SendPort mainSendPort) {
           }
           // Subsequent messages
           if (message is DDLogRequest) {
-            logQueue.add(
-              message.copyWith(
-                message: Sanitizer.obfuscate(
-                  message.message,
-                  maskedKeys: _maskedKeys,
-                ),
-              ),
-            );
+            logQueue.add(sanitizeLogRequest(message));
             if (logQueue.length >= batchSize) {
               await flush();
               resetTimer();

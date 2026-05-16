@@ -22,4 +22,18 @@ class ResponseDetails {
 
     return data;
   }
+
+  ResponseDetails copyWith({
+    Map<String, dynamic>? headers,
+    String? statusMessage,
+    int? statusCode,
+    dynamic body,
+  }) {
+    return ResponseDetails(
+      headers: headers ?? this.headers,
+      statusMessage: statusMessage ?? this.statusMessage,
+      statusCode: statusCode ?? this.statusCode,
+      body: body ?? this.body,
+    );
+  }
 }
