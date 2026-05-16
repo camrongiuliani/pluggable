@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-05-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`datadog_logger_plug` - `v0.0.5+1`](#datadog_logger_plug---v0051)
+
+---
+
+#### `datadog_logger_plug` - `v0.0.5+1`
+
+ - **FIX**: logging obfuscation.
+
+
 ## 2026-03-16
 
 ### Changes

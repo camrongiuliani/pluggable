@@ -1,3 +1,7 @@
+## 0.0.5+1
+
+ - **FIX**: logging obfuscation.
+
 ## 0.0.5
 
  - **FEAT**: add formdata and binary support.

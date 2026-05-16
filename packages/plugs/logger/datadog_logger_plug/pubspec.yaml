@@ -1,6 +1,6 @@
 name: datadog_logger_plug
 description: "A DataDog Logger Plugin for Pluggable"
-version: 0.0.5
+version: 0.0.5+1
 
 environment:
   sdk: ^3.7.2
