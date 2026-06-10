@@ -5,6 +5,7 @@ export 'src/pluggable_ext.dart';
 export 'src/validation/validation.dart';
 export 'package:pluggable/pluggable.dart' hide initPluggable;
 export 'src/handler/p_request_handler.dart';
+export 'src/handler/p_raw_response.dart';
 export 'src/module/server_module.dart';
 export 'src/module/server_env.dart';
 
