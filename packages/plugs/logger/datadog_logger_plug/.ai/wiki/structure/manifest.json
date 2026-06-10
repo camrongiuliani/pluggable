@@ -1,0 +1,173 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T13:00:37Z",
+  "files": {
+    "lib/src/datadog_plug.dart": [
+      "DataDogAnalyticsPlug",
+      "_ShelfMixin",
+      "_DartFrogMixin",
+      "_DioMixin",
+      "LoggingClient"
+    ],
+    "lib/src/util/content_details.dart": [
+      "ContentDetails"
+    ],
+    "lib/src/util/sanitizer.dart": [
+      "Sanitizer"
+    ],
+    "lib/src/util/log_batcher.dart": [
+      "LogBatcher"
+    ],
+    "lib/src/models/request_details.dart": [
+      "RequestDetails"
+    ],
+    "lib/src/models/log_request.dart": [
+      "DDLogRequest",
+      "DDApiLogRequest"
+    ],
+    "lib/src/models/logger_config.dart": [
+      "LoggerConfig"
+    ],
+    "lib/src/models/response_details.dart": [
+      "ResponseDetails"
+    ],
+    "lib/src/models/url_details.dart": [
+      "UrlDetails"
+    ],
+    "lib/src/models/http_details.dart": [
+      "HttpDetails"
+    ],
+    "lib/src/models/enums/status_category.dart": [
+      "StatusCategory"
+    ],
+    "lib/src/models/enums/log_level.dart": [
+      "LogLevel"
+    ],
+    "lib/src/models/enums/log_type.dart": [
+      "LogType"
+    ],
+    "lib/src/mappers/dio/dio_request_mapper.dart": [
+      "DioRequestMapper",
+      "_FutureExt"
+    ],
+    "lib/src/mappers/dio/dio_response_mapper.dart": [
+      "HXT",
+      "DioResponseMapper",
+      "_FutureExt"
+    ],
+    "lib/src/mappers/dio/dio_form_data_mapper.dart": [
+      "DioFormDataMapper"
+    ],
+    "lib/src/mappers/dio/dio_http_method_mapper.dart": [
+      "DioHttpMethodMapper"
+    ],
+    "lib/src/mappers/dio/dio_form_file_mapper.dart": [
+      "DioFormFileMapper"
+    ]
+  },
+  "symbols": {
+    "DataDogAnalyticsPlug": {
+      "defined_in": "lib/src/datadog_plug.dart",
+      "references": []
+    },
+    "_ShelfMixin": {
+      "defined_in": "lib/src/datadog_plug.dart",
+      "references": []
+    },
+    "_DartFrogMixin": {
+      "defined_in": "lib/src/datadog_plug.dart",
+      "references": []
+    },
+    "_DioMixin": {
+      "defined_in": "lib/src/datadog_plug.dart",
+      "references": []
+    },
+    "LoggingClient": {
+      "defined_in": "lib/src/datadog_plug.dart",
+      "references": []
+    },
+    "ContentDetails": {
+      "defined_in": "lib/src/util/content_details.dart",
+      "references": []
+    },
+    "Sanitizer": {
+      "defined_in": "lib/src/util/sanitizer.dart",
+      "references": []
+    },
+    "LogBatcher": {
+      "defined_in": "lib/src/util/log_batcher.dart",
+      "references": []
+    },
+    "RequestDetails": {
+      "defined_in": "lib/src/models/request_details.dart",
+      "references": []
+    },
+    "DDLogRequest": {
+      "defined_in": "lib/src/models/log_request.dart",
+      "references": []
+    },
+    "DDApiLogRequest": {
+      "defined_in": "lib/src/models/log_request.dart",
+      "references": []
+    },
+    "LoggerConfig": {
+      "defined_in": "lib/src/models/logger_config.dart",
+      "references": []
+    },
+    "ResponseDetails": {
+      "defined_in": "lib/src/models/response_details.dart",
+      "references": []
+    },
+    "UrlDetails": {
+      "defined_in": "lib/src/models/url_details.dart",
+      "references": []
+    },
+    "HttpDetails": {
+      "defined_in": "lib/src/models/http_details.dart",
+      "references": []
+    },
+    "StatusCategory": {
+      "defined_in": "lib/src/models/enums/status_category.dart",
+      "references": []
+    },
+    "LogLevel": {
+      "defined_in": "lib/src/models/enums/log_level.dart",
+      "references": []
+    },
+    "LogType": {
+      "defined_in": "lib/src/models/enums/log_type.dart",
+      "references": []
+    },
+    "DioRequestMapper": {
+      "defined_in": "lib/src/mappers/dio/dio_request_mapper.dart",
+      "references": []
+    },
+    "_FutureExt": {
+      "defined_in": "lib/src/mappers/dio/dio_request_mapper.dart",
+      "references": []
+    },
+    "HXT": {
+      "defined_in": "lib/src/mappers/dio/dio_response_mapper.dart",
+      "references": []
+    },
+    "DioResponseMapper": {
+      "defined_in": "lib/src/mappers/dio/dio_response_mapper.dart",
+      "references": []
+    },
+    "DioFormDataMapper": {
+      "defined_in": "lib/src/mappers/dio/dio_form_data_mapper.dart",
+      "references": []
+    },
+    "DioHttpMethodMapper": {
+      "defined_in": "lib/src/mappers/dio/dio_http_method_mapper.dart",
+      "references": []
+    },
+    "DioFormFileMapper": {
+      "defined_in": "lib/src/mappers/dio/dio_form_file_mapper.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}

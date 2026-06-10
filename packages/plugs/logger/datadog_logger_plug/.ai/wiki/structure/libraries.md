@@ -1,0 +1,74 @@
+---
+generated: true
+generated_by: codesight@1.14.0
+generated_at: 2026-06-10T13:00:36Z
+source_command: npx codesight --wiki
+---
+
+# Libraries
+
+- `lib/src/datadog_plug.dart`
+  - class DataDogAnalyticsPlug
+  - class LoggingClient
+  - function init
+  - function dispose
+  - function header
+  - function apiRequest
+  - _...5 more_
+- `lib/src/mappers/dio/dio_form_data_mapper.dart` — class DioFormDataMapper, function map
+- `lib/src/mappers/dio/dio_form_file_mapper.dart` — class DioFormFileMapper, function mapAsync
+- `lib/src/mappers/dio/dio_http_method_mapper.dart` — class DioHttpMethodMapper, function map
+- `lib/src/mappers/dio/dio_request_mapper.dart`
+  - class DioRequestMapper
+  - function all
+  - function mapAsync
+  - function toFuture
+  - function listen
+- `lib/src/mappers/dio/dio_response_mapper.dart`
+  - class HXT
+  - class DioResponseMapper
+  - function toMap
+  - function mapAsync
+  - function toFuture
+  - function listen
+- `lib/src/models/enums/log_type.dart`
+  - enum LogType
+  - function fromString
+  - function toString
+- `lib/src/models/enums/status_category.dart`
+  - enum StatusCategory
+  - function fromString
+  - function fromHttpStatusCode
+  - function toString
+- `lib/src/models/http_details.dart`
+  - class HttpDetails
+  - function toJson
+  - function copyWith
+- `lib/src/models/log_request.dart`
+  - class DDLogRequest
+  - class DDApiLogRequest
+  - function toJson
+  - function copyWith
+- `lib/src/models/logger_config.dart` — class LoggerConfig
+- `lib/src/models/request_details.dart`
+  - class RequestDetails
+  - function toJson
+  - function copyWith
+- `lib/src/models/response_details.dart`
+  - class ResponseDetails
+  - function toJson
+  - function copyWith
+- `lib/src/models/url_details.dart` — class UrlDetails, function toJson
+- `lib/src/util/content_details.dart` — class ContentDetails
+- `lib/src/util/log_batcher.dart`
+  - class LogBatcher
+  - function sanitizeLogRequest
+  - function addLog
+  - function print
+  - function dispose
+  - function runZonedGuarded
+  - _...3 more_
+- `lib/src/util/sanitizer.dart`
+  - class Sanitizer
+  - function obfuscateMap
+  - function obfuscate

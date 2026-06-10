@@ -1,0 +1,452 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T13:01:06Z",
+  "files": {
+    "lib/src/plug.dart": [
+      "Plug"
+    ],
+    "lib/src/di/pluggable_di.dart": [
+      "DependencyDisposeFunc",
+      "DependencyBuilder",
+      "PluggableDI"
+    ],
+    "lib/src/logger/pluggable_logger.dart": [
+      "PluggableLogger",
+      "ConsoleLoggerPlug"
+    ],
+    "lib/src/module/pluggable_module.dart": [
+      "PluggableModule"
+    ],
+    "lib/src/mapper/exceptions.dart": [
+      "MapperNotRegistered"
+    ],
+    "lib/src/mapper/pluggable_mapper.dart": [
+      "PluggableMapper",
+      "Mapper",
+      "AsyncMapper"
+    ],
+    "lib/src/pluggable/pluggable.dart": [
+      "PluggableImpl",
+      "DartNotifier"
+    ],
+    "lib/src/storage/pluggable_storage.dart": [
+      "DecodeFunc",
+      "Fetch",
+      "PluggableStorage"
+    ],
+    "lib/src/storage/in_flight_mixin.dart": [
+      "InFlightSets",
+      "InFlightMixin",
+      "InFlightEntry"
+    ],
+    "lib/src/storage/pluggable_storage_provider.dart": [
+      "DecodeFunc",
+      "Fetch",
+      "PluggableStorageProvider"
+    ],
+    "lib/src/env/pluggable_env.dart": [
+      "PluggableEnv"
+    ],
+    "lib/src/http/models/p_form_file.dart": [
+      "PFormFile"
+    ],
+    "lib/src/http/models/p_http_request.dart": [
+      "_BaseRequest",
+      "PHttpRequest"
+    ],
+    "lib/src/http/models/p_http_json_request.dart": [
+      "PHttpJsonDataRequest"
+    ],
+    "lib/src/http/models/p_http_method.dart": [
+      "PHttpMethod"
+    ],
+    "lib/src/http/models/cache_control.dart": [
+      "CacheControl"
+    ],
+    "lib/src/http/models/p_http_response.dart": [
+      "PHttpResponse"
+    ],
+    "lib/src/http/models/p_http_form_data_request.dart": [
+      "PHttpFormDataRequest"
+    ],
+    "lib/src/http/models/p_http_bytes_request.dart": [
+      "PHttpBytesDataRequest"
+    ],
+    "lib/src/http/models/http_status_code.dart": [
+      "PHttpStatusCode",
+      "PHttpException",
+      "BadRequestException",
+      "UnauthorizedException",
+      "PaymentRequiredException",
+      "ForbiddenException",
+      "NotFoundException",
+      "MethodNotAllowedException",
+      "NotAcceptableException",
+      "ProxyAuthenticationRequiredException",
+      "RequestTimeoutException",
+      "ConflictException",
+      "GoneException",
+      "LengthRequiredException",
+      "PreconditionFailedException",
+      "RequestEntityTooLargeException",
+      "RequestUriTooLongException",
+      "UnsupportedMediaTypeException",
+      "RequestedRangeNotSatisfiableException",
+      "ExpectationFailedException",
+      "ImATeapotException",
+      "InsufficientSpaceOnResourceException",
+      "MethodFailureException",
+      "MisdirectedRequestException",
+      "UnprocessableEntityException",
+      "LockedException",
+      "FailedDependencyException",
+      "UpgradeRequiredException",
+      "PreconditionRequiredException",
+      "TooManyRequestsException",
+      "RequestHeaderFieldsTooLargeException",
+      "ConnectionClosedWithoutResponseException",
+      "UnavailableForLegalReasonsException",
+      "ClientClosedRequestException",
+      "InternalServerErrorException",
+      "NotImplementedException",
+      "BadGatewayException",
+      "ServiceUnavailableException",
+      "GatewayTimeoutException",
+      "HttpVersionNotSupportedException",
+      "VariantAlsoNegotiatesException",
+      "InsufficientStorageException",
+      "LoopDetectedException",
+      "NotExtendedException",
+      "NetworkAuthenticationRequiredException",
+      "NetworkConnectTimeoutErrorException"
+    ],
+    "lib/src/http/models/p_form_data.dart": [
+      "PFormData"
+    ],
+    "lib/src/analytics/pluggable_analytics.dart": [
+      "PluggableAnalytics",
+      "NoAnalyticsPlug"
+    ]
+  },
+  "symbols": {
+    "Plug": {
+      "defined_in": "lib/src/plug.dart",
+      "references": []
+    },
+    "DependencyDisposeFunc": {
+      "defined_in": "lib/src/di/pluggable_di.dart",
+      "references": []
+    },
+    "DependencyBuilder": {
+      "defined_in": "lib/src/di/pluggable_di.dart",
+      "references": []
+    },
+    "PluggableDI": {
+      "defined_in": "lib/src/di/pluggable_di.dart",
+      "references": []
+    },
+    "PluggableLogger": {
+      "defined_in": "lib/src/logger/pluggable_logger.dart",
+      "references": []
+    },
+    "ConsoleLoggerPlug": {
+      "defined_in": "lib/src/logger/pluggable_logger.dart",
+      "references": []
+    },
+    "PluggableModule": {
+      "defined_in": "lib/src/module/pluggable_module.dart",
+      "references": []
+    },
+    "MapperNotRegistered": {
+      "defined_in": "lib/src/mapper/exceptions.dart",
+      "references": []
+    },
+    "PluggableMapper": {
+      "defined_in": "lib/src/mapper/pluggable_mapper.dart",
+      "references": []
+    },
+    "Mapper": {
+      "defined_in": "lib/src/mapper/pluggable_mapper.dart",
+      "references": []
+    },
+    "AsyncMapper": {
+      "defined_in": "lib/src/mapper/pluggable_mapper.dart",
+      "references": []
+    },
+    "PluggableImpl": {
+      "defined_in": "lib/src/pluggable/pluggable.dart",
+      "references": []
+    },
+    "DartNotifier": {
+      "defined_in": "lib/src/pluggable/pluggable.dart",
+      "references": []
+    },
+    "DecodeFunc": {
+      "defined_in": "lib/src/storage/pluggable_storage.dart",
+      "references": []
+    },
+    "Fetch": {
+      "defined_in": "lib/src/storage/pluggable_storage.dart",
+      "references": []
+    },
+    "PluggableStorage": {
+      "defined_in": "lib/src/storage/pluggable_storage.dart",
+      "references": []
+    },
+    "InFlightSets": {
+      "defined_in": "lib/src/storage/in_flight_mixin.dart",
+      "references": []
+    },
+    "InFlightMixin": {
+      "defined_in": "lib/src/storage/in_flight_mixin.dart",
+      "references": []
+    },
+    "InFlightEntry": {
+      "defined_in": "lib/src/storage/in_flight_mixin.dart",
+      "references": []
+    },
+    "PluggableStorageProvider": {
+      "defined_in": "lib/src/storage/pluggable_storage_provider.dart",
+      "references": []
+    },
+    "PluggableEnv": {
+      "defined_in": "lib/src/env/pluggable_env.dart",
+      "references": []
+    },
+    "PFormFile": {
+      "defined_in": "lib/src/http/models/p_form_file.dart",
+      "references": []
+    },
+    "_BaseRequest": {
+      "defined_in": "lib/src/http/models/p_http_request.dart",
+      "references": []
+    },
+    "PHttpRequest": {
+      "defined_in": "lib/src/http/models/p_http_request.dart",
+      "references": []
+    },
+    "PHttpJsonDataRequest": {
+      "defined_in": "lib/src/http/models/p_http_json_request.dart",
+      "references": []
+    },
+    "PHttpMethod": {
+      "defined_in": "lib/src/http/models/p_http_method.dart",
+      "references": []
+    },
+    "CacheControl": {
+      "defined_in": "lib/src/http/models/cache_control.dart",
+      "references": []
+    },
+    "PHttpResponse": {
+      "defined_in": "lib/src/http/models/p_http_response.dart",
+      "references": []
+    },
+    "PHttpFormDataRequest": {
+      "defined_in": "lib/src/http/models/p_http_form_data_request.dart",
+      "references": []
+    },
+    "PHttpBytesDataRequest": {
+      "defined_in": "lib/src/http/models/p_http_bytes_request.dart",
+      "references": []
+    },
+    "PHttpStatusCode": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "PHttpException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "BadRequestException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "UnauthorizedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "PaymentRequiredException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ForbiddenException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "NotFoundException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "MethodNotAllowedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "NotAcceptableException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ProxyAuthenticationRequiredException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "RequestTimeoutException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ConflictException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "GoneException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "LengthRequiredException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "PreconditionFailedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "RequestEntityTooLargeException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "RequestUriTooLongException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "UnsupportedMediaTypeException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "RequestedRangeNotSatisfiableException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ExpectationFailedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ImATeapotException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "InsufficientSpaceOnResourceException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "MethodFailureException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "MisdirectedRequestException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "UnprocessableEntityException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "LockedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "FailedDependencyException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "UpgradeRequiredException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "PreconditionRequiredException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "TooManyRequestsException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "RequestHeaderFieldsTooLargeException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ConnectionClosedWithoutResponseException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "UnavailableForLegalReasonsException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ClientClosedRequestException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "InternalServerErrorException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "NotImplementedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "BadGatewayException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "ServiceUnavailableException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "GatewayTimeoutException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "HttpVersionNotSupportedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "VariantAlsoNegotiatesException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "InsufficientStorageException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "LoopDetectedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "NotExtendedException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "NetworkAuthenticationRequiredException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "NetworkConnectTimeoutErrorException": {
+      "defined_in": "lib/src/http/models/http_status_code.dart",
+      "references": []
+    },
+    "PFormData": {
+      "defined_in": "lib/src/http/models/p_form_data.dart",
+      "references": []
+    },
+    "PluggableAnalytics": {
+      "defined_in": "lib/src/analytics/pluggable_analytics.dart",
+      "references": []
+    },
+    "NoAnalyticsPlug": {
+      "defined_in": "lib/src/analytics/pluggable_analytics.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}

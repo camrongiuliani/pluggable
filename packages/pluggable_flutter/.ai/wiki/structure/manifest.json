@@ -1,0 +1,148 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T13:01:01Z",
+  "files": {
+    "lib/src/pluggable_app.dart": [
+      "ThemeBuilder",
+      "CustomBuilder",
+      "InitCallback"
+    ],
+    "lib/src/pluggable_ext.dart": [
+      "PluggableFlutter",
+      "PluggableFlutterModule"
+    ],
+    "lib/src/navigator/pluggable_route_transition.dart": [
+      "RouteTransitionPage"
+    ],
+    "lib/src/navigator/pluggable_route.dart": [
+      "DetermineTransition",
+      "RouteTransition",
+      "PluggableRoute",
+      "PluggableShellRoute"
+    ],
+    "lib/src/navigator/custom_transition_page.dart": [
+      "CustomTransitionPage",
+      "NoTransitionPage",
+      "_CustomTransitionRoute"
+    ],
+    "lib/src/navigator/pluggable_navigator.dart": [
+      "PluggableNavigator"
+    ],
+    "lib/src/navigator/routes/route_state.dart": [
+      "PluggableRouteState"
+    ],
+    "lib/src/navigator/routes/route_base.dart": [
+      "PluggableRouteRedirect",
+      "PluggableRouterPageBuilder",
+      "PluggableRouterWidgetBuilder",
+      "PluggableRouterExitCallback",
+      "PluggableRouteBase",
+      "PluggableShellRouteBase"
+    ],
+    "lib/src/navigator/routes/shell_route.dart": [
+      "PluggableShellRouteBuilder",
+      "PluggableShellRoutePageBuilder",
+      "PluggableShellRoute"
+    ],
+    "lib/src/navigator/routes/pluggable_route.dart": [
+      "PluggableRoute"
+    ]
+  },
+  "symbols": {
+    "ThemeBuilder": {
+      "defined_in": "lib/src/pluggable_app.dart",
+      "references": []
+    },
+    "CustomBuilder": {
+      "defined_in": "lib/src/pluggable_app.dart",
+      "references": []
+    },
+    "InitCallback": {
+      "defined_in": "lib/src/pluggable_app.dart",
+      "references": []
+    },
+    "PluggableFlutter": {
+      "defined_in": "lib/src/pluggable_ext.dart",
+      "references": []
+    },
+    "PluggableFlutterModule": {
+      "defined_in": "lib/src/pluggable_ext.dart",
+      "references": []
+    },
+    "RouteTransitionPage": {
+      "defined_in": "lib/src/navigator/pluggable_route_transition.dart",
+      "references": []
+    },
+    "DetermineTransition": {
+      "defined_in": "lib/src/navigator/pluggable_route.dart",
+      "references": []
+    },
+    "RouteTransition": {
+      "defined_in": "lib/src/navigator/pluggable_route.dart",
+      "references": []
+    },
+    "PluggableRoute": {
+      "defined_in": "lib/src/navigator/pluggable_route.dart",
+      "references": []
+    },
+    "PluggableShellRoute": {
+      "defined_in": "lib/src/navigator/pluggable_route.dart",
+      "references": []
+    },
+    "CustomTransitionPage": {
+      "defined_in": "lib/src/navigator/custom_transition_page.dart",
+      "references": []
+    },
+    "NoTransitionPage": {
+      "defined_in": "lib/src/navigator/custom_transition_page.dart",
+      "references": []
+    },
+    "_CustomTransitionRoute": {
+      "defined_in": "lib/src/navigator/custom_transition_page.dart",
+      "references": []
+    },
+    "PluggableNavigator": {
+      "defined_in": "lib/src/navigator/pluggable_navigator.dart",
+      "references": []
+    },
+    "PluggableRouteState": {
+      "defined_in": "lib/src/navigator/routes/route_state.dart",
+      "references": []
+    },
+    "PluggableRouteRedirect": {
+      "defined_in": "lib/src/navigator/routes/route_base.dart",
+      "references": []
+    },
+    "PluggableRouterPageBuilder": {
+      "defined_in": "lib/src/navigator/routes/route_base.dart",
+      "references": []
+    },
+    "PluggableRouterWidgetBuilder": {
+      "defined_in": "lib/src/navigator/routes/route_base.dart",
+      "references": []
+    },
+    "PluggableRouterExitCallback": {
+      "defined_in": "lib/src/navigator/routes/route_base.dart",
+      "references": []
+    },
+    "PluggableRouteBase": {
+      "defined_in": "lib/src/navigator/routes/route_base.dart",
+      "references": []
+    },
+    "PluggableShellRouteBase": {
+      "defined_in": "lib/src/navigator/routes/route_base.dart",
+      "references": []
+    },
+    "PluggableShellRouteBuilder": {
+      "defined_in": "lib/src/navigator/routes/shell_route.dart",
+      "references": []
+    },
+    "PluggableShellRoutePageBuilder": {
+      "defined_in": "lib/src/navigator/routes/shell_route.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}

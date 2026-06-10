@@ -1,0 +1,65 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T13:00:42Z",
+  "files": {
+    "lib/go_route_ext.dart": [
+      "Remap",
+      "GoRouteListConverter",
+      "GoRouteConverter",
+      "_PluggableRouterPageBuilderExt",
+      "_PluggableRouterWidgetBuilderExt",
+      "_PluggableShellRoutePageBuilderExt",
+      "_PluggableShellRouteBuilderExt",
+      "_PluggableRouterExitCallbackExt",
+      "_PluggableRouteRedirectExt"
+    ],
+    "lib/go_router_plug.dart": [
+      "GoRouterPlug"
+    ]
+  },
+  "symbols": {
+    "Remap": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "GoRouteListConverter": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "GoRouteConverter": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "_PluggableRouterPageBuilderExt": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "_PluggableRouterWidgetBuilderExt": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "_PluggableShellRoutePageBuilderExt": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "_PluggableShellRouteBuilderExt": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "_PluggableRouterExitCallbackExt": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "_PluggableRouteRedirectExt": {
+      "defined_in": "lib/go_route_ext.dart",
+      "references": []
+    },
+    "GoRouterPlug": {
+      "defined_in": "lib/go_router_plug.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}

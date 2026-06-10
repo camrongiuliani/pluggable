@@ -1,0 +1,125 @@
+---
+generated: true
+generated_by: codesight@1.14.0
+generated_at: 2026-06-10T13:01:06Z
+source_command: npx codesight --wiki
+---
+
+# Libraries
+
+- `lib/src/analytics/pluggable_analytics.dart`
+  - class PluggableAnalytics
+  - class NoAnalyticsPlug
+  - function log
+  - function addExtraInfo
+  - function setUserInfo
+  - function init
+  - _...1 more_
+- `lib/src/di/pluggable_di.dart`
+  - class PluggableDI
+  - function allowReassignment
+  - function pushScope
+  - function popScope
+  - function replaceScope
+  - function containsScope
+- `lib/src/http/models/cache_control.dart`
+  - class CacheControl
+  - function toString
+  - function toMap
+- `lib/src/http/models/http_status_code.dart`
+  - class PHttpStatusCode
+  - class PHttpException
+  - class BadRequestException
+  - class UnauthorizedException
+  - class PaymentRequiredException
+  - class ForbiddenException
+  - _...42 more_
+- `lib/src/http/models/p_form_data.dart`
+  - class PFormData
+  - function clear
+  - function remove
+  - function toJson
+  - function copyWith
+- `lib/src/http/models/p_form_file.dart`
+  - class PFormFile
+  - function toJson
+  - function copyWith
+  - function readAsBytes
+  - function openRead
+  - function toString
+- `lib/src/http/models/p_http_bytes_request.dart`
+  - class PHttpBytesDataRequest
+  - function toJson
+  - function copyWith
+- `lib/src/http/models/p_http_form_data_request.dart`
+  - class PHttpFormDataRequest
+  - function toJson
+  - function copyWith
+- `lib/src/http/models/p_http_json_request.dart`
+  - class PHttpJsonDataRequest
+  - function toJson
+  - function copyWith
+- `lib/src/http/models/p_http_method.dart`
+  - enum PHttpMethod
+  - function delete
+  - function get
+  - function head
+  - function options
+  - function patch
+  - _...3 more_
+- `lib/src/http/models/p_http_request.dart`
+  - class PHttpRequest
+  - function toJson
+  - function copyWith
+  - function withData
+  - function fromJson
+- `lib/src/http/models/p_http_response.dart`
+  - class PHttpResponse
+  - function toJson
+  - function copyWith
+- `lib/src/logger/pluggable_logger.dart`
+  - class PluggableLogger
+  - class ConsoleLoggerPlug
+  - function header
+  - function init
+  - function dispose
+  - function print
+- `lib/src/mapper/exceptions.dart` — class MapperNotRegistered, function toString
+- `lib/src/mapper/pluggable_mapper.dart`
+  - class PluggableMapper
+  - class Mapper
+  - class AsyncMapper
+  - function init
+  - function dispose
+  - function map
+  - _...1 more_
+- `lib/src/module/pluggable_module.dart`
+  - class PluggableModule
+  - function plugin
+  - function addDependencies
+  - function registerMappers
+  - function bind
+  - function unbind
+  - _...1 more_
+- `lib/src/plug.dart`
+  - class Plug
+  - function init
+  - function dispose
+- `lib/src/pluggable/pluggable.dart`
+  - class PluggableImpl
+  - class DartNotifier
+  - function initPluggable
+  - function notifyListeners
+  - function dispose
+  - function emit
+- `lib/src/storage/in_flight_mixin.dart` — class InFlightMixin, class InFlightEntry
+- `lib/src/storage/pluggable_storage.dart`
+  - class PluggableStorage
+  - function init
+  - function dispose
+  - function assert
+- `lib/src/storage/pluggable_storage_provider.dart`
+  - class PluggableStorageProvider
+  - function init
+  - function dispose
+  - function getAllForType

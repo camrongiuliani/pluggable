@@ -1,0 +1,116 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T13:01:03Z",
+  "files": {
+    "lib/src/pluggable_ext.dart": [
+      "PluggableDartServer",
+      "PluggableServerMixin"
+    ],
+    "lib/src/handler/p_request_handler.dart": [
+      "PRequestHandler",
+      "on"
+    ],
+    "lib/src/module/server_module.dart": [
+      "ServerModule"
+    ],
+    "lib/src/module/server_env.dart": [
+      "ServerEnv"
+    ],
+    "lib/src/models/p_server_handler.dart": [
+      "PServerHandler"
+    ],
+    "lib/src/plugs/dart_server_plug.dart": [
+      "RequestHandler",
+      "DartServerPlug"
+    ],
+    "lib/src/validation/validation_operation.dart": [
+      "ValidationOperation",
+      "CustomValidator"
+    ],
+    "lib/src/validation/query_validation.dart": [
+      "QueryParamValidation",
+      "QueryParamValidator"
+    ],
+    "lib/src/validation/header_validation.dart": [
+      "HeaderValidation",
+      "HeaderValidator"
+    ],
+    "lib/src/validation/exceptions.dart": [
+      "InvalidArgumentException",
+      "MissingRequiredArgumentException"
+    ]
+  },
+  "symbols": {
+    "PluggableDartServer": {
+      "defined_in": "lib/src/pluggable_ext.dart",
+      "references": []
+    },
+    "PluggableServerMixin": {
+      "defined_in": "lib/src/pluggable_ext.dart",
+      "references": []
+    },
+    "PRequestHandler": {
+      "defined_in": "lib/src/handler/p_request_handler.dart",
+      "references": []
+    },
+    "on": {
+      "defined_in": "lib/src/handler/p_request_handler.dart",
+      "references": []
+    },
+    "ServerModule": {
+      "defined_in": "lib/src/module/server_module.dart",
+      "references": []
+    },
+    "ServerEnv": {
+      "defined_in": "lib/src/module/server_env.dart",
+      "references": []
+    },
+    "PServerHandler": {
+      "defined_in": "lib/src/models/p_server_handler.dart",
+      "references": []
+    },
+    "RequestHandler": {
+      "defined_in": "lib/src/plugs/dart_server_plug.dart",
+      "references": []
+    },
+    "DartServerPlug": {
+      "defined_in": "lib/src/plugs/dart_server_plug.dart",
+      "references": []
+    },
+    "ValidationOperation": {
+      "defined_in": "lib/src/validation/validation_operation.dart",
+      "references": []
+    },
+    "CustomValidator": {
+      "defined_in": "lib/src/validation/validation_operation.dart",
+      "references": []
+    },
+    "QueryParamValidation": {
+      "defined_in": "lib/src/validation/query_validation.dart",
+      "references": []
+    },
+    "QueryParamValidator": {
+      "defined_in": "lib/src/validation/query_validation.dart",
+      "references": []
+    },
+    "HeaderValidation": {
+      "defined_in": "lib/src/validation/header_validation.dart",
+      "references": []
+    },
+    "HeaderValidator": {
+      "defined_in": "lib/src/validation/header_validation.dart",
+      "references": []
+    },
+    "InvalidArgumentException": {
+      "defined_in": "lib/src/validation/exceptions.dart",
+      "references": []
+    },
+    "MissingRequiredArgumentException": {
+      "defined_in": "lib/src/validation/exceptions.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}

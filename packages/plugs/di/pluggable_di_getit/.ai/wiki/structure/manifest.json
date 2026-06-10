@@ -1,0 +1,18 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T12:59:47Z",
+  "files": {
+    "lib/pluggable_di_getit.dart": [
+      "PluggableGetIt"
+    ]
+  },
+  "symbols": {
+    "PluggableGetIt": {
+      "defined_in": "lib/pluggable_di_getit.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}

@@ -1,0 +1,50 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T13:00:55Z",
+  "files": {
+    "lib/exceptions.dart": [
+      "LockAcquisitionException",
+      "OpenException",
+      "SecurityException",
+      "ConnectionException",
+      "SocketException"
+    ],
+    "lib/redis_storage_plug.dart": [
+      "_RedisAdapter",
+      "RedisStoragePlug"
+    ]
+  },
+  "symbols": {
+    "LockAcquisitionException": {
+      "defined_in": "lib/exceptions.dart",
+      "references": []
+    },
+    "OpenException": {
+      "defined_in": "lib/exceptions.dart",
+      "references": []
+    },
+    "SecurityException": {
+      "defined_in": "lib/exceptions.dart",
+      "references": []
+    },
+    "ConnectionException": {
+      "defined_in": "lib/exceptions.dart",
+      "references": []
+    },
+    "SocketException": {
+      "defined_in": "lib/exceptions.dart",
+      "references": []
+    },
+    "_RedisAdapter": {
+      "defined_in": "lib/redis_storage_plug.dart",
+      "references": []
+    },
+    "RedisStoragePlug": {
+      "defined_in": "lib/redis_storage_plug.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}

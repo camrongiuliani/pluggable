@@ -1,0 +1,52 @@
+{
+  "generated_by": "codesight@1.14.0",
+  "generated_at": "2026-06-10T13:00:44Z",
+  "files": {
+    "lib/dart_frog_server_plug.dart": [
+      "DartFrogServerPlug"
+    ],
+    "lib/mappers/request_mapper.dart": [
+      "FrogRequestMapper",
+      "HttpMethodMapper",
+      "FormDataMapper",
+      "FormFileMapper",
+      "_FutureExt"
+    ],
+    "lib/mappers/response_mapper.dart": [
+      "FrogResponseMapper"
+    ]
+  },
+  "symbols": {
+    "DartFrogServerPlug": {
+      "defined_in": "lib/dart_frog_server_plug.dart",
+      "references": []
+    },
+    "FrogRequestMapper": {
+      "defined_in": "lib/mappers/request_mapper.dart",
+      "references": []
+    },
+    "HttpMethodMapper": {
+      "defined_in": "lib/mappers/request_mapper.dart",
+      "references": []
+    },
+    "FormDataMapper": {
+      "defined_in": "lib/mappers/request_mapper.dart",
+      "references": []
+    },
+    "FormFileMapper": {
+      "defined_in": "lib/mappers/request_mapper.dart",
+      "references": []
+    },
+    "_FutureExt": {
+      "defined_in": "lib/mappers/request_mapper.dart",
+      "references": []
+    },
+    "FrogResponseMapper": {
+      "defined_in": "lib/mappers/response_mapper.dart",
+      "references": []
+    }
+  },
+  "routes": [],
+  "models": [],
+  "components": []
+}
